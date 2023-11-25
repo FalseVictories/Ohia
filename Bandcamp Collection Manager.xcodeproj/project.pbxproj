@@ -3,66 +3,152 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE554D0B2ACAD2DB00579320 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE554D0A2ACAD2DB00579320 /* AppDelegate.swift */; };
-		AE554D0D2ACAD2DB00579320 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE554D0C2ACAD2DB00579320 /* ViewController.swift */; };
-		AE554D0F2ACAD2DC00579320 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE554D0E2ACAD2DC00579320 /* Assets.xcassets */; };
-		AE554D122ACAD2DC00579320 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE554D102ACAD2DC00579320 /* Main.storyboard */; };
-		AE554D1D2ACAD2DC00579320 /* Bandcamp_Collection_ManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE554D1C2ACAD2DC00579320 /* Bandcamp_Collection_ManagerTests.swift */; };
-		AE554D272ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE554D262ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITests.swift */; };
-		AE554D292ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE554D282ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITestsLaunchTests.swift */; };
+		AE012C602AFC2511000528C1 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = AE012C5F2AFC2511000528C1 /* Dependencies */; };
+		AE1E11B02AE549550001369A /* CouchbaseLiteSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */; };
+		AE1E11B32AE549D90001369A /* DataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11B22AE549D90001369A /* DataStorageService.swift */; };
+		AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */; };
+		AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BB2AE8176A0001369A /* SettingsView.swift */; };
+		AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BD2AE81B700001369A /* FilePickerButton.swift */; };
+		AE22188D2AF985210013FB84 /* PopoverMenu in Frameworks */ = {isa = PBXBuildFile; productRef = AE22188C2AF985210013FB84 /* PopoverMenu */; };
+		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
+		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
+		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
+		AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = AE679AB82AD991430073EF8C /* SFSafeSymbols */; };
+		AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */; };
+		AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABC2AD9D0550073EF8C /* HoverButton.swift */; };
+		AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */ = {isa = PBXBuildFile; fileRef = AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */; };
+		AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */; };
+		AE679AC72ADC0F150073EF8C /* DownloaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC62ADC0F150073EF8C /* DownloaderService.swift */; };
+		AE679AC92ADC0FD60073EF8C /* LiveDownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */; };
+		AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */; };
+		AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */; };
+		AE679AD12AE01B570073EF8C /* CollectionDownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */; };
+		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
+		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
+		AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */; };
+		AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECF4A812AD1A4560071CFD8 /* Assets.xcassets */; };
+		AECF4A862AD1A4560071CFD8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECF4A852AD1A4560071CFD8 /* Preview Assets.xcassets */; };
+		AECF4A902AD1A4560071CFD8 /* OhiaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A8F2AD1A4560071CFD8 /* OhiaTests.swift */; };
+		AECF4A9A2AD1A4560071CFD8 /* OhiaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A992AD1A4560071CFD8 /* OhiaUITests.swift */; };
+		AECF4A9C2AD1A4570071CFD8 /* OhiaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A9B2AD1A4570071CFD8 /* OhiaUITestsLaunchTests.swift */; };
+		AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AA62AD1A5DA0071CFD8 /* CollectionItemRow.swift */; };
+		AECF4AA92AD1A7B00071CFD8 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AA82AD1A7B00071CFD8 /* VisualEffect.swift */; };
+		AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */ = {isa = PBXBuildFile; productRef = AECF4AAA2AD1AAE80071CFD8 /* BCKit */; };
+		AECF4AAF2AD2D6C80071CFD8 /* OhiaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AAE2AD2D6C80071CFD8 /* OhiaViewModel.swift */; };
+		AECF4AB22AD2DA710071CFD8 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AB12AD2DA710071CFD8 /* WebView.swift */; };
+		AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AB42AD330DE0071CFD8 /* Logger+Ohia.swift */; };
+		AECF4ABF2AD5A62A0071CFD8 /* ImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4ABE2AD5A62A0071CFD8 /* ImageCacheService.swift */; };
+		AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */; };
+		AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */ = {isa = PBXBuildFile; fileRef = AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */; };
+		AEF2E3042AE9113400AF4550 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3032AE9113400AF4550 /* SettingsModel.swift */; };
+		AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */; };
+		AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */; };
+		AEF2E30B2AEBC4B400AF4550 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */; };
+		AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E30C2AEC43EC00AF4550 /* OhiaUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		AE554D192ACAD2DC00579320 /* PBXContainerItemProxy */ = {
+		AECF4A8C2AD1A4560071CFD8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AE554CFF2ACAD2DB00579320 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AE554D062ACAD2DB00579320;
-			remoteInfo = "Bandcamp Collection Manager";
+			remoteGlobalIDString = AECF4A7A2AD1A4550071CFD8;
+			remoteInfo = Ohia;
 		};
-		AE554D232ACAD2DC00579320 /* PBXContainerItemProxy */ = {
+		AECF4A962AD1A4560071CFD8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AE554CFF2ACAD2DB00579320 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AE554D062ACAD2DB00579320;
-			remoteInfo = "Bandcamp Collection Manager";
+			remoteGlobalIDString = AECF4A7A2AD1A4550071CFD8;
+			remoteInfo = Ohia;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AE554D072ACAD2DB00579320 /* Bandcamp Collection Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bandcamp Collection Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE1E11AD2AE2C1590001369A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		AE1E11B22AE549D90001369A /* DataStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorageService.swift; sourceTree = "<group>"; };
+		AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveDataStorageService.swift; sourceTree = "<group>"; };
+		AE1E11BB2AE8176A0001369A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AE1E11BD2AE81B700001369A /* FilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerButton.swift; sourceTree = "<group>"; };
 		AE554D0A2ACAD2DB00579320 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE554D0C2ACAD2DB00579320 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AE554D0E2ACAD2DC00579320 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE554D112ACAD2DC00579320 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		AE554D132ACAD2DC00579320 /* Bandcamp_Collection_Manager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bandcamp_Collection_Manager.entitlements; sourceTree = "<group>"; };
-		AE554D182ACAD2DC00579320 /* Bandcamp Collection ManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Bandcamp Collection ManagerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE554D1C2ACAD2DC00579320 /* Bandcamp_Collection_ManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bandcamp_Collection_ManagerTests.swift; sourceTree = "<group>"; };
-		AE554D222ACAD2DC00579320 /* Bandcamp Collection ManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Bandcamp Collection ManagerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE554D262ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bandcamp_Collection_ManagerUITests.swift; sourceTree = "<group>"; };
-		AE554D282ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bandcamp_Collection_ManagerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AE554D132ACAD2DC00579320 /* Ohia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ohia.entitlements; sourceTree = "<group>"; };
+		AE554D352ACAD30D00579320 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
+		AE554D3C2ACAD3FC00579320 /* LiveCollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LiveCollectionService.swift; sourceTree = "<group>"; };
+		AE554D462ACADEF900579320 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		AE554D492ACB485000579320 /* Logger+BCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+BCM.swift"; sourceTree = "<group>"; };
+		AE554D4E2ACC47D200579320 /* PercentEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentEncoding.swift; sourceTree = "<group>"; };
+		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
+		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
+		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
+		AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgress.swift; sourceTree = "<group>"; };
+		AE679ABC2AD9D0550073EF8C /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
+		AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ENVIRONMENT.md; sourceTree = "<group>"; };
+		AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDownloadProgress.swift; sourceTree = "<group>"; };
+		AE679AC62ADC0F150073EF8C /* DownloaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderService.swift; sourceTree = "<group>"; };
+		AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveDownloadService.swift; sourceTree = "<group>"; };
+		AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStateInfo.swift; sourceTree = "<group>"; };
+		AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionListHeaderView.swift; sourceTree = "<group>"; };
+		AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDownloadProgress.swift; sourceTree = "<group>"; };
+		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
+		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
+		AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
+		AECF4A752AD095160071CFD8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AECF4A7B2AD1A4550071CFD8 /* Ohia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ohia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaApp.swift; sourceTree = "<group>"; };
+		AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionContentView.swift; sourceTree = "<group>"; };
+		AECF4A812AD1A4560071CFD8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AECF4A832AD1A4560071CFD8 /* Ohia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ohia.entitlements; sourceTree = "<group>"; };
+		AECF4A852AD1A4560071CFD8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AECF4A8B2AD1A4560071CFD8 /* OhiaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OhiaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AECF4A8F2AD1A4560071CFD8 /* OhiaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaTests.swift; sourceTree = "<group>"; };
+		AECF4A952AD1A4560071CFD8 /* OhiaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OhiaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AECF4A992AD1A4560071CFD8 /* OhiaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaUITests.swift; sourceTree = "<group>"; };
+		AECF4A9B2AD1A4570071CFD8 /* OhiaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AECF4AA62AD1A5DA0071CFD8 /* CollectionItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItemRow.swift; sourceTree = "<group>"; };
+		AECF4AA82AD1A7B00071CFD8 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
+		AECF4AAE2AD2D6C80071CFD8 /* OhiaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaViewModel.swift; sourceTree = "<group>"; };
+		AECF4AB12AD2DA710071CFD8 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		AECF4AB42AD330DE0071CFD8 /* Logger+Ohia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Ohia.swift"; sourceTree = "<group>"; };
+		AECF4ABE2AD5A62A0071CFD8 /* ImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheService.swift; sourceTree = "<group>"; };
+		AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveImageCacheService.swift; sourceTree = "<group>"; };
+		AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = LogConfig.mobileconfig; sourceTree = "<group>"; };
+		AEDB016B2ACEF6F4004C575E /* BCKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BCKit; sourceTree = "<group>"; };
+		AEF2E3032AE9113400AF4550 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaItem.swift; sourceTree = "<group>"; };
+		AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ohia.swift"; sourceTree = "<group>"; };
+		AEF2E30C2AEC43EC00AF4550 /* OhiaUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AE554D042ACAD2DB00579320 /* Frameworks */ = {
+		AECF4A782AD1A4550071CFD8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE1E11B02AE549550001369A /* CouchbaseLiteSwift in Frameworks */,
+				AE22188D2AF985210013FB84 /* PopoverMenu in Frameworks */,
+				AEF2E30B2AEBC4B400AF4550 /* CachedAsyncImage in Frameworks */,
+				AE012C602AFC2511000528C1 /* Dependencies in Frameworks */,
+				AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */,
+				AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AECF4A882AD1A4560071CFD8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE554D152ACAD2DC00579320 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AE554D1F2ACAD2DC00579320 /* Frameworks */ = {
+		AECF4A922AD1A4560071CFD8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,109 +158,290 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE1E11B12AE549C30001369A /* DataStorageService */ = {
+			isa = PBXGroup;
+			children = (
+				AE1E11B22AE549D90001369A /* DataStorageService.swift */,
+				AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */,
+			);
+			path = DataStorageService;
+			sourceTree = "<group>";
+		};
+		AE1E11B62AE7F22F0001369A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AE1E11BB2AE8176A0001369A /* SettingsView.swift */,
+				AE1E11BD2AE81B700001369A /* FilePickerButton.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AE1E11B72AE7F23D0001369A /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */,
+				AECF4AA62AD1A5DA0071CFD8 /* CollectionItemRow.swift */,
+				AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */,
+				AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */,
+				AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */,
+				AE679AB02AD82B710073EF8C /* CollectionList.swift */,
+				AE679ABC2AD9D0550073EF8C /* HoverButton.swift */,
+				AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */,
+				AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		AE1E11B82AE7F3D90001369A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */,
+				AECF4AAE2AD2D6C80071CFD8 /* OhiaViewModel.swift */,
+				AEF2E3032AE9113400AF4550 /* SettingsModel.swift */,
+				AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */,
+				AEF2E30C2AEC43EC00AF4550 /* OhiaUser.swift */,
+				AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		AE554CFE2ACAD2DB00579320 = {
 			isa = PBXGroup;
 			children = (
-				AE554D092ACAD2DB00579320 /* Bandcamp Collection Manager */,
-				AE554D1B2ACAD2DC00579320 /* Bandcamp Collection ManagerTests */,
-				AE554D252ACAD2DC00579320 /* Bandcamp Collection ManagerUITests */,
+				AE1E11AD2AE2C1590001369A /* README.md */,
+				AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */,
+				AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */,
+				AEDB016B2ACEF6F4004C575E /* BCKit */,
+				AE554D092ACAD2DB00579320 /* Ohia-Cocoa */,
+				AECF4A7C2AD1A4550071CFD8 /* Ohia */,
+				AECF4A8E2AD1A4560071CFD8 /* OhiaTests */,
+				AECF4A982AD1A4560071CFD8 /* OhiaUITests */,
 				AE554D082ACAD2DB00579320 /* Products */,
+				AEDB016C2ACEFF2C004C575E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		AE554D082ACAD2DB00579320 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AE554D072ACAD2DB00579320 /* Bandcamp Collection Manager.app */,
-				AE554D182ACAD2DC00579320 /* Bandcamp Collection ManagerTests.xctest */,
-				AE554D222ACAD2DC00579320 /* Bandcamp Collection ManagerUITests.xctest */,
+				AECF4A7B2AD1A4550071CFD8 /* Ohia.app */,
+				AECF4A8B2AD1A4560071CFD8 /* OhiaTests.xctest */,
+				AECF4A952AD1A4560071CFD8 /* OhiaUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AE554D092ACAD2DB00579320 /* Bandcamp Collection Manager */ = {
+		AE554D092ACAD2DB00579320 /* Ohia-Cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				AE554D482ACB483B00579320 /* Extensions */,
 				AE554D0A2ACAD2DB00579320 /* AppDelegate.swift */,
 				AE554D0C2ACAD2DB00579320 /* ViewController.swift */,
 				AE554D0E2ACAD2DC00579320 /* Assets.xcassets */,
 				AE554D102ACAD2DC00579320 /* Main.storyboard */,
-				AE554D132ACAD2DC00579320 /* Bandcamp_Collection_Manager.entitlements */,
+				AE554D132ACAD2DC00579320 /* Ohia.entitlements */,
+				AE554D3A2ACAD3DF00579320 /* Services */,
+				AE554D462ACADEF900579320 /* LoginViewController.swift */,
+				AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */,
+				AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */,
+				AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */,
+				AECF4A752AD095160071CFD8 /* Preview Assets.xcassets */,
 			);
-			path = "Bandcamp Collection Manager";
+			path = "Ohia-Cocoa";
 			sourceTree = "<group>";
 		};
-		AE554D1B2ACAD2DC00579320 /* Bandcamp Collection ManagerTests */ = {
+		AE554D3A2ACAD3DF00579320 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				AE554D1C2ACAD2DC00579320 /* Bandcamp_Collection_ManagerTests.swift */,
+				AE554D3B2ACAD3EB00579320 /* CollectionService */,
 			);
-			path = "Bandcamp Collection ManagerTests";
+			path = Services;
 			sourceTree = "<group>";
 		};
-		AE554D252ACAD2DC00579320 /* Bandcamp Collection ManagerUITests */ = {
+		AE554D3B2ACAD3EB00579320 /* CollectionService */ = {
 			isa = PBXGroup;
 			children = (
-				AE554D262ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITests.swift */,
-				AE554D282ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITestsLaunchTests.swift */,
+				AE554D352ACAD30D00579320 /* CollectionService.swift */,
+				AE554D3C2ACAD3FC00579320 /* LiveCollectionService.swift */,
 			);
-			path = "Bandcamp Collection ManagerUITests";
+			path = CollectionService;
+			sourceTree = "<group>";
+		};
+		AE554D482ACB483B00579320 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AE554D492ACB485000579320 /* Logger+BCM.swift */,
+				AE554D4E2ACC47D200579320 /* PercentEncoding.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AE679AB42AD8717C0073EF8C /* ConfigurationService */ = {
+			isa = PBXGroup;
+			children = (
+				AE679AB22AD871780073EF8C /* ConfigurationService.swift */,
+				AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */,
+			);
+			path = ConfigurationService;
+			sourceTree = "<group>";
+		};
+		AE679AC52ADC0F050073EF8C /* DownloadService */ = {
+			isa = PBXGroup;
+			children = (
+				AE679AC62ADC0F150073EF8C /* DownloaderService.swift */,
+				AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */,
+			);
+			path = DownloadService;
+			sourceTree = "<group>";
+		};
+		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
+			isa = PBXGroup;
+			children = (
+				AE1E11B82AE7F3D90001369A /* App */,
+				AE1E11B72AE7F23D0001369A /* Collection */,
+				AE1E11B62AE7F22F0001369A /* Settings */,
+				AECF4ABD2AD5A2880071CFD8 /* Services */,
+				AECF4AB32AD330CA0071CFD8 /* Extensions */,
+				AECF4AB02AD2DA540071CFD8 /* AppKit */,
+				AECF4A812AD1A4560071CFD8 /* Assets.xcassets */,
+				AECF4A832AD1A4560071CFD8 /* Ohia.entitlements */,
+				AECF4A842AD1A4560071CFD8 /* Preview Content */,
+			);
+			path = Ohia;
+			sourceTree = "<group>";
+		};
+		AECF4A842AD1A4560071CFD8 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4A852AD1A4560071CFD8 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		AECF4A8E2AD1A4560071CFD8 /* OhiaTests */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4A8F2AD1A4560071CFD8 /* OhiaTests.swift */,
+			);
+			path = OhiaTests;
+			sourceTree = "<group>";
+		};
+		AECF4A982AD1A4560071CFD8 /* OhiaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4A992AD1A4560071CFD8 /* OhiaUITests.swift */,
+				AECF4A9B2AD1A4570071CFD8 /* OhiaUITestsLaunchTests.swift */,
+			);
+			path = OhiaUITests;
+			sourceTree = "<group>";
+		};
+		AECF4AB02AD2DA540071CFD8 /* AppKit */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4AA82AD1A7B00071CFD8 /* VisualEffect.swift */,
+				AECF4AB12AD2DA710071CFD8 /* WebView.swift */,
+			);
+			path = AppKit;
+			sourceTree = "<group>";
+		};
+		AECF4AB32AD330CA0071CFD8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4AB42AD330DE0071CFD8 /* Logger+Ohia.swift */,
+				AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AECF4ABD2AD5A2880071CFD8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AE1E11B12AE549C30001369A /* DataStorageService */,
+				AE679AC52ADC0F050073EF8C /* DownloadService */,
+				AECF4AC02AD5A6390071CFD8 /* ImageCacheService */,
+				AE679AB42AD8717C0073EF8C /* ConfigurationService */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AECF4AC02AD5A6390071CFD8 /* ImageCacheService */ = {
+			isa = PBXGroup;
+			children = (
+				AECF4ABE2AD5A62A0071CFD8 /* ImageCacheService.swift */,
+				AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */,
+			);
+			path = ImageCacheService;
+			sourceTree = "<group>";
+		};
+		AEDB016C2ACEFF2C004C575E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AE554D062ACAD2DB00579320 /* Bandcamp Collection Manager */ = {
+		AECF4A7A2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE554D2C2ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection Manager" */;
+			buildConfigurationList = AECF4A9D2AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "Ohia" */;
 			buildPhases = (
-				AE554D032ACAD2DB00579320 /* Sources */,
-				AE554D042ACAD2DB00579320 /* Frameworks */,
-				AE554D052ACAD2DB00579320 /* Resources */,
+				AECF4A772AD1A4550071CFD8 /* Sources */,
+				AECF4A782AD1A4550071CFD8 /* Frameworks */,
+				AECF4A792AD1A4550071CFD8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Bandcamp Collection Manager";
-			productName = "Bandcamp Collection Manager";
-			productReference = AE554D072ACAD2DB00579320 /* Bandcamp Collection Manager.app */;
+			name = Ohia;
+			packageProductDependencies = (
+				AECF4AAA2AD1AAE80071CFD8 /* BCKit */,
+				AE679AB82AD991430073EF8C /* SFSafeSymbols */,
+				AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */,
+				AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */,
+				AE22188C2AF985210013FB84 /* PopoverMenu */,
+				AE012C5F2AFC2511000528C1 /* Dependencies */,
+			);
+			productName = Ohia;
+			productReference = AECF4A7B2AD1A4550071CFD8 /* Ohia.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AE554D172ACAD2DC00579320 /* Bandcamp Collection ManagerTests */ = {
+		AECF4A8A2AD1A4560071CFD8 /* OhiaTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE554D2F2ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection ManagerTests" */;
+			buildConfigurationList = AECF4AA02AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "OhiaTests" */;
 			buildPhases = (
-				AE554D142ACAD2DC00579320 /* Sources */,
-				AE554D152ACAD2DC00579320 /* Frameworks */,
-				AE554D162ACAD2DC00579320 /* Resources */,
+				AECF4A872AD1A4560071CFD8 /* Sources */,
+				AECF4A882AD1A4560071CFD8 /* Frameworks */,
+				AECF4A892AD1A4560071CFD8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AE554D1A2ACAD2DC00579320 /* PBXTargetDependency */,
+				AECF4A8D2AD1A4560071CFD8 /* PBXTargetDependency */,
 			);
-			name = "Bandcamp Collection ManagerTests";
-			productName = "Bandcamp Collection ManagerTests";
-			productReference = AE554D182ACAD2DC00579320 /* Bandcamp Collection ManagerTests.xctest */;
+			name = OhiaTests;
+			productName = OhiaTests;
+			productReference = AECF4A8B2AD1A4560071CFD8 /* OhiaTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		AE554D212ACAD2DC00579320 /* Bandcamp Collection ManagerUITests */ = {
+		AECF4A942AD1A4560071CFD8 /* OhiaUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE554D322ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection ManagerUITests" */;
+			buildConfigurationList = AECF4AA32AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "OhiaUITests" */;
 			buildPhases = (
-				AE554D1E2ACAD2DC00579320 /* Sources */,
-				AE554D1F2ACAD2DC00579320 /* Frameworks */,
-				AE554D202ACAD2DC00579320 /* Resources */,
+				AECF4A912AD1A4560071CFD8 /* Sources */,
+				AECF4A922AD1A4560071CFD8 /* Frameworks */,
+				AECF4A932AD1A4560071CFD8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AE554D242ACAD2DC00579320 /* PBXTargetDependency */,
+				AECF4A972AD1A4560071CFD8 /* PBXTargetDependency */,
 			);
-			name = "Bandcamp Collection ManagerUITests";
-			productName = "Bandcamp Collection ManagerUITests";
-			productReference = AE554D222ACAD2DC00579320 /* Bandcamp Collection ManagerUITests.xctest */;
+			name = OhiaUITests;
+			productName = OhiaUITests;
+			productReference = AECF4A952AD1A4560071CFD8 /* OhiaUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -187,16 +454,16 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					AE554D062ACAD2DB00579320 = {
+					AECF4A7A2AD1A4550071CFD8 = {
 						CreatedOnToolsVersion = 15.0;
 					};
-					AE554D172ACAD2DC00579320 = {
+					AECF4A8A2AD1A4560071CFD8 = {
 						CreatedOnToolsVersion = 15.0;
-						TestTargetID = AE554D062ACAD2DB00579320;
+						TestTargetID = AECF4A7A2AD1A4550071CFD8;
 					};
-					AE554D212ACAD2DC00579320 = {
+					AECF4A942AD1A4560071CFD8 = {
 						CreatedOnToolsVersion = 15.0;
-						TestTargetID = AE554D062ACAD2DB00579320;
+						TestTargetID = AECF4A7A2AD1A4550071CFD8;
 					};
 				};
 			};
@@ -209,35 +476,44 @@
 				Base,
 			);
 			mainGroup = AE554CFE2ACAD2DB00579320;
+			packageReferences = (
+				AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
+				AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */,
+				AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */,
+				AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
+			);
 			productRefGroup = AE554D082ACAD2DB00579320 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AE554D062ACAD2DB00579320 /* Bandcamp Collection Manager */,
-				AE554D172ACAD2DC00579320 /* Bandcamp Collection ManagerTests */,
-				AE554D212ACAD2DC00579320 /* Bandcamp Collection ManagerUITests */,
+				AECF4A7A2AD1A4550071CFD8 /* Ohia */,
+				AECF4A8A2AD1A4560071CFD8 /* OhiaTests */,
+				AECF4A942AD1A4560071CFD8 /* OhiaUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AE554D052ACAD2DB00579320 /* Resources */ = {
+		AECF4A792AD1A4550071CFD8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE554D0F2ACAD2DC00579320 /* Assets.xcassets in Resources */,
-				AE554D122ACAD2DC00579320 /* Main.storyboard in Resources */,
+				AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */,
+				AECF4A862AD1A4560071CFD8 /* Preview Assets.xcassets in Resources */,
+				AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */,
+				AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE554D162ACAD2DC00579320 /* Resources */ = {
+		AECF4A892AD1A4560071CFD8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE554D202ACAD2DC00579320 /* Resources */ = {
+		AECF4A932AD1A4560071CFD8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -247,44 +523,71 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		AE554D032ACAD2DB00579320 /* Sources */ = {
+		AECF4A772AD1A4550071CFD8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE554D0D2ACAD2DB00579320 /* ViewController.swift in Sources */,
-				AE554D0B2ACAD2DB00579320 /* AppDelegate.swift in Sources */,
+				AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */,
+				AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */,
+				AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */,
+				AECF4AAF2AD2D6C80071CFD8 /* OhiaViewModel.swift in Sources */,
+				AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */,
+				AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */,
+				AE679AC92ADC0FD60073EF8C /* LiveDownloadService.swift in Sources */,
+				AE679AD12AE01B570073EF8C /* CollectionDownloadProgress.swift in Sources */,
+				AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */,
+				AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */,
+				AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */,
+				AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */,
+				AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */,
+				AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */,
+				AEF2E3042AE9113400AF4550 /* SettingsModel.swift in Sources */,
+				AE1E11B32AE549D90001369A /* DataStorageService.swift in Sources */,
+				AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */,
+				AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */,
+				AECF4ABF2AD5A62A0071CFD8 /* ImageCacheService.swift in Sources */,
+				AECF4AB22AD2DA710071CFD8 /* WebView.swift in Sources */,
+				AECF4AA92AD1A7B00071CFD8 /* VisualEffect.swift in Sources */,
+				AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */,
+				AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */,
+				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
+				AE679AC72ADC0F150073EF8C /* DownloaderService.swift in Sources */,
+				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
+				AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */,
+				AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */,
+				AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE554D142ACAD2DC00579320 /* Sources */ = {
+		AECF4A872AD1A4560071CFD8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE554D1D2ACAD2DC00579320 /* Bandcamp_Collection_ManagerTests.swift in Sources */,
+				AECF4A902AD1A4560071CFD8 /* OhiaTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE554D1E2ACAD2DC00579320 /* Sources */ = {
+		AECF4A912AD1A4560071CFD8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE554D292ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITestsLaunchTests.swift in Sources */,
-				AE554D272ACAD2DC00579320 /* Bandcamp_Collection_ManagerUITests.swift in Sources */,
+				AECF4A9A2AD1A4560071CFD8 /* OhiaUITests.swift in Sources */,
+				AECF4A9C2AD1A4570071CFD8 /* OhiaUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		AE554D1A2ACAD2DC00579320 /* PBXTargetDependency */ = {
+		AECF4A8D2AD1A4560071CFD8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AE554D062ACAD2DB00579320 /* Bandcamp Collection Manager */;
-			targetProxy = AE554D192ACAD2DC00579320 /* PBXContainerItemProxy */;
+			target = AECF4A7A2AD1A4550071CFD8 /* Ohia */;
+			targetProxy = AECF4A8C2AD1A4560071CFD8 /* PBXContainerItemProxy */;
 		};
-		AE554D242ACAD2DC00579320 /* PBXTargetDependency */ = {
+		AECF4A972AD1A4560071CFD8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AE554D062ACAD2DB00579320 /* Bandcamp Collection Manager */;
-			targetProxy = AE554D232ACAD2DC00579320 /* PBXContainerItemProxy */;
+			target = AECF4A7A2AD1A4550071CFD8 /* Ohia */;
+			targetProxy = AECF4A962AD1A4560071CFD8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -353,7 +656,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -410,7 +713,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -418,57 +721,79 @@
 			};
 			name = Release;
 		};
-		AE554D2D2ACAD2DC00579320 /* Debug */ = {
+		AECF4A9E2AD1A4570071CFD8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Bandcamp Collection Manager/Bandcamp_Collection_Manager.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-Manager";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.Ohia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		AE554D2E2ACAD2DC00579320 /* Release */ = {
+		AECF4A9F2AD1A4570071CFD8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Bandcamp Collection Manager/Bandcamp_Collection_Manager.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-Manager";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.Ohia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		AE554D302ACAD2DC00579320 /* Debug */ = {
+		AECF4AA12AD1A4570071CFD8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -476,17 +801,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-ManagerTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.OhiaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bandcamp Collection Manager.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bandcamp Collection Manager";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ohia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ohia";
 			};
 			name = Debug;
 		};
-		AE554D312ACAD2DC00579320 /* Release */ = {
+		AECF4AA22AD1A4570071CFD8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -494,45 +823,59 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-ManagerTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.OhiaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bandcamp Collection Manager.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bandcamp Collection Manager";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ohia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ohia";
 			};
 			name = Release;
 		};
-		AE554D332ACAD2DC00579320 /* Debug */ = {
+		AECF4AA42AD1A4570071CFD8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-ManagerUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.OhiaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "Bandcamp Collection Manager";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Ohia;
 			};
 			name = Debug;
 		};
-		AE554D342ACAD2DC00579320 /* Release */ = {
+		AECF4AA52AD1A4570071CFD8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.falsevictories.Bandcamp-Collection-ManagerUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.falsevictories.OhiaUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "Bandcamp Collection Manager";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Ohia;
 			};
 			name = Release;
 		};
@@ -548,34 +891,108 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE554D2C2ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection Manager" */ = {
+		AECF4A9D2AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "Ohia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE554D2D2ACAD2DC00579320 /* Debug */,
-				AE554D2E2ACAD2DC00579320 /* Release */,
+				AECF4A9E2AD1A4570071CFD8 /* Debug */,
+				AECF4A9F2AD1A4570071CFD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE554D2F2ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection ManagerTests" */ = {
+		AECF4AA02AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "OhiaTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE554D302ACAD2DC00579320 /* Debug */,
-				AE554D312ACAD2DC00579320 /* Release */,
+				AECF4AA12AD1A4570071CFD8 /* Debug */,
+				AECF4AA22AD1A4570071CFD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE554D322ACAD2DC00579320 /* Build configuration list for PBXNativeTarget "Bandcamp Collection ManagerUITests" */ = {
+		AECF4AA32AD1A4570071CFD8 /* Build configuration list for PBXNativeTarget "OhiaUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE554D332ACAD2DC00579320 /* Debug */,
-				AE554D342ACAD2DC00579320 /* Release */,
+				AECF4AA42AD1A4570071CFD8 /* Debug */,
+				AECF4AA52AD1A4570071CFD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../PopoverMenu;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/couchbase/couchbase-lite-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
+		AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.1;
+			};
+		};
+		AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AE012C5F2AFC2511000528C1 /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = Dependencies;
+		};
+		AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */;
+			productName = CouchbaseLiteSwift;
+		};
+		AE22188C2AF985210013FB84 /* PopoverMenu */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */;
+			productName = PopoverMenu;
+		};
+		AE679AB82AD991430073EF8C /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		AECF4AAA2AD1AAE80071CFD8 /* BCKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BCKit;
+		};
+		AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AE554CFF2ACAD2DB00579320 /* Project object */;
 }

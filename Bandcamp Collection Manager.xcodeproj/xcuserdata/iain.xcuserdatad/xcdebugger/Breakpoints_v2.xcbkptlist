@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "C7E47C7B-08D3-4B62-9D47-D7ED651622F7"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EE2787C9-310E-4771-8E9D-8A344541B0AA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Ohia/App/OhiaViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "loadCollection(using:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EE2787C9-310E-4771-8E9D-8A344541B0AA - 33166e85ddafbff4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Ohia.OhiaViewModel.loadCollection(using: BCKit.CollectionLoader) -&gt; ()"
+                  moduleName = "Ohia"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iain/Projects/Bandcamp%20Collection%20Manager/Ohia/App/OhiaViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "244"
+                  endingLineNumber = "244"
+                  offsetFromSymbolStart = "7024">
+               </Location>
+               <Location
+                  uuid = "EE2787C9-310E-4771-8E9D-8A344541B0AA - 9e5a2d88e708fbca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Ohia.OhiaViewModel.loadCollection(using: BCKit.CollectionLoader) -&gt; ()"
+                  moduleName = "Ohia"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iain/Projects/Bandcamp%20Collection%20Manager/Ohia/App/OhiaViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "244"
+                  endingLineNumber = "244"
+                  offsetFromSymbolStart = "5688">
+               </Location>
+               <Location
+                  uuid = "EE2787C9-310E-4771-8E9D-8A344541B0AA - c8fc0d0b487b59f5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Ohia.OhiaViewModel.loadCollection(using: BCKit.CollectionLoader) -&gt; ()"
+                  moduleName = "Ohia"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iain/Projects/Bandcamp%20Collection%20Manager/Ohia/App/OhiaViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "244"
+                  endingLineNumber = "244"
+                  offsetFromSymbolStart = "7148">
+               </Location>
+               <Location
+                  uuid = "EE2787C9-310E-4771-8E9D-8A344541B0AA - b427cc0d95d585cb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Ohia.OhiaViewModel.loadCollection(using: BCKit.CollectionLoader) -&gt; ()"
+                  moduleName = "Ohia"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/iain/Projects/Bandcamp%20Collection%20Manager/Ohia/App/OhiaViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "244"
+                  endingLineNumber = "244"
+                  offsetFromSymbolStart = "5796">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

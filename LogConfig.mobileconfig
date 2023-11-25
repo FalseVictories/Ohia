@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadDescription</key>
+            <string>System Logging</string>
+            <key>PayloadDisplayName</key>
+            <string>System Logging</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.system.logging.684C6584-DDFB-4DC5-AD4B-DF084028C248</string>
+            <key>PayloadType</key>
+            <string>com.apple.system.logging</string>
+            <key>PayloadUUID</key>
+            <string>684C6584-DDFB-4DC5-AD4B-DF084028C248</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Subsystems</key>
+            <dict>
+              <key>com.falsevictories.Ohia</key>
+              <dict>
+                <key>DEFAULT-OPTIONS</key>
+                <dict>
+                  <key>Enable-Private-Data</key>
+                  <true/>
+                </dict>
+              </dict>
+            </dict>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Enables private logging for Ohia.</string>
+    <key>PayloadDisplayName</key>
+    <string>Enable Logging</string>
+    <key>PayloadIdentifier</key>
+    <string>Slimey.02BFD8E9-601F-40D3-96CF-8EA446D0ABD6</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>84BE502F-BB63-4D65-BBAF-64FCC31AA00A</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
