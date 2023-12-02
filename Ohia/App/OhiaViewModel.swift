@@ -16,6 +16,7 @@ import SwiftUI
 @MainActor
 class OhiaViewModel: ObservableObject {
     @Dependency(\.configurationService) var configService: any ConfigurationService
+    @Dependency(\.cookieService) var cookieService: any CookieService
     @Dependency(\.dataStorageService) var dataStorageService: any DataStorageService
     @Dependency(\.downloadService) var downloadService: any DownloadService
     @Dependency(\.imageCacheService) var imageCacheService: any ImageCacheService
@@ -30,9 +31,6 @@ class OhiaViewModel: ObservableObject {
         case none
         case downloading
     }
-    
-    static let bandcampCookieDomain = ".bandcamp.com"
-    static let loggedInCookieName = "js_logged_in"
     
     @Published var isSignedIn: Bool = false {
         didSet {
@@ -60,8 +58,13 @@ class OhiaViewModel: ObservableObject {
     var oldSummary: OhiaCollectionSummary = .invalid
     var newSummary: OhiaCollectionSummary = .invalid
 
+    var webModel: WebViewModel
+
     init() {
         settings.loadDefaults()
+        webModel = WebViewModel()
+        webModel.delegate = self
+
         updateSignedIn()
     }
     
@@ -74,21 +77,7 @@ class OhiaViewModel: ObservableObject {
     }
     
     func updateSignedIn() {
-        guard let cookies = HTTPCookieStorage.shared.cookies else {
-            isSignedIn = false
-            return
-        }
-        
-        for cookie in cookies {
-            if cookie.domain == OhiaViewModel.bandcampCookieDomain &&
-                cookie.name == OhiaViewModel.loggedInCookieName {
-                isSignedIn = true
-                return
-            }
-        }
-        
-        isSignedIn = false
-        return
+        isSignedIn = cookieService.isLoggedIn
     }
     
     func setUsername(newUsername: String) {
@@ -178,7 +167,14 @@ class OhiaViewModel: ObservableObject {
     }
 
     func logOut() {
-        print("logging out")
+        Logger.Model.info("Logging out")
+
+        Task {
+            await webModel.clearCookies()
+            isSignedIn = false
+        }
+
+        webModel.clear()
     }
 }
 
@@ -385,5 +381,10 @@ private extension OhiaViewModel {
             }
         }
     }
+}
 
+extension OhiaViewModel: WebViewModelDelegate {
+    func webViewDidLogin() {
+        isSignedIn = true
+    }
 }

@@ -13,7 +13,7 @@ import SwiftUI
 @MainActor
 struct OhiaApp: App {
     @ObservedObject private var viewModel = OhiaViewModel()
-    
+
     var body: some Scene {
         Window("Ohia", id: "main") {
             if viewModel.isSignedIn {
@@ -28,7 +28,11 @@ struct OhiaApp: App {
                     }
                 }
             } else {
-                WebView(webView: WebViewModel().webView)
+                WebView(webView: viewModel.webModel.webView)
+                    .frame(width: 800, height: 600)
+                    .onAppear {
+                        viewModel.webModel.loadUrl()
+                    }
             }
         }
 #if os(macOS)

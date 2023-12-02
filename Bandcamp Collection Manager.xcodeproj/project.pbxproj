@@ -27,6 +27,8 @@
 		AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */; };
 		AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */; };
 		AE679AD12AE01B570073EF8C /* CollectionDownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */; };
+		AE80740A2B128FF5007DC1BC /* CookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8074092B128FF5007DC1BC /* CookieService.swift */; };
+		AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE80740C2B12907F007DC1BC /* LiveCookieService.swift */; };
 		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
 		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
 		AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */; };
@@ -96,6 +98,8 @@
 		AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStateInfo.swift; sourceTree = "<group>"; };
 		AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionListHeaderView.swift; sourceTree = "<group>"; };
 		AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDownloadProgress.swift; sourceTree = "<group>"; };
+		AE8074092B128FF5007DC1BC /* CookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieService.swift; sourceTree = "<group>"; };
+		AE80740C2B12907F007DC1BC /* LiveCookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCookieService.swift; sourceTree = "<group>"; };
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
 		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
@@ -294,6 +298,15 @@
 			path = DownloadService;
 			sourceTree = "<group>";
 		};
+		AE80740B2B129002007DC1BC /* CookieService */ = {
+			isa = PBXGroup;
+			children = (
+				AE8074092B128FF5007DC1BC /* CookieService.swift */,
+				AE80740C2B12907F007DC1BC /* LiveCookieService.swift */,
+			);
+			path = CookieService;
+			sourceTree = "<group>";
+		};
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +369,7 @@
 		AECF4ABD2AD5A2880071CFD8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AE80740B2B129002007DC1BC /* CookieService */,
 				AE1E11B12AE549C30001369A /* DataStorageService */,
 				AE679AC52ADC0F050073EF8C /* DownloadService */,
 				AECF4AC02AD5A6390071CFD8 /* ImageCacheService */,
@@ -538,6 +552,7 @@
 				AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */,
 				AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */,
 				AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */,
+				AE80740A2B128FF5007DC1BC /* CookieService.swift in Sources */,
 				AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */,
 				AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */,
 				AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */,
@@ -546,6 +561,7 @@
 				AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */,
 				AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */,
 				AECF4ABF2AD5A62A0071CFD8 /* ImageCacheService.swift in Sources */,
+				AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */,
 				AECF4AB22AD2DA710071CFD8 /* WebView.swift in Sources */,
 				AECF4AA92AD1A7B00071CFD8 /* VisualEffect.swift in Sources */,
 				AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */,
