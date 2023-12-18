@@ -6,7 +6,6 @@
 //
 
 import Dependencies
-import PopoverMenu
 import SwiftUI
 import CachedAsyncImage
 
@@ -29,39 +28,28 @@ struct CollectionListHeaderView: View {
         return "Loading Collection"
     }
     
-    @ViewBuilder var menu : some View {
-        MenuItem(image: Image(systemSymbol: .powerCircleFill), action: {
-            model.logOut()
-        }) {
-            Text("Log Out")
-        }
-    }
-
     var body: some View {
         HStack (alignment: .center) {
-            MenuButton {
-                // FIXME: Put this into a separate function
+            Menu {
+                Button("Log Out") {
+                    model.logOut()
+                }
+            } label: {
                 CachedAsyncImage(url: model.avatarUrl) { phase in
                     if let image = phase.image {
                         image
                             .resizable()
-                            .frame(width:36, height: 36)
-                            .clipShape(Circle())
                     } else if phase.error != nil {
                         Color.red
                     } else {
                         Color.clear
                     }
                 }
-                .frame(width:36, height: 36)
-            } menu: { context in
-                MenuItem(image: Image(systemSymbol: .powerCircleFill), action: {
-                    context.closeMenu()
-                    model.logOut()
-                }) {
-                    Text("Log Out")
-                }
             }
+            .clipShape(Circle())
+            .menuIndicator(.hidden)
+            .menuStyle(.button)
+            .buttonStyle(.borderless)
 
             Text(headerText)
                 .font(.title)
@@ -84,6 +72,7 @@ struct CollectionListHeaderView: View {
                 })
             }
         }
+        .frame(height: 50)
     }
 }
 

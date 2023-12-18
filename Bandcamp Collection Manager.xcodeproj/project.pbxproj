@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,7 +13,6 @@
 		AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */; };
 		AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BB2AE8176A0001369A /* SettingsView.swift */; };
 		AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BD2AE81B700001369A /* FilePickerButton.swift */; };
-		AE22188D2AF985210013FB84 /* PopoverMenu in Frameworks */ = {isa = PBXBuildFile; productRef = AE22188C2AF985210013FB84 /* PopoverMenu */; };
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
@@ -137,7 +136,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE1E11B02AE549550001369A /* CouchbaseLiteSwift in Frameworks */,
-				AE22188D2AF985210013FB84 /* PopoverMenu in Frameworks */,
 				AEF2E30B2AEBC4B400AF4550 /* CachedAsyncImage in Frameworks */,
 				AE012C602AFC2511000528C1 /* Dependencies in Frameworks */,
 				AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */,
@@ -415,7 +413,6 @@
 				AE679AB82AD991430073EF8C /* SFSafeSymbols */,
 				AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */,
 				AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */,
-				AE22188C2AF985210013FB84 /* PopoverMenu */,
 				AE012C5F2AFC2511000528C1 /* Dependencies */,
 			);
 			productName = Ohia;
@@ -494,7 +491,6 @@
 				AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */,
 				AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
-				AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */,
 				AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			productRefGroup = AE554D082ACAD2DB00579320 /* Products */;
@@ -936,13 +932,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../PopoverMenu;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -988,11 +977,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */;
 			productName = CouchbaseLiteSwift;
-		};
-		AE22188C2AF985210013FB84 /* PopoverMenu */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AE05F7BD2AF984AA00EADD2C /* XCLocalSwiftPackageReference "../PopoverMenu" */;
-			productName = PopoverMenu;
 		};
 		AE679AB82AD991430073EF8C /* SFSafeSymbols */ = {
 			isa = XCSwiftPackageProductDependency;
