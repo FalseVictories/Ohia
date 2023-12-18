@@ -77,6 +77,14 @@ class OhiaViewModel: ObservableObject {
     }
     
     func updateSignedIn() {
+        if ProcessInfo().environment["OHIA_ALWAYS_LOG_IN"] != nil {
+            Task {
+                await webModel.clearCookies()
+                isSignedIn = false
+            }
+            return
+        }
+
         isSignedIn = cookieService.isLoggedIn
     }
     
@@ -165,16 +173,9 @@ class OhiaViewModel: ObservableObject {
             }
         }
     }
-
+    
     func logOut() {
-        Logger.Model.info("Logging out")
-
-        Task {
-            await webModel.clearCookies()
-            isSignedIn = false
-        }
-
-        webModel.clear()
+        doLogOut()
     }
 }
 
@@ -183,9 +184,12 @@ private extension OhiaViewModel {
         setState(.loading)
 
         Task {
+            var serverSummary: BCCollectionSummary
+            var user: OhiaUser?
+
             do {
                 // Get the summary from the server
-                let serverSummary = try await getCollectionSummary(using: loader)
+                serverSummary = try await getCollectionSummary(using: loader)
                 newSummary = OhiaCollectionSummary(from: serverSummary)
 
                 // get the username from datastore or the server.
@@ -198,7 +202,7 @@ private extension OhiaViewModel {
                 // get the summary from the datastore now the DB has been opened for the user
                 oldSummary = try dataStorageService.getSummary()
 
-                var user = try dataStorageService.getUser()
+                user = try dataStorageService.getUser()
                 var realname: String?
                 var imageUrl: URL?
 
@@ -228,15 +232,22 @@ private extension OhiaViewModel {
                 if let imageUrl {
                     setAvatar(imageUrl)
                 }
+            } catch let error as NSError {
+                Logger.Model.error("Error logging in: \(error)")
+                setState(.none)
+                isSignedIn = false
+                return
+            }
 
-                guard let user else {
-                    Logger.Model.error("No user found")
+            guard let user,
+                  let username else {
+                Logger.Model.error("No user found")
 
-                    // Can we use defer here?
-                    setState(.loaded)
-                    return
-                }
+                doLogOut()
+                return
+            }
 
+            do {
                 // Try to load the collection from data store, fall back to the server
                 if try !loadCollectionFromStorage(for: username) {
                     Logger.Model.info("Loading collection from server")
@@ -263,8 +274,8 @@ private extension OhiaViewModel {
 
                 await loadImages()
             } catch let error as NSError {
-                Logger.Model.error("Error getting username: \(error, privacy: .public)")
-                setState(.loaded)
+                Logger.Model.error("Error loading collection: \(error, privacy: .public)")
+                setState(.none)
                 return
             }
         }
@@ -379,6 +390,19 @@ private extension OhiaViewModel {
             } else {
                 items.insert(item, at: 0)
             }
+        }
+    }
+
+    func doLogOut() {
+        Logger.Model.info("Logging out")
+
+        webModel.clear()
+        items = []
+        
+        Task {
+            await webModel.clearCookies()
+            setState(.none)
+            isSignedIn = false
         }
     }
 }

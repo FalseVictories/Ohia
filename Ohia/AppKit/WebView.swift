@@ -27,14 +27,14 @@ protocol WebViewModelDelegate : AnyObject {
 class WebViewModel: NSObject, ObservableObject {
     @Dependency(\.cookieService) var cookieService: any CookieService
 
+    static let url = URL(string: "https://bandcamp.com/login")!
+
     let webView: WKWebView
     let cookieStore: WKHTTPCookieStore
-    let url: URL
     weak var delegate: (any WebViewModelDelegate)?
 
     override init() {
         webView = WKWebView()
-        url = URL(string: "https://bandcamp.com/login")!
         cookieStore = webView.configuration.websiteDataStore.httpCookieStore
 
         super.init()
@@ -43,12 +43,13 @@ class WebViewModel: NSObject, ObservableObject {
         cookieStore.add(self)
     }
     
+    /// Clear the current webpage to force a reload
     func clear() {
         webView.load(URLRequest(url: URL(string:"about:blank")!))
     }
     
     func loadUrl() {
-        webView.load(URLRequest(url: url))
+        webView.load(URLRequest(url: WebViewModel.url))
     }
 
     func clearCookies() async {
@@ -60,79 +61,29 @@ class WebViewModel: NSObject, ObservableObject {
 }
 
 extension WebViewModel: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, 
-                 didFinish navigation: WKNavigation!) {
-        print("Navigation finished")
-    }
-
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        print("Decide policy for action: \(navigationAction)")
         if let url = navigationAction.request.mainDocumentURL?.absoluteString {
-            print("URL: \(url)")
             if url.hasSuffix(".bandcamp.com/dashboard") {
                 decisionHandler(.cancel)
-                print("Logged in")
 
                 delegate?.webViewDidLogin()
                 return
             } else if url.hasSuffix("bandcamp.com/login") {
-                print("Allow login page")
                 decisionHandler(.allow)
                 return
             }
         }
 
+        // Need to allow Google to handle the recaptcha stuff that handles
+        // the redirect
         if let url = navigationAction.request.mainDocumentURL {
             let host = url.host(percentEncoded: false)
             decisionHandler(host == "www.google.com" ? .allow : .cancel)
             return
         }
         decisionHandler(.cancel)
-    }
-
-    func webView(_ webView: WKWebView, 
-                 decidePolicyFor navigationResponse: WKNavigationResponse,
-                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        print("Decide policy for response: \(navigationResponse)")
-        decisionHandler(.allow)
-    }
-
-    func webView(_ webView: WKWebView, 
-                 didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("Provo nav")
-    }
-
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        print("Commit")
-    }
-
-    func webView(_ webView: WKWebView,
-                 navigationAction: WKNavigationAction,
-                 didBecome download: WKDownload) {
-        print("Became download")
-    }
-
-    func webView(_ webView: WKWebView,
-                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        print("Redirect")
-    }
-
-    func webView(_ webView: WKWebView, 
-                 didFail navigation: WKNavigation!,
-                 withError error: Error) {
-        print("Fail 1")
-    }
-
-    func webView(_ webView: WKWebView, 
-                 didFailProvisionalNavigation navigation: WKNavigation!,
-                 withError error: Error) {
-        print("Fail 2")
-    }
-
-    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        print("Terminate")
     }
 }
 
@@ -143,6 +94,7 @@ extension WebViewModel: WKHTTPCookieStoreObserver {
                 return
             }
 
+            // Add cookies from WebKit to the app cookie store
             cookies.forEach {
                 self.cookieService.addCookie($0)
             }

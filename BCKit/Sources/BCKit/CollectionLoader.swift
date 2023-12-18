@@ -15,6 +15,7 @@ let logger = Logger(subsystem:Bundle.main.bundleIdentifier!, category: "Collecti
 enum CollectionLoaderError: Error {
     case noData(String)
     case noUserId(String)
+    case invalidSummary(String)
     case noItems(String)
 }
 
@@ -41,9 +42,21 @@ public final class CollectionLoader {
         let userId = summary["fan_id"]
         let collectionSummary = summary["collection_summary"]
 
-        guard let userId = userId as? Int,
-              let collectionSummary else {
-            throw CollectionLoaderError.noUserId("Invalid user id in collection summary")
+        guard let userId = userId as? Int else {
+            let error = summary["error"]
+            if let error = error as? Bool {
+                if error {
+                    if let message = summary["error_message"] {
+                        throw CollectionLoaderError.noUserId("Error getting user id: \(message)")
+                    }
+                }
+            }
+
+            throw CollectionLoaderError.noUserId("Unknown error getting user id")
+        }
+
+        guard let collectionSummary else {
+            throw CollectionLoaderError.noItems("Unknown error getting collection summary")
         }
 
         let username = collectionSummary["username"]
@@ -53,7 +66,8 @@ public final class CollectionLoader {
         guard let username = username as? String,
               let userPage = userPage as? String,
               let albumCache else {
-            throw CollectionLoaderError.noItems("No items in collection summary")
+            logger.warning("Invalid data in collection summary")
+            throw CollectionLoaderError.invalidSummary("Bandcamp returned an invalid summary")
         }
 
         if let cache = albumCache.values {
@@ -64,8 +78,6 @@ public final class CollectionLoader {
             }
         }
 
-        print("Added \(itemIds.count) items to cache")
-        
         let bcSummary = BCCollectionSummary(userId: userId,
                                             username: username,
                                             homepage: URL(string: userPage),

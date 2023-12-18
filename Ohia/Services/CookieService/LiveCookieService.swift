@@ -12,10 +12,6 @@ class LiveCookieService: CookieService {
     static let loggedInCookieName = "js_logged_in"
 
     var isLoggedIn: Bool {
-        if ProcessInfo().environment["OHIA_ALWAYS_LOG_IN"] != nil {
-            clearCookies()
-        }
-
         guard let cookies = HTTPCookieStorage.shared.cookies else {
             return false
         }
