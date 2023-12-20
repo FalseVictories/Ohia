@@ -42,6 +42,12 @@ protocol DataStorageService {
 
     @MainActor
     func getSummary() throws -> OhiaCollectionSummary
+
+    @MainActor
+    func setSecureBookmark(_ bookmark: Data, for url: URL) throws
+
+    @MainActor
+    func getSecureBookmarkFor(_ url: URL) throws -> Data?
 }
 
 enum DataStorageServiceError: Error {

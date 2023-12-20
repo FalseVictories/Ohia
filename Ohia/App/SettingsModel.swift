@@ -12,6 +12,7 @@ import Foundation
 @MainActor
 final class SettingsModel: ObservableObject {
     @Dependency(\.configurationService) var configService: any ConfigurationService
+    @Dependency(\.dataStorageService) var dataStorageService: any DataStorageService
 
     @Published var selectedFileFormat: FileFormat = .flac {
         didSet {
@@ -24,6 +25,18 @@ final class SettingsModel: ObservableObject {
         didSet {
             var cs = configService
             cs.downloadFolder = selectedDownloadFolder
+
+            do {
+                if let selectedDownloadFolder {
+                   let bookmarkData = try selectedDownloadFolder.bookmarkData(options: .withSecurityScope,
+                                                                              includingResourceValuesForKeys: nil,
+                                                                              relativeTo: nil)
+                    var dss = dataStorageService
+                    try dss.setSecureBookmark(bookmarkData, for: selectedDownloadFolder)
+                }
+            } catch {
+                print("Error: \(error)")
+            }
         }
     }
 

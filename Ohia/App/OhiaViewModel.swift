@@ -53,6 +53,8 @@ class OhiaViewModel: ObservableObject {
     
     var settings: SettingsModel = SettingsModel()
     
+    var downloadFolderSecurityUrl: URL?
+
     var downloadTask: Task<Void, Never>?
     
     var oldSummary: OhiaCollectionSummary = .invalid
@@ -114,7 +116,7 @@ class OhiaViewModel: ObservableObject {
         self.currentAction = action
     }
         
-    func downloadItems() {
+    func downloadItems() throws {
         guard currentAction != .downloading else {
             Logger.Model.warning("Download already in progress")
             return
@@ -124,7 +126,30 @@ class OhiaViewModel: ObservableObject {
             Logger.Model.warning("No download folder set")
             return
         }
-        
+
+        guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
+            Logger.Model.error("No access to \(downloadFolder)")
+            return
+        }
+
+        var isStale = false
+        downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
+
+        guard let downloadFolderSecurityUrl else {
+            return
+        }
+
+        if isStale {
+            // FIXME: Get the bookmark data again
+            Logger.Model.warning("Bookmark data is stale")
+            return
+        }
+
+        if !downloadFolderSecurityUrl.startAccessingSecurityScopedResource() {
+            Logger.Model.error("Failed to access download URL")
+            return
+        }
+
         currentAction = .downloading
 
         var downloadItems: [OhiaItem] = []
@@ -147,7 +172,7 @@ class OhiaViewModel: ObservableObject {
         downloadTask = Task {
             let downloadStream = downloadService.download(items: downloadItems,
                                                           ofType: configService.fileFormat,
-                                                          to: downloadFolder)
+                                                          to: downloadFolderSecurityUrl)
             do {
                 for try await (item, success) in downloadStream {
                     currentDownload += 1
@@ -156,8 +181,13 @@ class OhiaViewModel: ObservableObject {
                         try dataStorageService.setItemDownloaded(item)
                     }
                 }
+
+                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
+                self.downloadFolderSecurityUrl = nil
             } catch {
                 Logger.Model.error("Error in download task: \(error)")
+                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
+                self.downloadFolderSecurityUrl = nil
             }
         }
     }
@@ -165,6 +195,9 @@ class OhiaViewModel: ObservableObject {
     func cancelAllDownloads() {
         downloadTask?.cancel()
         downloadService.cancelDownloads()
+        downloadFolderSecurityUrl?.stopAccessingSecurityScopedResource()
+        downloadFolderSecurityUrl = nil
+
         setAction(.none)
         
         items.forEach {

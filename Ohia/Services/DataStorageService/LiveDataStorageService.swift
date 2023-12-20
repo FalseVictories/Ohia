@@ -16,6 +16,7 @@ final class LiveDataStorageService: DataStorageService {
     static let dbName = "ohia-db"
     static let collectionName = "bcItems"
     static let userDataCollectionName = "userdata"
+    static let bookmarksCollectionName = "bookmarks"
 
     private struct DataBaseKeys {
         static let artist = "artist"
@@ -32,6 +33,7 @@ final class LiveDataStorageService: DataStorageService {
     var database: Database?
     var collection: Collection?
     var userDataCollection: Collection?
+    var bookmarksCollection: Collection?
 
     func openDataStorage(for username: String) throws {
         Logger.DataStorageService.info("Opening database for \(username)")
@@ -247,10 +249,41 @@ final class LiveDataStorageService: DataStorageService {
         }
         return OhiaCollectionSummary(count: collectionCount, mostRecentId: mostRecentId)
     }
+
+    func setSecureBookmark(_ bookmark: Data, for url: URL) throws {
+        guard let bookmarksCollection else {
+            throw DataStorageServiceError.noCollection("Missing bookmarks collection")
+        }
+
+        if let urlData = url.absoluteString.data(using: .utf8) {
+            let bookmark64 = bookmark.base64EncodedString()
+            let url64 = urlData.base64EncodedString()
+
+            let doc = MutableDocument(id: url64)
+            doc.setString(bookmark64, forKey: "bookmark")
+
+            try bookmarksCollection.save(document: doc)
+        }
+    }
+
+    func getSecureBookmarkFor(_ url: URL) throws -> Data? {
+        guard let bookmarksCollection else {
+            throw DataStorageServiceError.noCollection("Missing bookmarks collection")
+        }
+
+        if let urlData = url.absoluteString.data(using: .utf8) {
+            let doc = try bookmarksCollection.document(id: urlData.base64EncodedString())
+            if let bookmark64 = doc?.string(forKey: "bookmark") {
+                return Data(base64Encoded: bookmark64, options: .ignoreUnknownCharacters)
+            }
+        }
+
+        return nil
+    }
 }
 
-extension LiveDataStorageService {
-    private func openDatabase() throws {
+private extension LiveDataStorageService {
+    func openDatabase() throws {
         let fm = FileManager.default
 
         let cachesDir = fm.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -270,8 +303,13 @@ extension LiveDataStorageService {
 
         database = try Database(name: LiveDataStorageService.dbName, config: options)
 
-        if database == nil {
+        guard database != nil else {
             throw DataStorageServiceError.noDatabase("No database")
+        }
+
+        bookmarksCollection = try database?.createCollection(name: LiveDataStorageService.bookmarksCollectionName)
+        guard bookmarksCollection != nil else {
+            throw DataStorageServiceError.noCollection("Unable to find bookmarks collection")
         }
     }
 }

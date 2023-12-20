@@ -65,18 +65,18 @@ struct CollectionListHeaderView: View {
             
             if state == .loaded && items.count > 0 {
                 Button(action: {
-                    model.downloadItems()
-                },
-                       label: {
+                    do {
+                        try model.downloadItems()
+                    } catch {
+                        print("Error download")
+                    }
+                }, label: {
                     Text("Download All")
                 })
             }
         }
         .frame(height: 50)
     }
-}
-
-extension CollectionListHeaderView {
 }
 
 #Preview {
