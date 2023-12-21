@@ -135,13 +135,22 @@ class OhiaViewModel: ObservableObject {
         var isStale = false
         downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
 
-        guard let downloadFolderSecurityUrl else {
-            return
+        if isStale {
+            Logger.Model.warning("Bookmark data is stale - trying again")
+            if let bookmarkData = try settings.obtainSecurityBookmarkFor(downloadFolder) {
+                downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
+
+                if isStale {
+                    Logger.Model.error("Bookmark still stale")
+                    return
+                }
+            } else {
+                Logger.Model.error("Unable to get bookmark data for \(downloadFolder)")
+            }
         }
 
-        if isStale {
-            // FIXME: Get the bookmark data again
-            Logger.Model.warning("Bookmark data is stale")
+        guard let downloadFolderSecurityUrl else {
+            Logger.Model.error("No security url for \(downloadFolder)")
             return
         }
 
@@ -157,7 +166,7 @@ class OhiaViewModel: ObservableObject {
         items.forEach {
             if $0.state != .downloaded {
                 // Skip preorders
-                if !settings.downloadPreorders && $0.isPreorder {
+                if !downloadPreorders && $0.isPreorder {
                     Logger.Model.debug("Skipping \($0.artist) \($0.title)")
                 } else {
                     $0.state = .waiting

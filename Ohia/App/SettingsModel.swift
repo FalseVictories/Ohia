@@ -28,11 +28,7 @@ final class SettingsModel: ObservableObject {
 
             do {
                 if let selectedDownloadFolder {
-                   let bookmarkData = try selectedDownloadFolder.bookmarkData(options: .withSecurityScope,
-                                                                              includingResourceValuesForKeys: nil,
-                                                                              relativeTo: nil)
-                    var dss = dataStorageService
-                    try dss.setSecureBookmark(bookmarkData, for: selectedDownloadFolder)
+                    _ = try obtainSecurityBookmarkFor(selectedDownloadFolder)
                 }
             } catch {
                 print("Error: \(error)")
@@ -45,6 +41,16 @@ final class SettingsModel: ObservableObject {
             var cs = configService
             cs.downloadPreorders = downloadPreorders
         }
+    }
+
+    public func obtainSecurityBookmarkFor(_ url: URL) throws -> Data? {
+        let bookmarkData = try url.bookmarkData(options: .withSecurityScope,
+                                                includingResourceValuesForKeys: nil,
+                                                relativeTo: nil)
+        let dss = dataStorageService
+        try dss.setSecureBookmark(bookmarkData, for: url)
+
+        return bookmarkData
     }
 }
 
