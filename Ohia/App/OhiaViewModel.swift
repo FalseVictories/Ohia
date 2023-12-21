@@ -135,7 +135,9 @@ class OhiaViewModel: ObservableObject {
         }
 
         var isStale = false
-        downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
+        downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData,
+                                            options: .withSecurityScope,
+                                            bookmarkDataIsStale: &isStale)
 
         if isStale {
             Logger.Model.warning("Bookmark data is stale - trying again")
