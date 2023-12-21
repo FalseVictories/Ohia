@@ -127,6 +127,8 @@ class OhiaViewModel: ObservableObject {
             return
         }
 
+        Logger.Model.info("Download folder is \(downloadFolder)")
+
         guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
             Logger.Model.error("No access to \(downloadFolder)")
             return

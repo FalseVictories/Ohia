@@ -12,6 +12,9 @@ extension Logger {
     static let subsystem = Bundle.main.bundleIdentifier!
     
     static let Model = Logger(subsystem: subsystem, category: "model")
+    static let Settings = Logger(subsystem: subsystem, category: "settings")
+
+    // Services
     static let ImageService = Logger(subsystem: subsystem, category: "image service")
     static let DownloadService = Logger(subsystem: subsystem, category: "download service")
     static let DataStorageService = Logger(subsystem: subsystem, category: "data storage service")

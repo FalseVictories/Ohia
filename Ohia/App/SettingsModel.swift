@@ -8,6 +8,7 @@
 import BCKit
 import Dependencies
 import Foundation
+import OSLog
 
 @MainActor
 final class SettingsModel: ObservableObject {
@@ -31,7 +32,9 @@ final class SettingsModel: ObservableObject {
                     _ = try obtainSecurityBookmarkFor(selectedDownloadFolder)
                 }
             } catch {
-                print("Error: \(error)")
+                if let selectedDownloadFolder {
+                    Logger.Settings.error("Error setting security bookmark for \(selectedDownloadFolder) - \(error)")
+                }
             }
         }
     }
@@ -47,6 +50,7 @@ final class SettingsModel: ObservableObject {
         let bookmarkData = try url.bookmarkData(options: .withSecurityScope,
                                                 includingResourceValuesForKeys: nil,
                                                 relativeTo: nil)
+        Logger.Settings.info("Obtaining bookmark for \(url)")
         let dss = dataStorageService
         try dss.setSecureBookmark(bookmarkData, for: url)
 
