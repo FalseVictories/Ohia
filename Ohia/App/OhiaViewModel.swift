@@ -185,7 +185,8 @@ class OhiaViewModel: ObservableObject {
         downloadTask = Task {
             let downloadStream = downloadService.download(items: downloadItems,
                                                           ofType: configService.fileFormat,
-                                                          to: downloadFolderSecurityUrl)
+                                                          to: downloadFolderSecurityUrl,
+                                                          andDecompress: settings.decompressDownloads)
             do {
                 for try await (item, success) in downloadStream {
                     currentDownload += 1

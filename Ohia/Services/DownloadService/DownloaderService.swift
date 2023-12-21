@@ -9,10 +9,19 @@ import BCKit
 import Dependencies
 import Foundation
 
+struct DownloadOptions {
+    let decompress: Bool
+    let createFolder: Bool
+    let overwrite: Bool
+}
+
 protocol DownloadService {
     @MainActor
-    func download(items: [OhiaItem], ofType: FileFormat, to destinationUrl: URL) -> AsyncThrowingStream<(OhiaItem, Bool), Error>
-    
+    func download(items: [OhiaItem], 
+                  ofType: FileFormat,
+                  to destinationUrl: URL,
+                  with options: DownloadOptions) -> AsyncThrowingStream<(OhiaItem, Bool), Error>
+
     @MainActor
     func cancelDownloads()
 }

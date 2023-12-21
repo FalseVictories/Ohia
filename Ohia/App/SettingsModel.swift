@@ -56,6 +56,13 @@ final class SettingsModel: ObservableObject {
 
         return bookmarkData
     }
+
+    @Published var decompressDownloads: Bool = false {
+        didSet {
+            var cs = configService
+            cs.decompressDownloads = decompressDownloads
+        }
+    }
 }
 
 extension SettingsModel {
@@ -63,5 +70,6 @@ extension SettingsModel {
         selectedFileFormat = configService.fileFormat
         selectedDownloadFolder = configService.downloadFolder
         downloadPreorders = configService.downloadPreorders
+        decompressDownloads = configService.decompressDownloads
     }
 }

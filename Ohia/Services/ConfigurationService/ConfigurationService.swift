@@ -13,6 +13,7 @@ public enum ConfigurationKey: String {
     case downloadFolder = "downloadFolder"
     case fileFormat = "fileformat"
     case downloadPreorders = "downloadPreorders"
+    case decompressDownloads = "decompressDownloads"
 }
 
 protocol ConfigurationService {
@@ -55,6 +56,15 @@ extension ConfigurationService {
         }
         get {
             bool(for: .downloadPreorders)
+        }
+    }
+
+    var decompressDownloads: Bool {
+        set {
+            set(newValue, for: .decompressDownloads)
+        }
+        get {
+            bool(for: .decompressDownloads)
         }
     }
 }

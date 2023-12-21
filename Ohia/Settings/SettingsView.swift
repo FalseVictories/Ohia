@@ -29,6 +29,7 @@ struct SettingsView: View {
             }
 //            Toggle("Always overwrite downloads", isOn: $overwrite)
             Toggle("Download pre-orders", isOn: $settingsModel.downloadPreorders)
+            Toggle("Decompress downloads", isOn: $settingsModel.decompressDownloads)
         }
         .frame(idealWidth: 300, idealHeight: 250)
         .padding()

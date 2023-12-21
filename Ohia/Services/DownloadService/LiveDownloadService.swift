@@ -16,7 +16,10 @@ final class LiveDownloadService: DownloadService {
     
     var downloadTask: Task<Void, Error>?
     
-    func download(items: [OhiaItem], ofType format: FileFormat, to destinationUrl: URL) -> AsyncThrowingStream<(OhiaItem, Bool), Error> {
+    func download(items: [OhiaItem], 
+                  ofType format: FileFormat,
+                  to destinationUrl: URL,
+                  with options: DownloadOptions) -> AsyncThrowingStream<(OhiaItem, Bool), Error> {
         // Print this out first so it is only printed once per download event
         // and so we don't need to await any variable later on
         if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {
@@ -28,6 +31,8 @@ final class LiveDownloadService: DownloadService {
             return AsyncThrowingStream.finished()
         }
         
+        Logger.DownloadService.info("Decompressing downloads: \(options.decompress)")
+
         // Wrap the group inside an AsyncStream because the group only ever has `maxConcurrentDownloads` in it
         // and we can't use its AsyncSequence property to follow it
         return AsyncThrowingStream { continuation in
@@ -40,7 +45,10 @@ final class LiveDownloadService: DownloadService {
                         let item = items[index]
                         
                         group.addTask {
-                            let result = try await self.downloadTask(for: item, ofType: format, to: destinationUrl)
+                            let result = try await self.downloadTask(for: item, 
+                                                                     ofType: format,
+                                                                     to: destinationUrl,
+                                                                     with: options)
                             continuation.yield((item, result))
                         }
                     }
@@ -52,7 +60,10 @@ final class LiveDownloadService: DownloadService {
                             let item = items[index]
                             
                             group.addTask {
-                                let result = try await self.downloadTask(for: item, ofType: format, to: destinationUrl)
+                                let result = try await self.downloadTask(for: item, 
+                                                                         ofType: format,
+                                                                         to: destinationUrl,
+                                                                         with: options)
                                 continuation.yield((item, result))
                             }
                         }
@@ -76,13 +87,14 @@ extension LiveDownloadService {
     nonisolated
     private func downloadTask(for item: OhiaItem,
                               ofType format: FileFormat,
-                              to destinationUrl: URL) async throws -> Bool {
+                              to destinationUrl: URL,
+                              with options: DownloadOptions) async throws -> Bool {
         Logger.DownloadService.info("Downloading \(item.artist) - \(item.title)")
         
         await item.set(state: .connecting)
         
-        let downloadResult = try await self.downloadItem(item, ofType: format, to: destinationUrl)
-        
+        let downloadResult = try await self.downloadItem(item, ofType: format, to: destinationUrl, with: options)
+
         Logger.DownloadService.info("Downloaded \(item.artist) - \(item.title): \(downloadResult)")
         return downloadResult
     }
@@ -95,7 +107,8 @@ extension LiveDownloadService {
     nonisolated
     private func downloadItem(_ item: OhiaItem,
                               ofType format: FileFormat,
-                              to destinationUrl: URL) async throws -> Bool {
+                              to destinationUrl: URL,
+                              with options: DownloadOptions) async throws -> Bool {
         let loader = CollectionLoader()
         let downloadLinks = try await loader.getDownloadLinks(for: item.downloadUrl)
         
@@ -113,13 +126,14 @@ extension LiveDownloadService {
         
         await item.set(state: .downloading)
         
-        return try await downloadFile(for: item, from: downloadUrl, to: destinationUrl)
+        return try await downloadFile(for: item, from: downloadUrl, to: destinationUrl, with: options)
     }
     
     nonisolated
     private func downloadFile(for item: OhiaItem,
                               from url: URL,
-                              to destinationUrl: URL) async throws -> Bool {
+                              to destinationUrl: URL,
+                              with options: DownloadOptions) async throws -> Bool {
         let request = URLRequest(url: url)
         
         let (byteStream, response) = try await URLSession.shared.bytes(for: request, delegate: nil)
@@ -139,7 +153,20 @@ extension LiveDownloadService {
         
         let filename = httpResponse.suggestedFilename ?? "\(item.id)"
         
-        guard let fileHandle = try createFileHandle(for: filename, in: destinationUrl) else {
+        var destinationFolder = destinationUrl
+        if options.createFolder {
+            let artist = item.artist.isEmpty ? item.artist : "Unknown"
+
+            destinationFolder = destinationUrl.appending(component: artist, directoryHint: .isDirectory)
+
+            Logger.DownloadService.info("Creating folder \(destinationFolder)")
+
+            try FileManager.default.createDirectory(at: destinationFolder, withIntermediateDirectories: true)
+        }
+
+        guard let fileHandle = try createFileHandle(for: filename,
+                                                    in: destinationFolder,
+                                                    with: options) else {
             return false
         }
         
@@ -178,18 +205,20 @@ extension LiveDownloadService {
     }
     
     nonisolated
-    private func createFileHandle(for filename: String, in destinationUrl: URL) throws -> FileHandle? {
+    private func createFileHandle(for filename: String,
+                                  in destinationUrl: URL,
+                                  with options: DownloadOptions) throws -> FileHandle? {
         let destinationUrl = destinationUrl.appending(path: filename, directoryHint: .notDirectory)
         let destinationPath = destinationUrl.path(percentEncoded: false)
         
         let fm = FileManager.default
         
-        var overwrite = false // FIXME: Is this needed?
+        var overwrite = options.overwrite
         if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {
             Logger.DownloadService.info("Always forcing download")
             overwrite = true
         }
-        
+
         if fm.fileExists(atPath: destinationPath) && !overwrite {
             Logger.DownloadService.info("\(destinationPath) already exists, not overwriting")
             
