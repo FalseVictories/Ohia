@@ -18,8 +18,6 @@ final class LiveDownloadService: DownloadService {
         request.httpShouldHandleCookies = true
         
         let data = try await data(for: request)
-                try data.write(to: URL(filePath: "/Users/iain/Downloads/collection-info.json"))
-
         return data
     }
     

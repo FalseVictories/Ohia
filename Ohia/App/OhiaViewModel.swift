@@ -61,6 +61,8 @@ class OhiaViewModel: ObservableObject {
     var newSummary: OhiaCollectionSummary = .invalid
 
     var webModel: WebViewModel
+    
+    var currentDownloadOptions: DownloadOptions?
 
     init() {
         settings.loadDefaults()
@@ -128,6 +130,7 @@ class OhiaViewModel: ObservableObject {
         }
 
         Logger.Model.info("Download folder is \(downloadFolder)")
+        Logger.Model.info("Decompress: \(self.settings.decompressDownloads)")
 
         guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
             Logger.Model.error("No access to \(downloadFolder)")
@@ -182,11 +185,14 @@ class OhiaViewModel: ObservableObject {
         totalDownloads = downloadItems.count
         currentDownload = 0
 
+        currentDownloadOptions = DownloadOptions(decompress: settings.decompressDownloads,
+                                                 createFolder: false,
+                                                 overwrite: false)
+        
         downloadTask = Task {
             let downloadStream = downloadService.download(items: downloadItems,
                                                           ofType: configService.fileFormat,
-                                                          to: downloadFolderSecurityUrl,
-                                                          andDecompress: settings.decompressDownloads)
+                                                          updateClosure: processDownloadStream(item:filename:dataStream:))
             do {
                 for try await (item, success) in downloadStream {
                     currentDownload += 1
@@ -451,6 +457,85 @@ private extension OhiaViewModel {
             setState(.none)
             isSignedIn = false
         }
+    }
+    
+    nonisolated
+    func processDownloadStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
+        guard let currentDownloadOptions = await currentDownloadOptions else {
+            return
+        }
+        
+        if currentDownloadOptions.decompress {
+            try await unpackStream(item: item, filename: filename, dataStream: dataStream)
+        } else {
+            try await writeStream(item: item, filename: filename, dataStream: dataStream)
+        }
+    }
+    
+    nonisolated
+    func unpackStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
+        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl else {
+            return
+        }
+        
+        let zipper = await item.downloadProgress.startDecompressing(to: downloadFolderSecurityUrl)
+        try await zipper.consume(dataStream)
+    }
+    
+    nonisolated
+    func writeStream(item: OhiaItem,
+                     filename: String?,
+                     dataStream: URLSession.AsyncBytes) async throws {
+        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl,
+              let currentDownloadOptions = await currentDownloadOptions else {
+            return
+        }
+        
+        guard let handle = try await item.downloadProgress.startWritingDataFor(filename ?? "\(item.artist)-\(item.title).zip",
+                                                      in: downloadFolderSecurityUrl,
+                                                                               with: currentDownloadOptions) else {
+            return
+        }
+        
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: LiveDownloadService.bufferSize)
+        defer {
+            buffer.deallocate()
+        }
+        
+        var count = 0
+        var totalCount = 0
+        
+        for try await byte in dataStream {
+            // add byte to the buffer
+            buffer[count] = byte
+            count += 1
+            totalCount += 1
+            
+            // write the data when the buffer is full
+            if count >= LiveDownloadService.bufferSize {
+                Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
+                
+                let dataBuffer = Data(bytesNoCopy: buffer,
+                                      count: LiveDownloadService.bufferSize,
+                                      deallocator: .none)
+                
+                try handle.write(contentsOf: dataBuffer)
+                
+                await item.downloadProgress.increaseBytesDownloaded(size: Int64(count))
+                count = 0
+            }
+        }
+        
+        if count != 0 {
+            Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
+            let dataBuffer = Data(bytesNoCopy: buffer,
+                                  count: count,
+                                  deallocator: .none)
+            try handle.write(contentsOf: dataBuffer)
+            await item.downloadProgress.increaseBytesDownloaded(size: Int64(count))
+        }
+        
+        try handle.close()
     }
 }
 

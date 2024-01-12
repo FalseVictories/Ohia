@@ -13,6 +13,7 @@ extension Logger {
     
     static let Model = Logger(subsystem: subsystem, category: "model")
     static let Settings = Logger(subsystem: subsystem, category: "settings")
+    static let Download = Logger(subsystem: subsystem, category: "downloads")
 
     // Services
     static let ImageService = Logger(subsystem: subsystem, category: "image service")

@@ -13,6 +13,8 @@
 		AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */; };
 		AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BB2AE8176A0001369A /* SettingsView.swift */; };
 		AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BD2AE81B700001369A /* FilePickerButton.swift */; };
+		AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718A2B480E8700055E82 /* Zipper.swift */; };
+		AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718B2B480E8700055E82 /* RingBuffer.swift */; };
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
@@ -21,7 +23,7 @@
 		AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABC2AD9D0550073EF8C /* HoverButton.swift */; };
 		AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */ = {isa = PBXBuildFile; fileRef = AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */; };
 		AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */; };
-		AE679AC72ADC0F150073EF8C /* DownloaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC62ADC0F150073EF8C /* DownloaderService.swift */; };
+		AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC62ADC0F150073EF8C /* DownloadService.swift */; };
 		AE679AC92ADC0FD60073EF8C /* LiveDownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */; };
 		AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */; };
 		AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */; };
@@ -85,6 +87,8 @@
 		AE554D462ACADEF900579320 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AE554D492ACB485000579320 /* Logger+BCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+BCM.swift"; sourceTree = "<group>"; };
 		AE554D4E2ACC47D200579320 /* PercentEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentEncoding.swift; sourceTree = "<group>"; };
+		AE5A718A2B480E8700055E82 /* Zipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zipper.swift; sourceTree = "<group>"; };
+		AE5A718B2B480E8700055E82 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
@@ -92,7 +96,7 @@
 		AE679ABC2AD9D0550073EF8C /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
 		AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ENVIRONMENT.md; sourceTree = "<group>"; };
 		AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDownloadProgress.swift; sourceTree = "<group>"; };
-		AE679AC62ADC0F150073EF8C /* DownloaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderService.swift; sourceTree = "<group>"; };
+		AE679AC62ADC0F150073EF8C /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
 		AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveDownloadService.swift; sourceTree = "<group>"; };
 		AE679ACC2ADFECF90073EF8C /* DownloadStateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStateInfo.swift; sourceTree = "<group>"; };
 		AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionListHeaderView.swift; sourceTree = "<group>"; };
@@ -290,7 +294,7 @@
 		AE679AC52ADC0F050073EF8C /* DownloadService */ = {
 			isa = PBXGroup;
 			children = (
-				AE679AC62ADC0F150073EF8C /* DownloaderService.swift */,
+				AE679AC62ADC0F150073EF8C /* DownloadService.swift */,
 				AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */,
 			);
 			path = DownloadService;
@@ -305,9 +309,19 @@
 			path = CookieService;
 			sourceTree = "<group>";
 		};
+		AEA7D9F42B3632CC000765E8 /* Zipper */ = {
+			isa = PBXGroup;
+			children = (
+				AE5A718B2B480E8700055E82 /* RingBuffer.swift */,
+				AE5A718A2B480E8700055E82 /* Zipper.swift */,
+			);
+			path = Zipper;
+			sourceTree = "<group>";
+		};
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
+				AEA7D9F42B3632CC000765E8 /* Zipper */,
 				AE1E11B82AE7F3D90001369A /* App */,
 				AE1E11B72AE7F23D0001369A /* Collection */,
 				AE1E11B62AE7F22F0001369A /* Settings */,
@@ -538,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */,
+				AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */,
 				AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */,
 				AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */,
 				AECF4AAF2AD2D6C80071CFD8 /* OhiaViewModel.swift in Sources */,
@@ -562,8 +577,9 @@
 				AECF4AA92AD1A7B00071CFD8 /* VisualEffect.swift in Sources */,
 				AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */,
 				AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */,
+				AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */,
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
-				AE679AC72ADC0F150073EF8C /* DownloaderService.swift in Sources */,
+				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
 				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
 				AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */,
 				AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */,
@@ -746,7 +762,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
-				DEVELOPMENT_TEAM = 27E3K44V76;
+				DEVELOPMENT_TEAM = K88AP5WRNN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -785,7 +801,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
-				DEVELOPMENT_TEAM = 27E3K44V76;
+				DEVELOPMENT_TEAM = K88AP5WRNN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

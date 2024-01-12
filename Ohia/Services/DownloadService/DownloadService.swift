@@ -17,10 +17,11 @@ struct DownloadOptions {
 
 protocol DownloadService {
     @MainActor
-    func download(items: [OhiaItem], 
-                  ofType: FileFormat,
-                  to destinationUrl: URL,
-                  with options: DownloadOptions) -> AsyncThrowingStream<(OhiaItem, Bool), Error>
+    func download(items: [OhiaItem],
+                  ofType format: FileFormat,
+                  updateClosure: @MainActor @escaping (_ item: OhiaItem,
+                                                       _ filename: String?,
+                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncThrowingStream<(OhiaItem, Bool), Error>
 
     @MainActor
     func cancelDownloads()
