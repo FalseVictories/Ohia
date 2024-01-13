@@ -474,10 +474,17 @@ private extension OhiaViewModel {
     
     nonisolated
     func unpackStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
-        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl else {
+        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl,
+              let currentDownloadOptions = await currentDownloadOptions else {
             return
         }
         
+        var url = downloadFolderSecurityUrl
+        if currentDownloadOptions.createFolder {
+            url = try createFolderStructure(for: item,
+                                            into: url,
+                                            with: currentDownloadOptions)
+        }
         let zipper = await item.downloadProgress.startDecompressing(to: downloadFolderSecurityUrl)
         try await zipper.consume(dataStream)
     }
@@ -536,6 +543,20 @@ private extension OhiaViewModel {
         }
         
         try handle.close()
+    }
+    
+    nonisolated
+    func createFolderStructure(for item: OhiaItem,
+                               into downloadUrl: URL,
+                               with options: DownloadOptions) throws -> URL {
+        let fm = FileManager.default
+        
+        let url = downloadUrl.appending(path: "\(item.artist)/\(item.title)",
+                                        directoryHint: .isDirectory)
+        
+        try fm.createDirectory(at: url, withIntermediateDirectories: true)
+
+        return url
     }
 }
 
