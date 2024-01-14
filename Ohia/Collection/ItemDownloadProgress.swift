@@ -29,6 +29,13 @@ extension ItemDownloadProgress {
         }
     }
     
+    func setBytesDownloaded(_ bytes: Int64) {
+        bytesDownloaded = bytes
+        if downloadSizeInBytes != 0 {
+            progress = Double(bytesDownloaded) / Double(downloadSizeInBytes)
+        }
+    }
+    
     func setDownloadSize(inBytes size: Int64) {
         downloadSizeInBytes = size
     }
@@ -127,13 +134,17 @@ extension ItemDownloadProgress: ZipperDelegate {
         }
     }
     
-    func writeData(from buffer: Data) {
+    func writeData(from buffer: Data,
+                   bytesDownloaded: Int64) {
         guard let fileHandle else {
             return
         }
         
+        DispatchQueue.main.async {
+            self.setBytesDownloaded(bytesDownloaded)
+        }
+        
         do {
-            Logger.Download.debug("Writing \(buffer.count) bytes")
             try fileHandle.write(contentsOf: buffer)
         } catch {
             Logger.Download.error("Error writing data: \(error)")

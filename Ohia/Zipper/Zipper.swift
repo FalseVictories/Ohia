@@ -19,7 +19,7 @@ enum ZipperError: Error {
 protocol ZipperDelegate {
     func createFolder(with name: String)
     func beginWritingFile(with name: String)
-    func writeData(from buffer: Data)
+    func writeData(from buffer: Data, bytesDownloaded: Int64)
     func endWritingFile()
     func errorDidOccur(_ error: ZipperError)
 }
@@ -74,6 +74,8 @@ class Zipper {
     var destinationBufferPointer: UnsafeMutablePointer<UInt8>?
     var streamPointer: UnsafeMutablePointer<compression_stream>?
     
+    var bytesDownloaded: Int64 = 0
+    
     func consume<S: AsyncSequence>(_ iterator: S) async throws where S.Element == UInt8 {
         currentState = .fillingBuffer(parsePKEntryHeader(from:))
         bytesToFill = 4
@@ -81,6 +83,8 @@ class Zipper {
 
     byteIterator:
         for try await byte in iterator {
+            bytesDownloaded += 1
+            
             switch currentState {
             case .none:
                 delegate?.errorDidOccur(.invalidState)
@@ -147,7 +151,8 @@ class Zipper {
                 // Pass a buffer to the decompressor when it's full or it's the last buffer
                 if decompressionBuffer.count >= Zipper.bufferSize || headerType != .none {
                     if currentHeader?.compression == 0 {
-                        delegate?.writeData(from: decompressionBuffer)
+                        delegate?.writeData(from: decompressionBuffer,
+                                            bytesDownloaded: bytesDownloaded)
                     } else if currentHeader?.compression == 8 {
                         decompress(data: decompressionBuffer, finished: decompressionBuffer.count < Zipper.bufferSize)
                     } else {
@@ -396,7 +401,8 @@ private extension Zipper {
                                       count: dataCount,
                                       deallocator: .none)
                 
-                delegate?.writeData(from: outputData)
+                delegate?.writeData(from: outputData,
+                                    bytesDownloaded: bytesDownloaded)
                 
                 streamPointer.pointee.dst_ptr = destinationBufferPointer
                 streamPointer.pointee.dst_size = Zipper.bufferSize
