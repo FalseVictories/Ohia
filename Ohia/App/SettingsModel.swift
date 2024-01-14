@@ -63,6 +63,13 @@ final class SettingsModel: ObservableObject {
             cs.decompressDownloads = decompressDownloads
         }
     }
+    
+    @Published var createFolderStructure: FolderStructure = .multi {
+        didSet {
+            var cs = configService
+            cs.folderStructure = createFolderStructure
+        }
+    }
 }
 
 extension SettingsModel {
@@ -71,5 +78,6 @@ extension SettingsModel {
         selectedDownloadFolder = configService.downloadFolder
         downloadPreorders = configService.downloadPreorders
         decompressDownloads = configService.decompressDownloads
+        createFolderStructure = configService.folderStructure
     }
 }

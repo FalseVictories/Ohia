@@ -13,6 +13,12 @@ import Foundation
 import OSLog
 import SwiftUI
 
+struct DownloadOptions {
+    let decompress: Bool
+    let createFolder: FolderStructure
+    let overwrite: Bool
+}
+
 @MainActor
 class OhiaViewModel: ObservableObject {
     @Dependency(\.configurationService) var configService: any ConfigurationService
@@ -186,7 +192,7 @@ class OhiaViewModel: ObservableObject {
         currentDownload = 0
 
         currentDownloadOptions = DownloadOptions(decompress: settings.decompressDownloads,
-                                                 createFolder: false,
+                                                 createFolder: settings.createFolderStructure,
                                                  overwrite: false)
         
         downloadTask = Task {
@@ -480,12 +486,13 @@ private extension OhiaViewModel {
         }
         
         var url = downloadFolderSecurityUrl
-        if currentDownloadOptions.createFolder {
+        if currentDownloadOptions.createFolder != .none {
             url = try createFolderStructure(for: item,
                                             into: url,
                                             with: currentDownloadOptions)
         }
-        let zipper = await item.downloadProgress.startDecompressing(to: downloadFolderSecurityUrl)
+         let zipper = await item.downloadProgress.startDecompressing(to: url,
+                                                                    with: currentDownloadOptions)
         try await zipper.consume(dataStream)
     }
     
@@ -549,9 +556,15 @@ private extension OhiaViewModel {
     func createFolderStructure(for item: OhiaItem,
                                into downloadUrl: URL,
                                with options: DownloadOptions) throws -> URL {
+        guard options.createFolder != .none else {
+            return downloadUrl
+        }
+
         let fm = FileManager.default
         
-        let url = downloadUrl.appending(path: "\(item.artist)/\(item.title)",
+        let dirPath = options.createFolder == .single ? "\(item.artist) - \(item.title)" : "\(item.artist)/\(item.title)"
+        
+        let url = downloadUrl.appending(path: dirPath,
                                         directoryHint: .isDirectory)
         
         try fm.createDirectory(at: url, withIntermediateDirectories: true)

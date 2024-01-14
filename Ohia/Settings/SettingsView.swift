@@ -30,6 +30,11 @@ struct SettingsView: View {
 //            Toggle("Always overwrite downloads", isOn: $overwrite)
             Toggle("Download pre-orders", isOn: $settingsModel.downloadPreorders)
             Toggle("Decompress downloads", isOn: $settingsModel.decompressDownloads)
+            Picker("Create Folders:", selection: $settingsModel.createFolderStructure) {
+                Text("None").tag(FolderStructure.none)
+                Text("Artist - Title /").tag(FolderStructure.single)
+                Text("Artist / Title /").tag(FolderStructure.multi)
+            }.disabled(!settingsModel.decompressDownloads)
         }
         .frame(idealWidth: 300, idealHeight: 250)
         .padding()

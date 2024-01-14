@@ -14,6 +14,7 @@ final class ItemDownloadProgress: ObservableObject {
     @Published var bytesDownloaded: Int64 = 0
     
     var destinationUrl: URL?
+    var downloadOptions: DownloadOptions?
     var fileHandle: FileHandle?
     
     var downloadSizeInBytes: Int64 = 0
@@ -40,8 +41,9 @@ extension ItemDownloadProgress {
         downloadSizeInBytes = size
     }
     
-    func setDestinationUrl(_ url: URL) {
+    func setDestinationUrl(_ url: URL, options: DownloadOptions) {
         destinationUrl = url
+        downloadOptions = options
     }
     
     func startWritingDataFor(_ filename: String,
@@ -55,8 +57,10 @@ extension ItemDownloadProgress {
     }
     
     nonisolated
-    func startDecompressing(to destinationUrl: URL) async -> Zipper {
-        await setDestinationUrl(destinationUrl)
+    func startDecompressing(to destinationUrl: URL,
+                            with options: DownloadOptions) async -> Zipper {
+        await setDestinationUrl(destinationUrl, options: options)
+        
         let zipper = Zipper()
         zipper.delegate = self
         return zipper
@@ -120,14 +124,13 @@ extension ItemDownloadProgress: ZipperDelegate {
     
     func beginWritingFile(with name: String) {
         if fileHandle == nil,
-           let destinationUrl {
+           let destinationUrl,
+           let downloadOptions {
             do {
                 // FIXME: Get the correct download options here
                 fileHandle = try createFileHandle(for: name,
                                                   in: destinationUrl, 
-                                                  with: DownloadOptions(decompress: true,
-                                                                        createFolder: true,
-                                                                        overwrite: false))
+                                                  with: downloadOptions)
             } catch {
                 Logger.Download.error("Error creating file handle for \(name): \(error)")
             }

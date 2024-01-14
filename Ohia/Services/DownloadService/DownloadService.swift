@@ -9,12 +9,6 @@ import BCKit
 import Dependencies
 import Foundation
 
-struct DownloadOptions {
-    let decompress: Bool
-    let createFolder: Bool
-    let overwrite: Bool
-}
-
 protocol DownloadService {
     @MainActor
     func download(items: [OhiaItem],

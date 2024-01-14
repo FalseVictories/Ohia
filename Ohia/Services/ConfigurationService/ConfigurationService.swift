@@ -9,11 +9,18 @@ import BCKit
 import Dependencies
 import Foundation
 
+public enum FolderStructure: String {
+    case none = "none"
+    case single = "single"
+    case multi = "multi"
+}
+
 public enum ConfigurationKey: String {
     case downloadFolder = "downloadFolder"
     case fileFormat = "fileformat"
     case downloadPreorders = "downloadPreorders"
     case decompressDownloads = "decompressDownloads"
+    case folderStructure = "folderStructure"
 }
 
 protocol ConfigurationService {
@@ -65,6 +72,18 @@ extension ConfigurationService {
         }
         get {
             bool(for: .decompressDownloads)
+        }
+    }
+    
+    var folderStructure: FolderStructure {
+        set {
+            set(newValue.rawValue, for: .folderStructure)
+        }
+        get {
+            if let result = string(for: .folderStructure) {
+                return .init(rawValue: result) ?? .multi
+            }
+            return .multi
         }
     }
 }
