@@ -73,6 +73,7 @@ struct CollectionListHeaderView: View {
                 }, label: {
                     Text("Download All")
                 })
+                .disabled(model.currentAction == .downloading)
             }
         }
         .frame(height: 50)
