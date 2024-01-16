@@ -23,7 +23,7 @@ protocol DataStorageService {
     func addItem(_ item: OhiaItem) throws
     
     @MainActor
-    func setItemDownloaded(_ item: OhiaItem) throws
+    func setItemDownloaded(_ item: OhiaItem, downloaded: Bool) throws
     
     @MainActor
     func setUser(_ user: OhiaUser) throws

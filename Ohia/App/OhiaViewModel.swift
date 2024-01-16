@@ -124,6 +124,15 @@ class OhiaViewModel: ObservableObject {
         self.currentAction = action
     }
         
+    func markItem(_ item: OhiaItem, downloaded: Bool) {
+        do {
+            try dataStorageService.setItemDownloaded(item, downloaded: downloaded)
+            item.state = downloaded ? .downloaded : .none
+        } catch {
+            Logger.Model.error("Error marking item as \(downloaded): \(error)")
+        }
+    }
+    
     func downloadItems() throws {
         guard currentAction != .downloading else {
             Logger.Model.warning("Download already in progress")
@@ -204,7 +213,7 @@ class OhiaViewModel: ObservableObject {
                     currentDownload += 1
                     item.set(state: success ? .downloaded : .cancelled)
                     if success {
-                        try dataStorageService.setItemDownloaded(item)
+                        try dataStorageService.setItemDownloaded(item, downloaded: true)
                     }
                 }
 

@@ -11,6 +11,8 @@ import SwiftUI
 struct CollectionItemRow: View {
     @ObservedObject var item: OhiaItem
     
+    @EnvironmentObject var model: OhiaViewModel
+    
     var body: some View {
         HStack (alignment: .center) {
             ZStack(alignment: .bottomTrailing) {
@@ -38,6 +40,12 @@ struct CollectionItemRow: View {
             }
         }
         .padding(8)
+        .contextMenu(menuItems: {
+            Button("Mark As Not Downloaded") {
+                model.markItem(item, downloaded: false)
+            }
+            .disabled(item.state == .none)
+        })
     }
 }
 

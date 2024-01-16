@@ -139,7 +139,8 @@ final class LiveDataStorageService: DataStorageService {
         try collection.save(document: document)
     }
 
-    func setItemDownloaded(_ item: OhiaItem) throws {
+    func setItemDownloaded(_ item: OhiaItem,
+                           downloaded: Bool) throws {
         guard let collection else {
             throw DataStorageServiceError.noCollection("Missing item collection")
         }
@@ -149,7 +150,7 @@ final class LiveDataStorageService: DataStorageService {
         }
 
         let mutableDoc = document.toMutable()
-        mutableDoc.setBoolean(true, forKey: DataBaseKeys.isDownloaded)
+        mutableDoc.setBoolean(downloaded, forKey: DataBaseKeys.isDownloaded)
 
         try collection.save(document: mutableDoc)
     }
