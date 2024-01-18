@@ -49,7 +49,7 @@ class OhiaItem: ObservableObject, Identifiable {
         self.artist = artist
         self.added = added
         self.downloadUrl = downloadUrl
-        self.thumbnail = Image(.cover)
+        self.thumbnail = Image(.defaultIcon)
         self.state = state
         self.isPreorder = isPreorder
         self.isHidden = isHidden
