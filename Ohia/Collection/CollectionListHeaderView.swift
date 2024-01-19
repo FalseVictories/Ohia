@@ -5,9 +5,10 @@
 //  Created by iain on 18/10/2023.
 //
 
-import Dependencies
-import SwiftUI
 import CachedAsyncImage
+import Dependencies
+import OSLog
+import SwiftUI
 
 struct CollectionListHeaderView: View {
     @Dependency(\.downloadService) var downloadService: any DownloadService
@@ -17,7 +18,7 @@ struct CollectionListHeaderView: View {
     var username: String?
     var items: [OhiaItem]
     var state: OhiaViewModel.CollectionState
-
+    
     var headerText: String {
         if state == .loaded {
             if username != nil {
@@ -64,15 +65,28 @@ struct CollectionListHeaderView: View {
             Spacer()
             
             if state == .loaded && items.count > 0 {
-                Button(action: {
-                    do {
-                        try model.downloadItems()
-                    } catch {
-                        print("Error download")
+                MenuButton(title: "Download All") {
+                    Button("Download Selected") {
+                        do {
+                            try model.downloadItemsOf(type: .selected)
+                        } catch {
+                            Logger.Download.error("Error downloading: \(error)")
+                        }
                     }
-                }, label: {
-                    Text("Download All")
-                })
+                    Button("Download New") {
+                        do {
+                            try model.downloadItemsOf(type: .new)
+                        } catch {
+                            Logger.Download.error("Error downloading: \(error)")
+                        }
+                    }
+                } action: {
+                    do {
+                        try model.downloadItemsOf(type: .all)
+                    } catch {
+                        Logger.Download.error("Error downloading: \(error)")
+                    }
+                }
                 .disabled(model.currentAction == .downloading)
             }
         }
@@ -86,4 +100,5 @@ struct CollectionListHeaderView: View {
         CollectionListHeaderView(username: "Jason", items: [], state: .loading)
         CollectionListHeaderView(username: "Jason", items: [], state: .loaded)
     }
+    .environmentObject(OhiaViewModel())
 }

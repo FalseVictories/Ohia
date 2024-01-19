@@ -38,6 +38,12 @@ class OhiaViewModel: ObservableObject {
         case downloading
     }
     
+    enum DownloadType {
+        case all
+        case selected
+        case new
+    }
+    
     @Published var isSignedIn: Bool = false {
         didSet {
             Logger.Model.info("Signed in: \(self.isSignedIn, privacy: .public)")
@@ -133,7 +139,37 @@ class OhiaViewModel: ObservableObject {
         }
     }
     
-    func downloadItems() throws {
+    func downloadItemsOf(type: DownloadType) throws {
+        var itemsToDownload: [OhiaItem] = []
+        var selectionClosure: (OhiaItem, Bool) -> Bool
+        
+        let downloadPreorders = settings.downloadPreorders
+        
+        switch type {
+        case .all:
+            selectionClosure = selectAllItems
+            break
+            
+        case .new:
+            selectionClosure = selectNewItems
+            break
+            
+        case .selected:
+            selectionClosure = selectSelected
+            break
+        }
+        
+        items.forEach {
+            if selectionClosure($0, downloadPreorders) {
+                $0.state = .waiting
+                itemsToDownload.append($0)
+            }
+        }
+        
+        try downloadItems(itemsToDownload)
+    }
+    
+    func downloadItems(_ downloadItems: [OhiaItem]) throws {
         guard currentAction != .downloading else {
             Logger.Model.warning("Download already in progress")
             return
@@ -183,8 +219,7 @@ class OhiaViewModel: ObservableObject {
 
         currentAction = .downloading
 
-        var downloadItems: [OhiaItem] = []
-        let downloadPreorders = settings.downloadPreorders
+        /*
         items.forEach {
             if $0.state != .downloaded {
                 // Skip preorders
@@ -196,6 +231,7 @@ class OhiaViewModel: ObservableObject {
                 }
             }
         }
+         */
 
         totalDownloads = downloadItems.count
         currentDownload = 0
@@ -472,6 +508,28 @@ private extension OhiaViewModel {
             setState(.none)
             isSignedIn = false
         }
+    }
+    
+    func selectAllItems(item: OhiaItem, downloadPreorders: Bool) -> Bool {
+        if item.state != .downloaded {
+            // Skip preorders
+            if !downloadPreorders && item.isPreorder {
+                return false
+            } else {
+                return true
+//                item.state = .waiting
+//                downloadItems.append($0)
+            }
+        }
+        return false
+    }
+    
+    func selectSelected(item: OhiaItem, downloadPreorders: Bool) -> Bool {
+        return false
+    }
+    
+    func selectNewItems(item: OhiaItem, downloadPreorders: Bool) -> Bool {
+        return false
     }
     
     nonisolated

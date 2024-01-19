@@ -47,6 +47,7 @@
 		AECF4ABF2AD5A62A0071CFD8 /* ImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4ABE2AD5A62A0071CFD8 /* ImageCacheService.swift */; };
 		AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */; };
 		AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */ = {isa = PBXBuildFile; fileRef = AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */; };
+		AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED478B32B59913400CDEA24 /* MenuButton.swift */; };
 		AEF2E3042AE9113400AF4550 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3032AE9113400AF4550 /* SettingsModel.swift */; };
 		AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */; };
 		AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */; };
@@ -127,6 +128,7 @@
 		AECF4ABE2AD5A62A0071CFD8 /* ImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheService.swift; sourceTree = "<group>"; };
 		AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveImageCacheService.swift; sourceTree = "<group>"; };
 		AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = LogConfig.mobileconfig; sourceTree = "<group>"; };
+		AED478B32B59913400CDEA24 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		AEDB016B2ACEF6F4004C575E /* BCKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BCKit; sourceTree = "<group>"; };
 		AEF2E3032AE9113400AF4550 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaItem.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				AE679ABC2AD9D0550073EF8C /* HoverButton.swift */,
 				AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */,
 				AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */,
+				AED478B32B59913400CDEA24 /* MenuButton.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				AECF4AA92AD1A7B00071CFD8 /* VisualEffect.swift in Sources */,
 				AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */,
 				AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */,
+				AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */,
 				AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */,
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
 				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
