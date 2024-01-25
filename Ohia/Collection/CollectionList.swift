@@ -9,12 +9,14 @@ import Dependencies
 import SwiftUI
 
 struct CollectionList: View {
+    @EnvironmentObject var model: OhiaViewModel
+    
     var state: OhiaViewModel.CollectionState
     var username: String?
     var items: [OhiaItem]
 
     var body: some View {
-        List {
+        List(selection: $model.selectedItems) {
             Section(header: CollectionListHeaderView(username: username, items: items, state: state)) {
                 ForEach(items) { item in
                     CollectionItemRow(item: item)

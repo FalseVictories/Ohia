@@ -73,6 +73,7 @@ struct CollectionListHeaderView: View {
                             Logger.Download.error("Error downloading: \(error)")
                         }
                     }
+                    .disabled(model.selectedItems.isEmpty)
                     Button("Download New") {
                         do {
                             try model.downloadItemsOf(type: .new)

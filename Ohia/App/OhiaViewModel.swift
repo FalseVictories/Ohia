@@ -63,6 +63,8 @@ class OhiaViewModel: ObservableObject {
     @Published var totalDownloads: Int = 0
     @Published var avatarUrl: URL?
     
+    @Published var selectedItems = Set<Int>()
+    
     var settings: SettingsModel = SettingsModel()
     
     var downloadFolderSecurityUrl: URL?
@@ -525,7 +527,7 @@ private extension OhiaViewModel {
     }
     
     func selectSelected(item: OhiaItem, downloadPreorders: Bool) -> Bool {
-        return false
+        return selectedItems.contains(item.id)
     }
     
     func selectNewItems(item: OhiaItem, downloadPreorders: Bool) -> Bool {
