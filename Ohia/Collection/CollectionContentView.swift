@@ -25,9 +25,9 @@ struct CollectionContentView: View {
                     .transition(.move(edge: .bottom))
             }
         }
-        .onReceive(model.$currentAction) { state in
+        .onReceive(model.$currentAction) { action in
             withAnimation {
-                downloadProgressIsVisible = state == .downloading
+                downloadProgressIsVisible = action == .downloading
             }
         }
     }

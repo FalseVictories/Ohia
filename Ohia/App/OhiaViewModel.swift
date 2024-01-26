@@ -220,21 +220,6 @@ class OhiaViewModel: ObservableObject {
         }
 
         currentAction = .downloading
-
-        /*
-        items.forEach {
-            if $0.state != .downloaded {
-                // Skip preorders
-                if !downloadPreorders && $0.isPreorder {
-                    Logger.Model.debug("Skipping \($0.artist) \($0.title)")
-                } else {
-                    $0.state = .waiting
-                    downloadItems.append($0)
-                }
-            }
-        }
-         */
-
         totalDownloads = downloadItems.count
         currentDownload = 0
 
@@ -257,6 +242,7 @@ class OhiaViewModel: ObservableObject {
 
                 downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
                 self.downloadFolderSecurityUrl = nil
+                currentAction = .none
             } catch {
                 Logger.Model.error("Error in download task: \(error)")
                 downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()

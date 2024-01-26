@@ -43,15 +43,18 @@ final class LiveDownloadService: DownloadService {
                     for index in 0..<maxConcurrentDownloads {
                         let item = items[index]
                         
+                        Logger.DownloadService.debug("Adding \(item.title) to download")
                         group.addTask {
                             let result = try await self.downloadTask(for: item, 
                                                                      ofType: format,
                                                                      updateClosure: updateClosure)
+                            Logger.DownloadService.debug("\(item.title) complete")
                             continuation.yield((item, result))
                         }
                     }
                     
                     var index = maxConcurrentDownloads
+                    
                     // Wait for a task to complete and schedule the next download
                     while try await group.next() != nil {
                         if index < items.count {
@@ -68,8 +71,10 @@ final class LiveDownloadService: DownloadService {
                     }
                 }
                 
+                Logger.DownloadService.debug("Downloads complete")
                 // Downloads should now be finished, so nil the task
                 downloadTask = nil
+                continuation.finish()
             }
         }
     }
