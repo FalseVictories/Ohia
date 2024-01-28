@@ -16,15 +16,19 @@ struct CollectionList: View {
     var items: [OhiaItem]
 
     var body: some View {
-        List(selection: $model.selectedItems) {
-            Section(header: CollectionListHeaderView(username: username, items: items, state: state)) {
+        ZStack (alignment: .topLeading) {
+            List(selection: $model.selectedItems) {
                 ForEach(items) { item in
                     CollectionItemRow(item: item)
                 }
             }
+            .padding(EdgeInsets(top: 50, leading: 0, bottom: 0, trailing: 0))
+            .scrollContentBackground(.hidden)
+            .background(.clear)
+            CollectionListHeaderView(username: username, items: items, state: state)
+                .padding(8)
+                .background(.thinMaterial)
         }
-        .scrollContentBackground(.hidden)
-        .background(.clear)
     }
 }
 
