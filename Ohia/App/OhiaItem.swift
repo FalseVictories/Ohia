@@ -32,6 +32,8 @@ class OhiaItem: ObservableObject, Identifiable {
 
     let downloadUrl: URL
     var thumbnailUrl: URL?
+    var localFolder: URL?
+    
     @Published var thumbnail: Image
     @Published var state: State = .none
     @Published var downloadProgress = ItemDownloadProgress()
@@ -71,5 +73,9 @@ extension OhiaItem {
     
     func set(state: State) {
         self.state = state
+    }
+    
+    func setLocalFolder(_ url: URL) {
+        self.localFolder = url
     }
 }

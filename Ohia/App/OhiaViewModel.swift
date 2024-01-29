@@ -236,6 +236,9 @@ class OhiaViewModel: ObservableObject {
                     currentDownload += 1
                     item.set(state: success ? .downloaded : .cancelled)
                     if success {
+                        if let localFolder = item.localFolder {
+                            try dataStorageService.setItemDownloadLocation(item, location: localFolder.path(percentEncoded: false))
+                        }
                         try dataStorageService.setItemDownloaded(item, downloaded: true)
                     }
                 }
@@ -268,6 +271,17 @@ class OhiaViewModel: ObservableObject {
     
     func logOut() {
         doLogOut()
+    }
+    
+    func open(item: OhiaItem) {
+        do {
+            if let url = try dataStorageService.getDownloadLocation(item) {
+                Logger.Model.debug("Opening \(url)")
+                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url)
+            }
+        } catch {
+            Logger.Model.error("Error getting download location \(error)")
+        }
     }
 }
 
@@ -546,7 +560,9 @@ private extension OhiaViewModel {
                                             into: url,
                                             with: currentDownloadOptions)
         }
-         let zipper = await item.downloadProgress.startDecompressing(to: url,
+        
+        await item.setLocalFolder(url)
+        let zipper = await item.downloadProgress.startDecompressing(to: url,
                                                                     with: currentDownloadOptions)
         try await zipper.consume(dataStream)
     }
@@ -565,6 +581,8 @@ private extension OhiaViewModel {
                                                                                with: currentDownloadOptions) else {
             return
         }
+        
+        await item.setLocalFolder(downloadFolderSecurityUrl)
         
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: LiveDownloadService.bufferSize)
         defer {

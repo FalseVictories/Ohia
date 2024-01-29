@@ -45,6 +45,10 @@ struct CollectionItemRow: View {
                 model.markItem(item, downloaded: false)
             }
             .disabled(item.state == .none)
+            Button("Reveal in Finder") {
+                model.open(item: item)
+            }
+            .disabled(item.state != .downloaded)
         })
     }
 }

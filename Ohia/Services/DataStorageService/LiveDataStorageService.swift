@@ -25,6 +25,8 @@ final class LiveDataStorageService: DataStorageService {
         static let thumbnailUrl = "thumbnailUrl"
         static let bcid = "bcid"
         static let isDownloaded = "isDownloaded"
+        static let downloadLocation = "downloadLocation"
+        static let isNew = "isNew"
         static let added = "added"
         static let isPreorder = "isPreorder"
         static let isHidden = "isHidden"
@@ -151,6 +153,48 @@ final class LiveDataStorageService: DataStorageService {
 
         let mutableDoc = document.toMutable()
         mutableDoc.setBoolean(downloaded, forKey: DataBaseKeys.isDownloaded)
+
+        try collection.save(document: mutableDoc)
+    }
+    
+    func setItemDownloadLocation(_ item: OhiaItem, location: String) throws {
+        guard let collection else {
+            throw DataStorageServiceError.noCollection("Missing item collection")
+        }
+
+        guard let document = try collection.document(id: String(describing: item.id)) else {
+            return
+        }
+
+        let mutableDoc = document.toMutable()
+        mutableDoc.setString(location, forKey: DataBaseKeys.downloadLocation)
+
+        try collection.save(document: mutableDoc)
+    }
+    
+    func getDownloadLocation(_ item: OhiaItem) throws -> String? {
+        guard let collection else {
+            throw DataStorageServiceError.noCollection("Missing item collection")
+        }
+        
+        guard let document = try collection.document(id: String(describing: item.id)) else {
+            return nil
+        }
+        
+        return document.string(forKey: DataBaseKeys.downloadLocation)
+    }
+    
+    func setItemNew(_ item: OhiaItem, new: Bool) throws {
+        guard let collection else {
+            throw DataStorageServiceError.noCollection("Missing item collection")
+        }
+
+        guard let document = try collection.document(id: String(describing: item.id)) else {
+            return
+        }
+
+        let mutableDoc = document.toMutable()
+        mutableDoc.setBoolean(new, forKey: DataBaseKeys.isNew)
 
         try collection.save(document: mutableDoc)
     }

@@ -26,6 +26,15 @@ protocol DataStorageService {
     func setItemDownloaded(_ item: OhiaItem, downloaded: Bool) throws
     
     @MainActor
+    func setItemDownloadLocation(_ item: OhiaItem, location: String) throws
+    
+    @MainActor
+    func getDownloadLocation(_ item: OhiaItem) throws -> String?
+    
+    @MainActor
+    func setItemNew(_ item: OhiaItem, new: Bool) throws
+    
+    @MainActor
     func setUser(_ user: OhiaUser) throws
     
     @MainActor
