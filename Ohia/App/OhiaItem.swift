@@ -34,6 +34,7 @@ class OhiaItem: ObservableObject, Identifiable {
     var thumbnailUrl: URL?
     var localFolder: URL?
     
+    @Published var isNew: Bool
     @Published var thumbnail: Image
     @Published var state: State = .none
     @Published var downloadProgress = ItemDownloadProgress()
@@ -44,6 +45,7 @@ class OhiaItem: ObservableObject, Identifiable {
          added: Int,
          isPreorder: Bool,
          isHidden: Bool,
+         isNew: Bool,
          downloadUrl: URL,
          state: State = .none) {
         self.id = id
@@ -55,14 +57,27 @@ class OhiaItem: ObservableObject, Identifiable {
         self.state = state
         self.isPreorder = isPreorder
         self.isHidden = isHidden
+        self.isNew = isNew
     }
 
     static func preview(for state: State) -> OhiaItem {
         return OhiaItem(id: 1, title: "Travels in Constants", 
                         artist: "Songs: Ohia", added: 0,
-                        isPreorder: false, isHidden: false,
+                        isPreorder: false,
+                        isHidden: false,
+                        isNew: false,
                         downloadUrl: URL(string: "https://example.com")!,
                         state: state)
+    }
+    
+    static func new() -> OhiaItem {
+        return OhiaItem(id: 1,
+                        title: "Travels in Constants",
+                        artist: "Songs: Ohia",
+                        added: 0, isPreorder: false,
+                        isHidden: false,
+                        isNew: true,
+                        downloadUrl: URL(string: "https://example.com")!)
     }
 }
 

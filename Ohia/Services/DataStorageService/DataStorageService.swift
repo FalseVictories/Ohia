@@ -57,6 +57,9 @@ protocol DataStorageService {
 
     @MainActor
     func getSecureBookmarkFor(_ url: URL) throws -> Data?
+    
+    @MainActor
+    func clearNewItems() throws
 }
 
 enum DataStorageServiceError: Error {

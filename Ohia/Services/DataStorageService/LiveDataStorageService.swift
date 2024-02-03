@@ -105,6 +105,7 @@ final class LiveDataStorageService: DataStorageService {
                                 added: docProps.int(forKey: DataBaseKeys.added),
                                 isPreorder: docProps.boolean(forKey: DataBaseKeys.isPreorder),
                                 isHidden: docProps.boolean(forKey: DataBaseKeys.isHidden),
+                                isNew: docProps.boolean(forKey: DataBaseKeys.isNew),
                                 downloadUrl: URL(string: downloadUrl)!)
             if let thumbnail = docProps.string(forKey: DataBaseKeys.thumbnailUrl) {
                 item.thumbnailUrl = URL(string:thumbnail)
@@ -189,14 +190,7 @@ final class LiveDataStorageService: DataStorageService {
             throw DataStorageServiceError.noCollection("Missing item collection")
         }
 
-        guard let document = try collection.document(id: String(describing: item.id)) else {
-            return
-        }
-
-        let mutableDoc = document.toMutable()
-        mutableDoc.setBoolean(new, forKey: DataBaseKeys.isNew)
-
-        try collection.save(document: mutableDoc)
+        try setNewFlagOnItemWith(id: String(describing: item.id), in: collection, new: new)
     }
 
     func setUser(_ data: OhiaUser) throws {
@@ -325,6 +319,26 @@ final class LiveDataStorageService: DataStorageService {
 
         return nil
     }
+    
+    func clearNewItems() throws {
+        guard let collection else {
+            throw DataStorageServiceError.noCollection("Missing items collection")
+        }
+        
+        let query = QueryBuilder
+            .select(SelectResult.expression(Meta.id)) 
+            .from(DataSource.collection(collection))
+            .where(Expression.property(DataBaseKeys.isNew).equalTo(Expression.boolean(true)))
+        
+        Logger.DataStorageService.debug("Executing new query")
+        for result in try query.execute() {
+            if let id = result.string(forKey: "id") {
+                Logger.DataStorageService.debug("Id \(id) is new")
+                try setNewFlagOnItemWith(id: id, in: collection, new: false)
+            }
+        }
+        Logger.DataStorageService.debug("Completed new query")
+    }
 }
 
 private extension LiveDataStorageService {
@@ -356,5 +370,16 @@ private extension LiveDataStorageService {
         guard bookmarksCollection != nil else {
             throw DataStorageServiceError.noCollection("Unable to find bookmarks collection")
         }
+    }
+    
+    func setNewFlagOnItemWith(id: String, in collection: Collection, new: Bool) throws {
+        guard let document = try collection.document(id: id) else {
+            return
+        }
+
+        let mutableDoc = document.toMutable()
+        mutableDoc.setBoolean(new, forKey: DataBaseKeys.isNew)
+
+        try collection.save(document: mutableDoc)
     }
 }

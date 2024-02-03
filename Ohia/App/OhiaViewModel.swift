@@ -305,6 +305,7 @@ private extension OhiaViewModel {
                 // Use the user's collection data
                 try dataStorageService.openDataStorage(for: username)
 
+                try dataStorageService.clearNewItems()
                 // get the summary from the datastore now the DB has been opened for the user
                 oldSummary = try dataStorageService.getSummary()
 
@@ -366,6 +367,11 @@ private extension OhiaViewModel {
                     Logger.Model.info("   - need \(updateCount) items")
 
                     if (updateCount > 0) {
+                        try dataStorageService.clearNewItems()
+                        for item in items {
+                            item.isNew = false
+                        }
+                        
                         try await loadCollectionUpdatesFor(user.userId,
                                                            count: updateCount,
                                                            using: loader)
@@ -476,12 +482,16 @@ private extension OhiaViewModel {
     func addItems(_ batchItems: [BCItem], append: Bool = true) {
         for bcItem in batchItems {
             let item = OhiaItem(id: bcItem.id, title: bcItem.name, artist: bcItem.artist, 
-                                added: bcItem.added, isPreorder: bcItem.isPreorder, isHidden: bcItem.isHidden,
+                                added: bcItem.added,
+                                isPreorder: bcItem.isPreorder,
+                                isHidden: bcItem.isHidden,
+                                isNew: !append,
                                 downloadUrl: bcItem.downloadUrl)
             item.thumbnailUrl = bcItem.thumbnailUrl
             
             do {
                 try dataStorageService.addItem(item)
+                try dataStorageService.setItemNew(item, new: !append)
             } catch {
                 Logger.Model.error("Error adding \(item.artist) - \(item.title) to database")
             }
@@ -531,7 +541,7 @@ private extension OhiaViewModel {
     }
     
     func selectNewItems(item: OhiaItem, downloadPreorders: Bool) -> Bool {
-        return false
+        return item.isNew
     }
     
     nonisolated

@@ -21,6 +21,14 @@ struct CollectionItemRow: View {
                     .cornerRadius(6)
                     .frame(width:64, height: 64)
 
+                if item.isNew {
+                    Text("New")
+                        .font(.caption2)
+                        .foregroundStyle(Color.secondary)
+                        .background(Color.accentColor.opacity(0.4))
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                }
+                
                 if item.isPreorder {
                     Text("Preorder")
                         .font(.caption2)
@@ -62,6 +70,7 @@ extension CollectionItemRow {
         ForEach (OhiaItem.State.allCases) { state in
             CollectionItemRow(item: OhiaItem.preview(for: state))
         }
+        CollectionItemRow(item: OhiaItem.new())
     }
 }
 
