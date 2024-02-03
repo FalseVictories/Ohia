@@ -1,0 +1,110 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@'s Collection - %d items" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@'s Collection - %2$d items"
+          }
+        }
+      }
+    },
+    "AAC High" : {
+
+    },
+    "AIFF Lossless" : {
+
+    },
+    "ALAC" : {
+
+    },
+    "Artist - Title /" : {
+
+    },
+    "Artist / Title /" : {
+
+    },
+    "Create Folders:" : {
+
+    },
+    "Decompress downloads" : {
+
+    },
+    "Download All" : {
+
+    },
+    "Download Folder:" : {
+
+    },
+    "Download Format:" : {
+
+    },
+    "Download New" : {
+
+    },
+    "Download pre-orders" : {
+
+    },
+    "Download Selected" : {
+
+    },
+    "Downloaded %lld / %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Downloaded %1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "Flac" : {
+
+    },
+    "Loading Collection" : {
+
+    },
+    "Log Out" : {
+
+    },
+    "Mark As Not Downloaded" : {
+
+    },
+    "MP3 320" : {
+
+    },
+    "MP3 v0" : {
+
+    },
+    "New" : {
+
+    },
+    "None" : {
+
+    },
+    "Ogg Vorbis" : {
+
+    },
+    "Ohia" : {
+
+    },
+    "Preorder" : {
+
+    },
+    "Reveal in Finder" : {
+
+    },
+    "Test menu 1" : {
+
+    },
+    "Test menu 2" : {
+
+    },
+    "Wav" : {
+
+    }
+  },
+  "version" : "1.0"
+}

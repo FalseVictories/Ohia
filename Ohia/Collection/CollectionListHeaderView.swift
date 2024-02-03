@@ -22,11 +22,11 @@ struct CollectionListHeaderView: View {
     var headerText: String {
         if state == .loaded {
             if username != nil {
-                return "\(username!)'s Collection - \(items.count) items"
+                return String(format: NSLocalizedString("%@'s Collection - %d items", comment: ""), username!, items.count)
             }
         } 
         
-        return "Loading Collection"
+        return NSLocalizedString("Loading Collection", comment: "")
     }
     
     var body: some View {

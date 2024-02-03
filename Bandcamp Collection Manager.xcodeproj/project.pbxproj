@@ -15,6 +15,7 @@
 		AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BD2AE81B700001369A /* FilePickerButton.swift */; };
 		AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718A2B480E8700055E82 /* Zipper.swift */; };
 		AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718B2B480E8700055E82 /* RingBuffer.swift */; };
+		AE62CDD52B6EFE7B006F7444 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */; };
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
@@ -90,6 +91,7 @@
 		AE554D4E2ACC47D200579320 /* PercentEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentEncoding.swift; sourceTree = "<group>"; };
 		AE5A718A2B480E8700055E82 /* Zipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zipper.swift; sourceTree = "<group>"; };
 		AE5A718B2B480E8700055E82 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
+		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				AECF4A812AD1A4560071CFD8 /* Assets.xcassets */,
 				AECF4A832AD1A4560071CFD8 /* Ohia.entitlements */,
 				AECF4A842AD1A4560071CFD8 /* Preview Content */,
+				AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */,
 			);
 			path = Ohia;
 			sourceTree = "<group>";
@@ -527,6 +530,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */,
+				AE62CDD52B6EFE7B006F7444 /* Localizable.xcstrings in Resources */,
 				AECF4A862AD1A4560071CFD8 /* Preview Assets.xcassets in Resources */,
 				AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */,
 				AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */,
