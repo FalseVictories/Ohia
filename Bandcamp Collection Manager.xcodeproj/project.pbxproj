@@ -16,6 +16,7 @@
 		AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718A2B480E8700055E82 /* Zipper.swift */; };
 		AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718B2B480E8700055E82 /* RingBuffer.swift */; };
 		AE62CDD52B6EFE7B006F7444 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */; };
+		AE62CDD82B7ADDD1006F7444 /* ErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */; };
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
@@ -92,6 +93,7 @@
 		AE5A718A2B480E8700055E82 /* Zipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zipper.swift; sourceTree = "<group>"; };
 		AE5A718B2B480E8700055E82 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScreen.swift; sourceTree = "<group>"; };
 		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
@@ -287,6 +289,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		AE62CDD62B7ADC9B006F7444 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		AE679AB42AD8717C0073EF8C /* ConfigurationService */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +336,7 @@
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
+				AE62CDD62B7ADC9B006F7444 /* Error */,
 				AEA7D9F42B3632CC000765E8 /* Zipper */,
 				AE1E11B82AE7F3D90001369A /* App */,
 				AE1E11B72AE7F23D0001369A /* Collection */,
@@ -571,6 +582,7 @@
 				AE679ACF2AE00F960073EF8C /* CollectionListHeaderView.swift in Sources */,
 				AE679ACD2ADFECF90073EF8C /* DownloadStateInfo.swift in Sources */,
 				AE80740A2B128FF5007DC1BC /* CookieService.swift in Sources */,
+				AE62CDD82B7ADDD1006F7444 /* ErrorScreen.swift in Sources */,
 				AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */,
 				AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */,
 				AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */,

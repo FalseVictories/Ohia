@@ -8,6 +8,7 @@
 import BCKit
 import Dependencies
 import Foundation
+import OSLog
 
 protocol DataStorageService {
     @MainActor
@@ -60,11 +61,61 @@ protocol DataStorageService {
     
     @MainActor
     func clearNewItems() throws
+    
+    @MainActor
+    func resetDatabase() -> Bool
 }
 
 enum DataStorageServiceError: Error {
-    case noDatabase(String)
-    case noCollection(String)
+    case noDatabase
+    case noItemCollection
+    case noUserCollection
+    case noBookmarksCollection
+}
+
+extension DataStorageServiceError: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .noDatabase:
+            return "Unable to open the database"
+            
+        case .noItemCollection:
+            return "Missing item collection"
+            
+        case .noUserCollection:
+            return "Missing user collection"
+            
+        case .noBookmarksCollection:
+            return "Missing bookmarks collection"
+        }
+    }
+}
+
+extension DataStorageServiceError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .noDatabase:
+            return NSLocalizedString("The database could not be opened.",
+                                     comment: "")
+            
+        case .noItemCollection:
+            return NSLocalizedString("The database is missing the item collection.",
+                                     comment: "")
+            
+        case .noUserCollection:
+            return NSLocalizedString("The database is missing the user data collection",
+                                     comment: "")
+            
+        case .noBookmarksCollection:
+            return NSLocalizedString("The database is missing the bookmarks collection",
+                                     comment: "")
+        }
+    }
+    
+    var recoverySuggestion: String? {
+        return NSLocalizedString("It may be possible that the database has become corrupt. It may be possible to fix this by deleting the database",
+                                 comment: "")
+    }
 }
 
 @MainActor

@@ -19,6 +19,26 @@ struct DownloadOptions {
     let overwrite: Bool
 }
 
+enum ModelError: Error {
+    case noDownloadAccess
+}
+
+extension ModelError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .noDownloadAccess:
+            return NSLocalizedString("No write access to selected download folder", comment: "")
+        }
+    }
+    
+    var recoverySuggestion: String? {
+        switch self {
+        case .noDownloadAccess:
+            return NSLocalizedString("Changing the download folder",
+                                     comment: "")
+        }
+    }
+}
 @MainActor
 class OhiaViewModel: ObservableObject {
     @Dependency(\.configurationService) var configService: any ConfigurationService
@@ -49,7 +69,15 @@ class OhiaViewModel: ObservableObject {
             Logger.Model.info("Signed in: \(self.isSignedIn, privacy: .public)")
             if isSignedIn {
                 let loader = CollectionLoader()
-                loadCollection(using: loader)
+                Task {
+                    do {
+                        try await loadCollection(using: loader)
+                    } catch let error as NSError {
+                        // Logging out will clear things that might be broken.
+                        showError(error, isFatal: true)
+                        doLogOut()
+                    }
+                }
             }
         }
     }
@@ -64,6 +92,7 @@ class OhiaViewModel: ObservableObject {
     @Published var avatarUrl: URL?
     
     @Published var selectedItems = Set<Int>()
+    @Published var errorShown = false
     
     var settings: SettingsModel = SettingsModel()
     
@@ -78,6 +107,9 @@ class OhiaViewModel: ObservableObject {
     
     var currentDownloadOptions: DownloadOptions?
 
+    var lastError: NSError?
+    var lastErrorIsFatal: Bool = false
+    
     init() {
         settings.loadDefaults()
         webModel = WebViewModel()
@@ -141,7 +173,7 @@ class OhiaViewModel: ObservableObject {
         }
     }
     
-    func downloadItemsOf(type: DownloadType) throws {
+    func downloadItemsOf(type: DownloadType) {
         var itemsToDownload: [OhiaItem] = []
         var selectionClosure: (OhiaItem, Bool) -> Bool
         
@@ -168,7 +200,11 @@ class OhiaViewModel: ObservableObject {
             }
         }
         
-        try downloadItems(itemsToDownload)
+        do {
+            try downloadItems(itemsToDownload)
+        } catch let error as NSError {
+            showError(error, isFatal: false)
+        }
     }
     
     func downloadItems(_ downloadItems: [OhiaItem]) throws {
@@ -187,7 +223,7 @@ class OhiaViewModel: ObservableObject {
 
         guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
             Logger.Model.error("No access to \(downloadFolder)")
-            return
+            throw ModelError.noDownloadAccess
         }
 
         var isStale = false
@@ -211,12 +247,12 @@ class OhiaViewModel: ObservableObject {
 
         guard let downloadFolderSecurityUrl else {
             Logger.Model.error("No security url for \(downloadFolder)")
-            return
+            throw ModelError.noDownloadAccess
         }
 
         if !downloadFolderSecurityUrl.startAccessingSecurityScopedResource() {
             Logger.Model.error("Failed to access download URL")
-            return
+            throw ModelError.noDownloadAccess
         }
 
         currentAction = .downloading
@@ -233,6 +269,7 @@ class OhiaViewModel: ObservableObject {
                                                           updateClosure: processDownloadStream(item:filename:dataStream:))
             do {
                 for try await (item, success) in downloadStream {
+                    // item download is now complete
                     currentDownload += 1
                     item.set(state: success ? .downloaded : .cancelled)
                     if success {
@@ -246,10 +283,13 @@ class OhiaViewModel: ObservableObject {
                 downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
                 self.downloadFolderSecurityUrl = nil
                 currentAction = .none
-            } catch {
+            } catch let error as NSError {
                 Logger.Model.error("Error in download task: \(error)")
                 downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
                 self.downloadFolderSecurityUrl = nil
+                currentAction = .none
+
+                showError(error, isFatal: false)
             }
         }
     }
@@ -283,89 +323,126 @@ class OhiaViewModel: ObservableObject {
             Logger.Model.error("Error getting download location \(error)")
         }
     }
+    
+    func resetError() {
+        lastErrorIsFatal = false
+        lastError = nil
+        errorShown = false
+    }
 }
 
 private extension OhiaViewModel {
-    func loadCollection(using loader: CollectionLoader) {
+    func showError(_ error: NSError,
+                   isFatal: Bool) {
+        lastErrorIsFatal = isFatal
+        lastError = error
+        errorShown = true
+    }
+        
+    func loadCollection(using loader: CollectionLoader) async throws {
         setState(.loading)
 
-        Task {
-            var serverSummary: BCCollectionSummary
-            var user: OhiaUser?
+        try await realLoadCollection(using: loader)
+    }
+    
+    func realLoadCollection(using loader: CollectionLoader) async throws {
+        var serverSummary: BCCollectionSummary
+        var user: OhiaUser?
 
-            do {
-                // Get the summary from the server
-                serverSummary = try await getCollectionSummary(using: loader)
-                newSummary = OhiaCollectionSummary(from: serverSummary)
+        do {
+            // Get the summary from the server
+            serverSummary = try await getCollectionSummary(using: loader)
+            newSummary = OhiaCollectionSummary(from: serverSummary)
+        } catch {
+            Logger.Model.error("Error loading summary: \(error, privacy: .public)")
+            
+            throw error
+        }
+        
+        var username: String
+        do {
+            // get the username from datastore or the server.
+            username = try dataStorageService.getCurrentUsername() ?? serverSummary.username
+            setUsername(newUsername: username)
+            
+            // Use the user's collection data
+            try dataStorageService.openDataStorage(for: username)
+            
+            try dataStorageService.clearNewItems()
+        } catch {
+            Logger.Model.error("Error opening database \(error, privacy: .public)")
+            
+            throw error
+        }
+        
+        do {
+            // get the summary from the datastore now the DB has been opened for the user
+            oldSummary = try dataStorageService.getSummary()
 
-                // get the username from datastore or the server.
-                let username = try dataStorageService.getCurrentUsername() ?? serverSummary.username
-                setUsername(newUsername: username)
+            user = try dataStorageService.getUser()
+            var realname: String?
+            var imageUrl: URL?
 
-                // Use the user's collection data
-                try dataStorageService.openDataStorage(for: username)
-
-                try dataStorageService.clearNewItems()
-                // get the summary from the datastore now the DB has been opened for the user
-                oldSummary = try dataStorageService.getSummary()
-
-                user = try dataStorageService.getUser()
-                var realname: String?
-                var imageUrl: URL?
-
-                if user == nil || user?.userId == 0{
-                    Logger.Model.debug("No name set")
-                    let fanData = try await loader.getFanData(for: username)
-                    realname = fanData.name
-                    imageUrl = fanData.imageUrl
-                    if realname != nil {
-                        Logger.Model.debug("Name from service: \(realname!)")
-                    } else {
-                        Logger.Model.warning("No name from service")
-                    }
-
-                    user = OhiaUser(userId: fanData.userId ?? 0, username: username, realname: realname, imageUrl: imageUrl)
-                    try dataStorageService.setUser(user!)
+            if user == nil || user?.userId == 0{
+                Logger.Model.debug("No name set")
+                let fanData = try await loader.getFanData(for: username)
+                realname = fanData.name
+                imageUrl = fanData.imageUrl
+                if realname != nil {
+                    Logger.Model.debug("Name from service: \(realname!)")
                 } else {
-                    Logger.Model.debug("Name from service: \(user?.realname ?? "<none>")")
-                    realname = user!.realname
-                    imageUrl = user!.imageUrl
+                    Logger.Model.warning("No name from service")
                 }
 
-                if let realname {
-                    setName(realname)
-                }
-
-                if let imageUrl {
-                    setAvatar(imageUrl)
-                }
-            } catch let error as NSError {
-                Logger.Model.error("Error logging in: \(error)")
-                setState(.none)
-                isSignedIn = false
-                return
+                user = OhiaUser(userId: fanData.userId ?? 0, username: username, realname: realname, imageUrl: imageUrl)
+                try dataStorageService.setUser(user!)
+            } else {
+                Logger.Model.debug("Name from service: \(user?.realname ?? "<none>")")
+                realname = user!.realname
+                imageUrl = user!.imageUrl
             }
 
-            guard let user,
-                  let username else {
-                Logger.Model.error("No user found")
-
-                doLogOut()
-                return
+            if let realname {
+                setName(realname)
             }
 
-            do {
-                // Try to load the collection from data store, fall back to the server
-                if try !loadCollectionFromStorage(for: username) {
-                    Logger.Model.info("Loading collection from server")
+            if let imageUrl {
+                setAvatar(imageUrl)
+            }
+        } catch let error as NSError {
+            Logger.Model.error("Error getting user details in: \(error, privacy: .public)")
+            
+            throw error
+        }
+
+        // This shouldn't ever happen
+        guard let user else {
+            Logger.Model.error("No user found")
+
+            fatalError("No user could be created")
+        }
+
+        do {
+            // Try to load the collection from data store, fall back to the server
+            if try !loadCollectionFromStorage(for: username) {
+                Logger.Model.info("Loading collection from server")
+                
+                do {
                     try await loadCollectionFromServer(for: username, using: loader)
-                } else {
-                    // Check if we need to get an update from the server.
-                    let updateCount = calculateUpdateCount(lastItemId: oldSummary.mostRecentId,
-                                                           itemIds: serverSummary.itemIds)
+                } catch {
+                    Logger.Model.error("Error loading collection from server \(error, privacy: .public)")
+                    
+                    throw error
+                }
+                
+            } else {
+                // Check if we need to get an update from the server.
+                let updateCount = calculateUpdateCount(lastItemId: oldSummary.mostRecentId,
+                                                       itemIds: serverSummary.itemIds)
 
-                    Logger.Model.info("   - need \(updateCount) items")
+                Logger.Model.info("   - need \(updateCount) items")
 
+                do {
                     if (updateCount > 0) {
                         try dataStorageService.clearNewItems()
                         for item in items {
@@ -376,20 +453,24 @@ private extension OhiaViewModel {
                                                            count: updateCount,
                                                            using: loader)
                     }
+                } catch {
+                    Logger.Model.error("Error getting collection update: \(error, privacy: .public)")
+                    
+                    throw error
                 }
-
-                // Update our stored summary
-                try dataStorageService.setSummary(newSummary)
-
-                // Collection is loaded
-                setState(.loaded)
-
-                await loadImages()
-            } catch let error as NSError {
-                Logger.Model.error("Error loading collection: \(error, privacy: .public)")
-                setState(.none)
-                return
             }
+
+            // Update our stored summary
+            try dataStorageService.setSummary(newSummary)
+
+            // Collection is loaded
+            setState(.loaded)
+
+            await loadImages()
+        } catch let error as NSError {
+            Logger.Model.error("Error loading collection: \(error, privacy: .public)")
+            
+            throw error
         }
     }
     
@@ -529,8 +610,6 @@ private extension OhiaViewModel {
                 return false
             } else {
                 return true
-//                item.state = .waiting
-//                downloadItems.append($0)
             }
         }
         return false
@@ -546,6 +625,8 @@ private extension OhiaViewModel {
     
     nonisolated
     func processDownloadStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
+        throw ModelError.noDownloadAccess
+        
         guard let currentDownloadOptions = await currentDownloadOptions else {
             return
         }

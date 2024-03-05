@@ -15,8 +15,26 @@ let logger = Logger(subsystem:Bundle.main.bundleIdentifier!, category: "Collecti
 enum CollectionLoaderError: Error {
     case noData(String)
     case noUserId(String)
-    case invalidSummary(String)
+    case invalidSummary
     case noItems(String)
+}
+
+extension CollectionLoaderError: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .noData(let reason):
+            return reason
+            
+        case .invalidSummary:
+            return "Bandcamp returned an invalid summary"
+            
+        case .noItems(let reason):
+            return reason
+            
+        case .noUserId(let reason):
+            return reason
+        }
+    }
 }
 
 public final class CollectionLoader {
@@ -29,10 +47,10 @@ public final class CollectionLoader {
     
     public func getCollectionInfo() async throws -> BCCollectionSummary {
         let data = try await downloadService.collectionSummary()
-
+        
         // We need the albumCache values to remain in file order.
         guard let summaryStr = String(data:data, encoding: .utf8) else {
-            throw CollectionLoaderError.noData("Invalid data in summary")
+            throw CollectionLoaderError.noData("The summary data returned from Bandcamp is invalid")
         }
 
         let summary = try JSON.parse(string: summaryStr)
@@ -67,7 +85,7 @@ public final class CollectionLoader {
               let userPage = userPage as? String,
               let albumCache else {
             logger.warning("Invalid data in collection summary")
-            throw CollectionLoaderError.invalidSummary("Bandcamp returned an invalid summary")
+            throw CollectionLoaderError.invalidSummary
         }
 
         if let cache = albumCache.values {
@@ -127,34 +145,28 @@ public final class CollectionLoader {
             throw CollectionLoaderError.noData("Data blob not found")
         }
         
-        do {
-            let dataBlob = try JSONDecoder().decode(DownloadDataBlob.self, from: dbStr.data(using: .utf8)!)
-            if dataBlob.items.count == 0 {
-                throw CollectionLoaderError.noItems("No download links found")
+        let dataBlob = try JSONDecoder().decode(DownloadDataBlob.self, from: dbStr.data(using: .utf8)!)
+        if dataBlob.items.count == 0 {
+            throw CollectionLoaderError.noItems("No download links found in data blob from Bandcamp")
+        }
+        
+        var links: [BCItemDownload] = []
+        for (type, link) in dataBlob.items[0].downloads {
+            guard let url = URL(string: link.url) else {
+                logger.warning("Invalid download link: \(link.url) for \(type)")
+                continue
             }
             
-            var links: [BCItemDownload] = []
-            for (type, link) in dataBlob.items[0].downloads {
-                guard let url = URL(string: link.url) else {
-                    logger.warning("Invalid download link: \(link.url) for \(type)")
-                    continue
-                }
-                
-                guard let fileType = FileFormat(rawValue: type) else {
-                    logger.warning("Unknown download type: \(type)")
-                    continue
-                }
-                
-                let link = BCItemDownload(format: fileType, url: url)
-                logger.debug("Link: \(type) - \(url)")
-                links.append(link)
-                
+            guard let fileType = FileFormat(rawValue: type) else {
+                logger.warning("Unknown download type: \(type)")
+                continue
             }
-            return links
-        } catch {
-            print (error)
-            throw CollectionLoaderError.noItems("")
+            
+            let link = BCItemDownload(format: fileType, url: url)
+            links.append(link)
+            
         }
+        return links
     }
 }
 
@@ -225,7 +237,6 @@ extension CollectionLoader {
                     logger.warning("No art for \(item.bandName, privacy: .public) - \(item.itemTitle, privacy: .public)")
                 }
 
-                print ("\(item.dateAdded ?? "none") : \(item.dateUpdated ?? "None") : \(item.datePurchased ?? "None")")
                 let added = CollectionLoader.getTimeAddedFromDates(added: item.dateAdded,
                                                                    updated: item.dateUpdated,
                                                                    purchased: item.datePurchased,
@@ -269,16 +280,12 @@ extension CollectionLoader {
         var addedTime = 0
         if let added,
            let date = formatter.date(from: added) {
-            print("Added: \(added)")
             addedTime = Int(date.timeIntervalSince1970)
-        } else {
-            print ("Failed: \(added ?? "<None>")")
         }
 
         var updatedTime = 0
         if let updated,
            let date = formatter.date(from: updated) {
-            print("updated: \(updated)")
             updatedTime = Int(date.timeIntervalSince1970)
         } else {
             print("Failed: \(updated ?? "<None>")")
@@ -287,7 +294,6 @@ extension CollectionLoader {
         var purchasedTime = 0
         if let purchased,
            let date = formatter.date(from: purchased) {
-            print("purchased: \(purchased)")
             purchasedTime = Int(date.timeIntervalSince1970)
         } else {
             print ("Failed: \(purchased ?? "<None>")")

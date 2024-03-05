@@ -45,21 +45,21 @@ final class LiveDataStorageService: DataStorageService {
         }
 
         guard let database else {
-            throw DataStorageServiceError.noDatabase("No database")
+            throw DataStorageServiceError.noDatabase
         }
 
         // Store items by username
         collection = try database.createCollection(name: LiveDataStorageService.collectionName,
                                                    scope: username)
         if collection == nil {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         // store user data in a separate collection scoped to the username
         userDataCollection = try database.createCollection(name: LiveDataStorageService.userDataCollectionName,
                                                            scope: username)
         if userDataCollection == nil {
-            throw DataStorageServiceError.noCollection("Missing user collection")
+            throw DataStorageServiceError.noUserCollection
         }
     }
 
@@ -70,7 +70,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func loadItems() throws -> [OhiaItem] {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         Logger.DataStorageService.debug("Loading collection from database")
@@ -122,7 +122,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func addItem(_ item: OhiaItem) throws {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         Logger.DataStorageService.debug("Adding \(item.artist) - \(item.title) to database")
@@ -145,7 +145,7 @@ final class LiveDataStorageService: DataStorageService {
     func setItemDownloaded(_ item: OhiaItem,
                            downloaded: Bool) throws {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         guard let document = try collection.document(id: String(describing: item.id)) else {
@@ -160,7 +160,7 @@ final class LiveDataStorageService: DataStorageService {
     
     func setItemDownloadLocation(_ item: OhiaItem, location: String) throws {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         guard let document = try collection.document(id: String(describing: item.id)) else {
@@ -175,7 +175,7 @@ final class LiveDataStorageService: DataStorageService {
     
     func getDownloadLocation(_ item: OhiaItem) throws -> String? {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
         
         guard let document = try collection.document(id: String(describing: item.id)) else {
@@ -187,7 +187,7 @@ final class LiveDataStorageService: DataStorageService {
     
     func setItemNew(_ item: OhiaItem, new: Bool) throws {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing item collection")
+            throw DataStorageServiceError.noItemCollection
         }
 
         try setNewFlagOnItemWith(id: String(describing: item.id), in: collection, new: new)
@@ -195,7 +195,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func setUser(_ data: OhiaUser) throws {
         guard let userDataCollection else {
-            throw DataStorageServiceError.noCollection("Missing user collection")
+            throw DataStorageServiceError.noUserCollection
         }
 
         let mutableDoc = MutableDocument(id: "User Data")
@@ -213,7 +213,7 @@ final class LiveDataStorageService: DataStorageService {
         }
 
         guard let database else {
-            throw DataStorageServiceError.noDatabase("Missing database")
+            throw DataStorageServiceError.noDatabase
         }
 
         guard let doc = try database.defaultCollection().document(id: "currentUsername") else {
@@ -229,7 +229,7 @@ final class LiveDataStorageService: DataStorageService {
         }
 
         guard let database else {
-            throw DataStorageServiceError.noDatabase("Missing database")
+            throw DataStorageServiceError.noDatabase
         }
 
         let doc = try database.defaultCollection().document(id: "currentUsername")
@@ -241,7 +241,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func getUser() throws -> OhiaUser? {
         guard let userDataCollection else {
-            throw DataStorageServiceError.noCollection("Missing user data collection")
+            throw DataStorageServiceError.noUserCollection
         }
 
         guard let doc = try userDataCollection.document(id: "User Data"),
@@ -261,7 +261,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func setSummary(_ summary: OhiaCollectionSummary) throws {
         guard let userDataCollection else {
-            throw DataStorageServiceError.noCollection("Missing user data collection")
+            throw DataStorageServiceError.noUserCollection
         }
 
         let mutableDoc = MutableDocument(id: "Summary")
@@ -273,7 +273,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func getSummary() throws -> OhiaCollectionSummary {
         guard let userDataCollection else {
-            throw DataStorageServiceError.noCollection("Missing user data collection")
+            throw DataStorageServiceError.noUserCollection
         }
 
         guard let doc = try userDataCollection.document(id: "Summary") else {
@@ -291,7 +291,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func setSecureBookmark(_ bookmark: Data, for url: URL) throws {
         guard let bookmarksCollection else {
-            throw DataStorageServiceError.noCollection("Missing bookmarks collection")
+            throw DataStorageServiceError.noBookmarksCollection
         }
 
         if let urlData = url.absoluteString.data(using: .utf8) {
@@ -307,7 +307,7 @@ final class LiveDataStorageService: DataStorageService {
 
     func getSecureBookmarkFor(_ url: URL) throws -> Data? {
         guard let bookmarksCollection else {
-            throw DataStorageServiceError.noCollection("Missing bookmarks collection")
+            throw DataStorageServiceError.noBookmarksCollection
         }
 
         if let urlData = url.absoluteString.data(using: .utf8) {
@@ -322,7 +322,7 @@ final class LiveDataStorageService: DataStorageService {
     
     func clearNewItems() throws {
         guard let collection else {
-            throw DataStorageServiceError.noCollection("Missing items collection")
+            throw DataStorageServiceError.noItemCollection
         }
         
         let query = QueryBuilder
@@ -330,14 +330,28 @@ final class LiveDataStorageService: DataStorageService {
             .from(DataSource.collection(collection))
             .where(Expression.property(DataBaseKeys.isNew).equalTo(Expression.boolean(true)))
         
-        Logger.DataStorageService.debug("Executing new query")
         for result in try query.execute() {
             if let id = result.string(forKey: "id") {
                 Logger.DataStorageService.debug("Id \(id) is new")
                 try setNewFlagOnItemWith(id: id, in: collection, new: false)
             }
         }
-        Logger.DataStorageService.debug("Completed new query")
+    }
+    
+    func resetDatabase() -> Bool {
+        let fm = FileManager.default
+        let cachesDir = fm.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let ohiaUrl = cachesDir.appending(path: LiveDataStorageService.dbFolderPath, directoryHint: .isDirectory)
+        let ohiaDb = ohiaUrl.appending(path: "ohia-db.cblite2", directoryHint: .notDirectory)
+        
+        do {
+            try fm.removeItem(at: ohiaDb)
+        } catch {
+            Logger.DataStorageService.error("Error resetting database: \(error, privacy: .public)")
+            return false
+        }
+        
+        return true
     }
 }
 
@@ -363,12 +377,12 @@ private extension LiveDataStorageService {
         database = try Database(name: LiveDataStorageService.dbName, config: options)
 
         guard database != nil else {
-            throw DataStorageServiceError.noDatabase("No database")
+            throw DataStorageServiceError.noDatabase
         }
 
         bookmarksCollection = try database?.createCollection(name: LiveDataStorageService.bookmarksCollectionName)
         guard bookmarksCollection != nil else {
-            throw DataStorageServiceError.noCollection("Unable to find bookmarks collection")
+            throw DataStorageServiceError.noBookmarksCollection
         }
     }
     

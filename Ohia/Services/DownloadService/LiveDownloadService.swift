@@ -20,7 +20,7 @@ final class LiveDownloadService: DownloadService {
                   ofType format: FileFormat,
                   updateClosure: @MainActor @escaping (_ item: OhiaItem,
                                                        _ filename: String?,
-                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncThrowingStream<(OhiaItem, Bool), Error>{
+                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncThrowingStream<(OhiaItem, Bool), Error> {
         // Print this out first so it is only printed once per download event
         // and so we don't need to await any variable later on
         if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {

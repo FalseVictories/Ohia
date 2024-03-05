@@ -20,10 +20,19 @@
     "ALAC" : {
 
     },
+    "An Error Occurred" : {
+
+    },
     "Artist - Title /" : {
 
     },
     "Artist / Title /" : {
+
+    },
+    "Changing the download folder" : {
+
+    },
+    "Close" : {
 
     },
     "Create Folders:" : {
@@ -63,7 +72,16 @@
     "Flac" : {
 
     },
+    "It may be possible that the database has become corrupt. It may be possible to fix this by deleting the database" : {
+
+    },
+    "It may be possible to fix this by:" : {
+
+    },
     "Loading Collection" : {
+
+    },
+    "Log In" : {
 
     },
     "Log Out" : {
@@ -81,6 +99,9 @@
     "New" : {
 
     },
+    "No write access to selected download folder" : {
+
+    },
     "None" : {
 
     },
@@ -93,6 +114,12 @@
     "Preorder" : {
 
     },
+    "Quit" : {
+
+    },
+    "Reset Database" : {
+
+    },
     "Reveal in Finder" : {
 
     },
@@ -100,6 +127,18 @@
 
     },
     "Test menu 2" : {
+
+    },
+    "The database could not be opened." : {
+
+    },
+    "The database is missing the bookmarks collection" : {
+
+    },
+    "The database is missing the item collection." : {
+
+    },
+    "The database is missing the user data collection" : {
 
     },
     "Wav" : {

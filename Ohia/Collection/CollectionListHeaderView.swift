@@ -67,26 +67,14 @@ struct CollectionListHeaderView: View {
             if state == .loaded && items.count > 0 {
                 MenuButton(title: "Download All") {
                     Button("Download Selected") {
-                        do {
-                            try model.downloadItemsOf(type: .selected)
-                        } catch {
-                            Logger.Download.error("Error downloading: \(error)")
-                        }
+                        model.downloadItemsOf(type: .selected)
                     }
                     .disabled(model.selectedItems.isEmpty)
                     Button("Download New") {
-                        do {
-                            try model.downloadItemsOf(type: .new)
-                        } catch {
-                            Logger.Download.error("Error downloading: \(error)")
-                        }
+                        model.downloadItemsOf(type: .new)
                     }
                 } action: {
-                    do {
-                        try model.downloadItemsOf(type: .all)
-                    } catch {
-                        Logger.Download.error("Error downloading: \(error)")
-                    }
+                    model.downloadItemsOf(type: .all)
                 }
                 .disabled(model.currentAction == .downloading)
             }
