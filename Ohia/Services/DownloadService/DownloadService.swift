@@ -15,7 +15,7 @@ protocol DownloadService {
                   ofType format: FileFormat,
                   updateClosure: @MainActor @escaping (_ item: OhiaItem,
                                                        _ filename: String?,
-                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncThrowingStream<(OhiaItem, Bool), Error>
+                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)>
 
     @MainActor
     func cancelDownloads()
@@ -25,6 +25,21 @@ public enum DownloadServiceError: Error {
     case noLink(String)
     case badResponse(String)
     case badStatusCode(String)
+}
+
+extension DownloadServiceError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .badResponse(let msg):
+            return msg
+            
+        case .badStatusCode(let msg):
+            return msg
+            
+        case.noLink(let msg):
+            return msg
+        }
+    }
 }
 
 @MainActor

@@ -267,30 +267,38 @@ class OhiaViewModel: ObservableObject {
             let downloadStream = downloadService.download(items: downloadItems,
                                                           ofType: configService.fileFormat,
                                                           updateClosure: processDownloadStream(item:filename:dataStream:))
-            do {
-                for try await (item, success) in downloadStream {
-                    // item download is now complete
-                    currentDownload += 1
-                    item.set(state: success ? .downloaded : .cancelled)
-                    if success {
+            for await (item, error) in downloadStream {
+                let success = error == nil
+                
+                // item download is now complete
+                currentDownload += 1
+                item.set(state: success ? .downloaded : .error)
+                if success {
+                    do {
                         if let localFolder = item.localFolder {
                             try dataStorageService.setItemDownloadLocation(item, location: localFolder.path(percentEncoded: false))
                         }
                         try dataStorageService.setItemDownloaded(item, downloaded: true)
+                    } catch let error as NSError {
+                        Logger.Model.error("Error setting download results: \(error)")
                     }
+                } else {
+                    item.lastError = error
                 }
-
-                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
-                self.downloadFolderSecurityUrl = nil
-                currentAction = .none
-            } catch let error as NSError {
-                Logger.Model.error("Error in download task: \(error)")
-                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
-                self.downloadFolderSecurityUrl = nil
-                currentAction = .none
-
-                showError(error, isFatal: false)
             }
+            
+            downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
+            self.downloadFolderSecurityUrl = nil
+            currentAction = .none
+            
+//            } catch let error as NSError {
+//                Logger.Model.error("Error in download task: \(error)")
+//                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
+//                self.downloadFolderSecurityUrl = nil
+//                currentAction = .none
+//
+//                showError(error, isFatal: false)
+//            }
         }
     }
     

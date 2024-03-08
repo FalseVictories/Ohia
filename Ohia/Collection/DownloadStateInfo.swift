@@ -12,7 +12,8 @@ struct DownloadStateInfo: View {
     
     var body: some View {
         HStack {
-            Text(DownloadStateInfo.stringForState(item.state))
+            Text(DownloadStateInfo.text(for: item))
+
             /* - Button looks ugly
             if item.state != .none {
                 HoverButton(item: item) {
@@ -25,22 +26,30 @@ struct DownloadStateInfo: View {
 }
 
 extension DownloadStateInfo {
+    static func text(for item: OhiaItem) -> String {
+        if let error = item.lastError {
+            return NSLocalizedString("Error: \(error)", comment: "")
+        } else {
+            return stringForState(item.state)
+        }
+    }
+    
     static func stringForState(_ state: OhiaItem.State) -> String {
         switch state {
         case .cancelled:
-            return "Cancelled"
+            return NSLocalizedString("Cancelled", comment: "")
             
         case .connecting:
-            return "Connecting…"
+            return NSLocalizedString("Connecting…", comment: "")
             
         case .downloaded:
-            return "Downloaded"
+            return NSLocalizedString("Downloaded", comment: "")
             
         case .error:
-            return "Error"
+            return NSLocalizedString("Error", comment: "")
             
         case .waiting:
-            return "Waiting…"
+            return NSLocalizedString("Waiting…", comment: "")
             
         case .none, .downloading:
             return ""

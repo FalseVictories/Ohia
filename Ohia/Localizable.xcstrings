@@ -29,10 +29,16 @@
     "Artist / Title /" : {
 
     },
+    "Cancelled" : {
+
+    },
     "Changing the download folder" : {
 
     },
     "Close" : {
+
+    },
+    "Connecting…" : {
 
     },
     "Create Folders:" : {
@@ -59,6 +65,9 @@
     "Download Selected" : {
 
     },
+    "Downloaded" : {
+
+    },
     "Downloaded %lld / %lld" : {
       "localizations" : {
         "en" : {
@@ -68,6 +77,12 @@
           }
         }
       }
+    },
+    "Error" : {
+
+    },
+    "Error: (error)" : {
+
     },
     "Flac" : {
 
@@ -139,6 +154,9 @@
 
     },
     "The database is missing the user data collection" : {
+
+    },
+    "Waiting…" : {
 
     },
     "Wav" : {

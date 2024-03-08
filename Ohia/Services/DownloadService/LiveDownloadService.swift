@@ -20,7 +20,7 @@ final class LiveDownloadService: DownloadService {
                   ofType format: FileFormat,
                   updateClosure: @MainActor @escaping (_ item: OhiaItem,
                                                        _ filename: String?,
-                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncThrowingStream<(OhiaItem, Bool), Error> {
+                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)> {
         // Print this out first so it is only printed once per download event
         // and so we don't need to await any variable later on
         if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {
@@ -29,14 +29,14 @@ final class LiveDownloadService: DownloadService {
         
         if downloadTask != nil {
             Logger.DownloadService.warning("Download already in progress")
-            return AsyncThrowingStream.finished()
+            return AsyncStream.finished
         }
 
         // Wrap the group inside an AsyncStream because the group only ever has `maxConcurrentDownloads` in it
         // and we can't use its AsyncSequence property to follow it
-        return AsyncThrowingStream { continuation in
+        return AsyncStream { continuation in
             downloadTask = Task {
-                try await withThrowingTaskGroup(of: Void.self) { group in
+                await withTaskGroup(of: Void.self) { group in
                     // Limit the number of downloads to maxDownloads
                     let maxConcurrentDownloads = min(items.count, LiveDownloadService.maxDownloads)
                     
@@ -45,26 +45,36 @@ final class LiveDownloadService: DownloadService {
                         
                         Logger.DownloadService.debug("Adding \(item.title) to download")
                         group.addTask {
-                            let result = try await self.downloadTask(for: item, 
-                                                                     ofType: format,
-                                                                     updateClosure: updateClosure)
-                            Logger.DownloadService.debug("\(item.title) complete")
-                            continuation.yield((item, result))
+                            do {
+                                try await self.downloadTask(for: item,
+                                                            ofType: format,
+                                                            updateClosure: updateClosure)
+                                Logger.DownloadService.debug("\(item.title) complete")
+                                continuation.yield((item, nil))
+                            } catch let error as NSError {
+                                Logger.DownloadService.error("Error downloading \(item.title) - \(error)")
+                                continuation.yield((item, error))
+                            }
                         }
                     }
                     
                     var index = maxConcurrentDownloads
                     
                     // Wait for a task to complete and schedule the next download
-                    while try await group.next() != nil {
+                    while await group.next() != nil {
                         if index < items.count {
                             let item = items[index]
                             
                             group.addTask {
-                                let result = try await self.downloadTask(for: item, 
-                                                                         ofType: format,
-                                                                         updateClosure: updateClosure)
-                                continuation.yield((item, result))
+                                do {
+                                    try await self.downloadTask(for: item,
+                                                                ofType: format,
+                                                                updateClosure: updateClosure)
+                                    continuation.yield((item, nil))
+                                } catch let error as NSError {
+                                    Logger.DownloadService.error("Error downloading \(item.title) - \(error)")
+                                    continuation.yield((item, error))
+                                }
                             }
                         }
                         index += 1
@@ -91,17 +101,16 @@ extension LiveDownloadService {
                               ofType format: FileFormat,
                               updateClosure: (_ item: OhiaItem,
                                               _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws -> Bool {
+                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
         Logger.DownloadService.info("Downloading \(item.artist) - \(item.title)")
         
         await item.set(state: .connecting)
         
-        let downloadResult = try await self.downloadItem(item, 
-                                                         ofType: format,
-                                                         updateClosure: updateClosure)
+        try await self.downloadItem(item,
+                                    ofType: format,
+                                    updateClosure: updateClosure)
 
-        Logger.DownloadService.info("Downloaded \(item.artist) - \(item.title): \(downloadResult)")
-        return downloadResult
+        Logger.DownloadService.info("Downloaded \(item.artist) - \(item.title)")
     }
     
     nonisolated
@@ -114,7 +123,7 @@ extension LiveDownloadService {
                               ofType format: FileFormat,
                               updateClosure: (_ item: OhiaItem,
                                               _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws -> Bool {
+                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
         let loader = CollectionLoader()
         let downloadLinks = try await loader.getDownloadLinks(for: item.downloadUrl)
         
@@ -132,9 +141,9 @@ extension LiveDownloadService {
         
         await item.set(state: .downloading)
         
-        return try await downloadFile(for: item,
-                                      from: downloadUrl,
-                                      updateClosure: updateClosure)
+        try await downloadFile(for: item,
+                               from: downloadUrl,
+                               updateClosure: updateClosure)
     }
     
     nonisolated
@@ -142,7 +151,7 @@ extension LiveDownloadService {
                               from url: URL,
                               updateClosure: (_ item: OhiaItem,
                                               _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws -> Bool {
+                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
         let request = URLRequest(url: url)
         
         let (byteStream, response) = try await URLSession.shared.bytes(for: request, delegate: nil)
@@ -165,7 +174,5 @@ extension LiveDownloadService {
         await item.set(state: .downloading)
         
         try await updateClosure(item, filename, byteStream)
-        
-        return true
     }
 }

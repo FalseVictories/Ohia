@@ -39,7 +39,9 @@ class OhiaItem: ObservableObject, Identifiable {
     @Published var state: State = .none
     @Published var downloadProgress = ItemDownloadProgress()
     
-    init(id: Int, 
+    var lastError: (any Error)?
+    
+    init(id: Int,
          title: String,
          artist: String,
          added: Int,
