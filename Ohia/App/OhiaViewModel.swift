@@ -164,10 +164,13 @@ class OhiaViewModel: ObservableObject {
         self.currentAction = action
     }
         
-    func markItem(_ item: OhiaItem, downloaded: Bool) {
+    func markItem(downloaded: Bool) {
         do {
-            try dataStorageService.setItemDownloaded(item, downloaded: downloaded)
-            item.state = downloaded ? .downloaded : .none
+            try selectedItems.forEach {
+                let item = items[$0]
+                try dataStorageService.setItemDownloaded(item, downloaded: downloaded)
+                item.state = downloaded ? .downloaded : .none
+            }
         } catch {
             Logger.Model.error("Error marking item as \(downloaded): \(error)")
         }

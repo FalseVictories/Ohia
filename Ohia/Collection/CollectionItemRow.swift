@@ -50,7 +50,7 @@ struct CollectionItemRow: View {
         .padding(8)
         .contextMenu(menuItems: {
             Button("Mark As Not Downloaded") {
-                model.markItem(item, downloaded: false)
+                model.markItem(downloaded: false)
             }
             .disabled(item.state == .none)
             Button("Reveal in Finder") {
