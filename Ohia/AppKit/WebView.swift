@@ -24,6 +24,7 @@ protocol WebViewModelDelegate : AnyObject {
     func webViewDidLogin()
 }
 
+@MainActor
 class WebViewModel: NSObject, ObservableObject {
     @Dependency(\.cookieService) var cookieService: any CookieService
 

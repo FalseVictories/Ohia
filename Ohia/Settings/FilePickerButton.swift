@@ -27,6 +27,7 @@ extension FilePickerButton {
         return "<No folder>"
     }
     
+    @MainActor
     private func openFilePicker() {
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = true
