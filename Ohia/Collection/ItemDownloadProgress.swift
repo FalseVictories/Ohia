@@ -15,7 +15,7 @@ final class ItemDownloadProgress: ObservableObject {
     
     var destinationUrl: URL?
     var downloadOptions: DownloadOptions?
-    var fileHandle: FileHandle?
+    var zipperDelegate: ItemDownloadZipperDelegate?
     
     var downloadSizeInBytes: Int64 = 0
     
@@ -59,10 +59,13 @@ extension ItemDownloadProgress {
     nonisolated
     func startDecompressing(to destinationUrl: URL,
                             with options: DownloadOptions) async -> Zipper {
+        let zipperDelegate = ItemDownloadZipperDelegate(itemDownload: self,
+                                                        destinationUrl: destinationUrl,
+                                                        options: options)
         await setDestinationUrl(destinationUrl, options: options)
         
         let zipper = Zipper()
-        zipper.delegate = self
+        zipper.delegate = zipperDelegate
         return zipper
     }
 }
@@ -96,13 +99,21 @@ private extension ItemDownloadProgress {
     }
 }
 
-extension ItemDownloadProgress: ZipperDelegate {
-    func createFolder(with name: String) {
-        guard let destinationUrl else {
-            Logger.Model.error("No destination URL set")
-            return
-        }
-        
+class ItemDownloadZipperDelegate: ZipperDelegate {
+    var itemDownload: ItemDownloadProgress?
+    var fileHandle: FileHandle?
+    let destinationUrl: URL
+    let downloadOptions: DownloadOptions
+    
+    init(itemDownload: ItemDownloadProgress,
+         destinationUrl: URL,
+         options: DownloadOptions) {
+        self.itemDownload = itemDownload
+        self.destinationUrl = destinationUrl
+        self.downloadOptions = options
+    }
+    
+    nonisolated func createFolder(with name: String) {
         let fm = FileManager.default
         
         var isDirectory = ObjCBool(false)
@@ -122,14 +133,12 @@ extension ItemDownloadProgress: ZipperDelegate {
         }
     }
     
-    func beginWritingFile(with name: String) {
-        if fileHandle == nil,
-           let destinationUrl,
-           let downloadOptions {
+    nonisolated func beginWritingFile(with name: String) {
+        if fileHandle == nil {
             do {
                 // FIXME: Get the correct download options here
                 fileHandle = try createFileHandle(for: name,
-                                                  in: destinationUrl, 
+                                                  in: destinationUrl,
                                                   with: downloadOptions)
             } catch {
                 Logger.Download.error("Error creating file handle for \(name): \(error)")
@@ -143,8 +152,9 @@ extension ItemDownloadProgress: ZipperDelegate {
             return
         }
         
+        let itemDownload = self.itemDownload
         DispatchQueue.main.async {
-            self.setBytesDownloaded(bytesDownloaded)
+            itemDownload?.setBytesDownloaded(bytesDownloaded)
         }
         
         do {
@@ -163,9 +173,37 @@ extension ItemDownloadProgress: ZipperDelegate {
         }
         
         fileHandle = nil
+        itemDownload = nil
     }
     
     func errorDidOccur(_ error: ZipperError) {
         Logger.Download.error("Zipper error: \(error)")
+    }
+    
+    private func createFileHandle(for filename: String,
+                                  in destinationUrl: URL,
+                                  with options: DownloadOptions) throws -> FileHandle? {
+        let destinationUrl = destinationUrl.appending(path: filename, directoryHint: .notDirectory)
+        let destinationPath = destinationUrl.path(percentEncoded: false)
+        
+        let fm = FileManager.default
+        
+        var overwrite = options.overwrite
+        if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {
+            Logger.Download.info("Always forcing download")
+            overwrite = true
+        }
+        
+        if fm.fileExists(atPath: destinationPath) && !overwrite {
+            Logger.Download.info("\(destinationPath) already exists, not overwriting")
+            
+            return nil
+        }
+        
+        Logger.Download.debug("Saving file as \(destinationPath)")
+        
+        fm.createFile(atPath: destinationPath, contents: nil, attributes: nil)
+        
+        return try FileHandle(forWritingTo: destinationUrl)
     }
 }

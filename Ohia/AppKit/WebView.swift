@@ -32,16 +32,23 @@ class WebViewModel: NSObject, ObservableObject {
 
     let webView: WKWebView
     let cookieStore: WKHTTPCookieStore
-    weak var delegate: (any WebViewModelDelegate)?
+    let cookieStoreObserver: WebViewModelCookieStoreObserver
+    let navDelegate: WebViewNavigationDelegate
 
     override init() {
         webView = WKWebView()
         cookieStore = webView.configuration.websiteDataStore.httpCookieStore
-
+        cookieStoreObserver = WebViewModelCookieStoreObserver()
+        navDelegate = WebViewNavigationDelegate()
+        
         super.init()
 
-        webView.navigationDelegate = self
-        cookieStore.add(self)
+        webView.navigationDelegate = navDelegate
+        cookieStore.add(cookieStoreObserver)
+    }
+    
+    func setDelegate(_ delegate: any WebViewModelDelegate) {
+        navDelegate.delegate = delegate
     }
     
     /// Clear the current webpage to force a reload
@@ -61,8 +68,10 @@ class WebViewModel: NSObject, ObservableObject {
     }
 }
 
-extension WebViewModel: WKNavigationDelegate {
-    func webView(_ webView: WKWebView,
+class WebViewNavigationDelegate: NSObject, WKNavigationDelegate {
+    var delegate: (any WebViewModelDelegate)?
+    
+    nonisolated func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.mainDocumentURL?.absoluteString {
@@ -88,8 +97,10 @@ extension WebViewModel: WKNavigationDelegate {
     }
 }
 
-extension WebViewModel: WKHTTPCookieStoreObserver {
-    func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
+class WebViewModelCookieStoreObserver: NSObject, WKHTTPCookieStoreObserver {
+    @Dependency(\.cookieService) var cookieService: any CookieService
+    
+    nonisolated func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
         cookieStore.getAllCookies { [weak self] cookies in
             guard let self else {
                 return
@@ -101,8 +112,4 @@ extension WebViewModel: WKHTTPCookieStoreObserver {
             }
         }
     }
-}
-
-#Preview {
-    WebView(webView: WebViewModel().webView)
 }

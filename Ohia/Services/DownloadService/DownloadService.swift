@@ -9,13 +9,13 @@ import BCKit
 import Dependencies
 import Foundation
 
-protocol DownloadService {
+protocol DownloadService: Sendable {
     @MainActor
     func download(items: [OhiaItem],
                   ofType format: FileFormat,
-                  updateClosure: @MainActor @escaping (_ item: OhiaItem,
-                                                       _ filename: String?,
-                                                       _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)>
+                  updateClosure: @MainActor @Sendable @escaping (_ item: OhiaItem,
+                                                                 _ filename: String?,
+                                                                 _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)>
 
     @MainActor
     func cancelDownloads()

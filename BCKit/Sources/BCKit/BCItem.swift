@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct BCItem: Identifiable {
+public struct BCItem: Identifiable, Sendable {
     public let id: Int
     public let name: String
     public let artist: String
@@ -19,7 +19,7 @@ public struct BCItem: Identifiable {
     public let thumbnailUrl: URL?
 }
 
-public enum FileFormat: String {
+public enum FileFormat: String, Sendable {
     case mp3_v0 = "mp3-v0"
     case mp3_320 = "mp3-320"
     case flac = "flac"
@@ -35,7 +35,7 @@ public struct BCItemDownload {
     public let url: URL
 }
 
-public struct BCCollectionSummary {
+public struct BCCollectionSummary: Sendable {
     public let userId: Int
     public let username: String
     public let homepage: URL?

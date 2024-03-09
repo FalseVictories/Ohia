@@ -13,7 +13,7 @@ import Foundation
 import OSLog
 import SwiftUI
 
-struct DownloadOptions {
+struct DownloadOptions: Sendable {
     let decompress: Bool
     let createFolder: FolderStructure
     let overwrite: Bool
@@ -82,6 +82,10 @@ class OhiaViewModel: ObservableObject {
         }
     }
     
+    func setIsSignedIn(value: Bool) {
+        isSignedIn = value
+    }
+    
     @Published var items: [OhiaItem] = []
     @Published var username: String?
     @Published var name: String?
@@ -113,7 +117,7 @@ class OhiaViewModel: ObservableObject {
     init() {
         settings.loadDefaults()
         webModel = WebViewModel()
-        webModel.delegate = self
+        webModel.setDelegate(self)
 
         updateSignedIn()
     }
@@ -634,8 +638,7 @@ private extension OhiaViewModel {
         return item.isNew
     }
     
-    nonisolated
-    func processDownloadStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
+    @Sendable nonisolated func processDownloadStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
         guard let currentDownloadOptions = await currentDownloadOptions else {
             return
         }
@@ -747,7 +750,9 @@ private extension OhiaViewModel {
 }
 
 extension OhiaViewModel: WebViewModelDelegate {
-    func webViewDidLogin() {
-        isSignedIn = true
+    nonisolated func webViewDidLogin() {
+        Task {
+            await setIsSignedIn(value: true)
+        }
     }
 }

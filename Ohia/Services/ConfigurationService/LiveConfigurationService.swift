@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LiveConfigurationService: ConfigurationService {
+final class LiveConfigurationService: ConfigurationService {
     func string(for key: ConfigurationKey) -> String? {
         return UserDefaults.standard.string(forKey: key.rawValue)
     }

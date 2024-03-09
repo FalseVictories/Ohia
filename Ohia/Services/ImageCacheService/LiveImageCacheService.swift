@@ -10,6 +10,7 @@ import Foundation
 import OSLog
 import SwiftUI
 
+@MainActor
 final class LiveImageCacheService: ImageCacheService {
     let imageCache: URLCache
     
@@ -41,7 +42,7 @@ final class LiveImageCacheService: ImageCacheService {
         
         let cacheRequest = URLRequest(url: thumbnailUrl)
         if let data = imageCache.cachedResponse(for: cacheRequest)?.data {
-            return imageFrom(data: data)
+            return LiveImageCacheService.imageFrom(data: data)
         }
         return nil
     }
@@ -95,20 +96,22 @@ final class LiveImageCacheService: ImageCacheService {
 }
 
 extension LiveImageCacheService {
-    private func imageFrom(data: Data) -> Image? {
+    nonisolated
+    private static func imageFrom(data: Data) -> Image? {
         guard let nsImage = NSImage(data: data) else {
             return nil
         }
         return Image(nsImage: nsImage)
     }
     
+    nonisolated
     private func downloadImage(for item: OhiaItem,
                                from url: URL,
                                using session: URLSession) async throws {
         Logger.ImageService.debug("Downloading thumbnail for \(item.artist) - \(item.title): \(url)")
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         let (imageData, _) = try await session.data(for: request)
-        if let image = self.imageFrom(data: imageData) {
+        if let image = LiveImageCacheService.imageFrom(data: imageData) {
             await item.setThumbnail(image: image)
         }
     }

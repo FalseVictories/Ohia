@@ -8,7 +8,7 @@
 import Dependencies
 import Foundation
 
-protocol CookieService {
+protocol CookieService: Sendable {
     var isLoggedIn: Bool { get }
 
     func clearCookies()

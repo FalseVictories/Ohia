@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LiveCookieService: CookieService {
+final class LiveCookieService: CookieService {
     static let bandcampCookieDomain = ".bandcamp.com"
     static let loggedInCookieName = "js_logged_in"
 

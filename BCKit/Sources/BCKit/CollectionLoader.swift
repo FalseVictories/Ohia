@@ -302,7 +302,7 @@ extension CollectionLoader {
         return max(max(addedTime, updatedTime), purchasedTime)
     }
 
-    public struct Photo: Decodable {
+    public struct Photo: Decodable, Sendable {
         public let imageId: Int
 
         enum CodingKeys: String, CodingKey {
@@ -310,7 +310,7 @@ extension CollectionLoader {
         }
     }
 
-    public struct FanData: Decodable {
+    public struct FanData: Decodable, Sendable {
         private static let imageBase = "https://f0.bcbits.com/img/" // f0 and f4 work.
 
         public let userId: Int?

@@ -9,7 +9,7 @@ import BCKit
 import Dependencies
 import Foundation
 
-public enum FolderStructure: String {
+public enum FolderStructure: String, Sendable {
     case none = "none"
     case single = "single"
     case multi = "multi"
@@ -23,7 +23,7 @@ public enum ConfigurationKey: String {
     case folderStructure = "folderStructure"
 }
 
-protocol ConfigurationService {
+protocol ConfigurationService: Sendable {
     func string(for key: ConfigurationKey) -> String?
     func bool(for key: ConfigurationKey) -> Bool
     func set(_ value: String?, for key: ConfigurationKey)

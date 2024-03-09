@@ -10,7 +10,7 @@ import Dependencies
 import Foundation
 import OSLog
 
-protocol DataStorageService {
+protocol DataStorageService: Sendable {
     @MainActor
     func openDataStorage(for username: String) throws
     
