@@ -636,8 +636,6 @@ private extension OhiaViewModel {
     
     nonisolated
     func processDownloadStream(item: OhiaItem, filename: String?, dataStream: URLSession.AsyncBytes) async throws {
-        throw ModelError.noDownloadAccess
-        
         guard let currentDownloadOptions = await currentDownloadOptions else {
             return
         }
