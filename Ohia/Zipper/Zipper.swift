@@ -21,6 +21,7 @@ protocol ZipperDelegate {
     func beginWritingFile(with name: String)
     func writeData(from buffer: Data, bytesDownloaded: Int64)
     func endWritingFile()
+    func didFinish()
     func errorDidOccur(_ error: ZipperError)
 }
 
@@ -202,6 +203,8 @@ class Zipper {
                 break byteIterator
             }
         }
+        
+        delegate?.didFinish()
     }
 }
 

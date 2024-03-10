@@ -173,6 +173,10 @@ class ItemDownloadZipperDelegate: ZipperDelegate {
         }
         
         fileHandle = nil
+    }
+    
+    func didFinish() {
+        Logger.Download.info("Finished extracting")
         itemDownload = nil
     }
     
