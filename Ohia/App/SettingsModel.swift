@@ -70,6 +70,13 @@ final class SettingsModel: ObservableObject {
             cs.folderStructure = createFolderStructure
         }
     }
+    
+    @Published var maxDownloads: Int = 6 {
+        didSet {
+            var cs = configService
+            cs.maxDownloads = maxDownloads
+        }
+    }
 }
 
 extension SettingsModel {
@@ -79,5 +86,6 @@ extension SettingsModel {
         downloadPreorders = configService.downloadPreorders
         decompressDownloads = configService.decompressDownloads
         createFolderStructure = configService.folderStructure
+        maxDownloads = configService.maxDownloads
     }
 }

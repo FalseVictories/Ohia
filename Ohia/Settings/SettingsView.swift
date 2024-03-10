@@ -24,10 +24,14 @@ struct SettingsView: View {
                 Text("AIFF Lossless").tag(FileFormat.aiff)
             }
 
-            LabeledContent("Download Folder:"){
+            LabeledContent("Download Folder:") {
                 FilePickerButton(folder: $settingsModel.selectedDownloadFolder)
             }
-//            Toggle("Always overwrite downloads", isOn: $overwrite)
+            
+            // Limit to 30 downloads at once? Dunno. Seems high enough to not annoy anyone.
+            TextField("Max concurrent downloads:",
+                      value: $settingsModel.maxDownloads,
+                      format: .ranged(1...30))
             Toggle("Download pre-orders", isOn: $settingsModel.downloadPreorders)
             Toggle("Decompress downloads", isOn: $settingsModel.decompressDownloads)
             Picker("Create Folders:", selection: $settingsModel.createFolderStructure) {
@@ -39,10 +43,6 @@ struct SettingsView: View {
         .frame(idealWidth: 300, idealHeight: 250)
         .padding()
     }
-}
-
-final class SettingsViewModel: ObservableObject {
-    
 }
 
 #Preview {

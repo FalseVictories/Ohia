@@ -116,10 +116,19 @@ class OhiaViewModel: ObservableObject {
     var lastErrorIsFatal: Bool = false
     
     init() {
-        settings.loadDefaults()
+        if ProcessInfo().environment["OHIA_RESET_SETTINGS"] != nil {
+            Logger.Model.info("Resetting user defaults")
+            
+            if let bundleID = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleID)
+            }
+        }
+        
         webModel = WebViewModel()
         webModel.setDelegate(self)
 
+        registerDefaults()
+        settings.loadDefaults()
         updateSignedIn()
     }
     
@@ -275,8 +284,10 @@ class OhiaViewModel: ObservableObject {
                                                  overwrite: false)
         
         downloadTask = Task {
+            let options = DownloadServiceOptions(format: configService.fileFormat,
+                                                 maxDownloads: configService.maxDownloads)
             let downloadStream = downloadService.download(items: downloadItems,
-                                                          ofType: configService.fileFormat,
+                                                          with: options,
                                                           updateClosure: processDownloadStream(item:filename:dataStream:))
             for await (item, error) in downloadStream {
                 let success = error == nil
@@ -754,6 +765,12 @@ private extension OhiaViewModel {
         try fm.createDirectory(at: url, withIntermediateDirectories: true)
 
         return url
+    }
+    
+    func registerDefaults() {
+        UserDefaults.standard.register(defaults: [
+            ConfigurationKey.maxDownloads.rawValue: 6
+        ])
     }
 }
 

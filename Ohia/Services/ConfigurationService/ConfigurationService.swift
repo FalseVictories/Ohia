@@ -21,13 +21,16 @@ public enum ConfigurationKey: String {
     case downloadPreorders = "downloadPreorders"
     case decompressDownloads = "decompressDownloads"
     case folderStructure = "folderStructure"
+    case maxDownloads = "maxDownloads"
 }
 
 protocol ConfigurationService: Sendable {
     func string(for key: ConfigurationKey) -> String?
     func bool(for key: ConfigurationKey) -> Bool
+    func int(for key: ConfigurationKey) -> Int
     func set(_ value: String?, for key: ConfigurationKey)
     func set(_ value: Bool, for key: ConfigurationKey)
+    func set(_ value: Int, for key: ConfigurationKey)
 }
 
 extension ConfigurationService {
@@ -54,6 +57,15 @@ extension ConfigurationService {
                 return .flac
             }
             return FileFormat(rawValue: format) ?? .flac
+        }
+    }
+    
+    var maxDownloads: Int {
+        set {
+            set(newValue, for: .maxDownloads)
+        }
+        get {
+            int(for: .maxDownloads)
         }
     }
 

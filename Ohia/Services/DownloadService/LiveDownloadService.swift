@@ -12,12 +12,12 @@ import OSLog
 @MainActor
 final class LiveDownloadService: DownloadService {
     static let bufferSize = 65536
-    static let maxDownloads = 1
+    static let maxDownloads = 6
     
     var downloadTask: Task<Void, Error>?
     
     func download(items: [OhiaItem],
-                  ofType format: FileFormat,
+                  with options: DownloadServiceOptions,
                   updateClosure: @MainActor @Sendable @escaping (_ item: OhiaItem,
                                                                  _ filename: String?,
                                                                  _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)> {
@@ -38,7 +38,14 @@ final class LiveDownloadService: DownloadService {
             downloadTask = Task {
                 await withTaskGroup(of: Void.self) { group in
                     // Limit the number of downloads to maxDownloads
-                    let maxConcurrentDownloads = min(items.count, LiveDownloadService.maxDownloads)
+                    var requestedMaxDownloads = options.maxDownloads
+                    if let environmentMax = ProcessInfo().environment["OHIA_MAX_DOWNLOADS"] {
+                        Logger.DownloadService.info("Forcing \(environmentMax) downloads")
+                        if let environmentRequested = Int(environmentMax) {
+                            requestedMaxDownloads = environmentRequested
+                        }
+                    }
+                    let maxConcurrentDownloads = min(items.count, requestedMaxDownloads)
                     
                     for index in 0..<maxConcurrentDownloads {
                         let item = items[index]
@@ -47,7 +54,7 @@ final class LiveDownloadService: DownloadService {
                         group.addTask {
                             do {
                                 try await self.downloadTask(for: item,
-                                                            ofType: format,
+                                                            ofType: options.format,
                                                             updateClosure: updateClosure)
                                 Logger.DownloadService.debug("\(item.title) complete")
                                 continuation.yield((item, nil))
@@ -68,7 +75,7 @@ final class LiveDownloadService: DownloadService {
                             group.addTask {
                                 do {
                                     try await self.downloadTask(for: item,
-                                                                ofType: format,
+                                                                ofType: options.format,
                                                                 updateClosure: updateClosure)
                                     continuation.yield((item, nil))
                                 } catch let error as NSError {

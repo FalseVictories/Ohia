@@ -9,10 +9,15 @@ import BCKit
 import Dependencies
 import Foundation
 
+struct DownloadServiceOptions {
+    let format: FileFormat
+    let maxDownloads: Int
+}
+
 protocol DownloadService: Sendable {
     @MainActor
     func download(items: [OhiaItem],
-                  ofType format: FileFormat,
+                  with options: DownloadServiceOptions,
                   updateClosure: @MainActor @Sendable @escaping (_ item: OhiaItem,
                                                                  _ filename: String?,
                                                                  _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)>

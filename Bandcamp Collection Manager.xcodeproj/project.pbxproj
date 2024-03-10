@@ -17,6 +17,7 @@
 		AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718B2B480E8700055E82 /* RingBuffer.swift */; };
 		AE62CDD52B6EFE7B006F7444 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */; };
 		AE62CDD82B7ADDD1006F7444 /* ErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */; };
+		AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */; };
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
@@ -94,6 +95,7 @@
 		AE5A718B2B480E8700055E82 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScreen.swift; sourceTree = "<group>"; };
+		AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeIntegerStyle.swift; sourceTree = "<group>"; };
 		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			children = (
 				AE1E11BB2AE8176A0001369A /* SettingsView.swift */,
 				AE1E11BD2AE81B700001369A /* FilePickerButton.swift */,
+				AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */,
 				AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */,
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
+				AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */,
 				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
 				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
 				AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */,

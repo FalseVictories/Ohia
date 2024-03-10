@@ -9,3 +9,7 @@
 *OHIA_ALWAYS_UPDATE*: Always update the collection from the server
 
 *OHIA_ALWAYS_LOGGED_OUT*: Always require log in
+
+*OHIA_MAX_DOWNLOADS*: The max number of concurrent downloads
+
+*OHIA_RESET_SETTINGS*: Clear the user defaults

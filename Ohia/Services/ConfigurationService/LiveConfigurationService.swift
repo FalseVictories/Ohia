@@ -20,7 +20,15 @@ final class LiveConfigurationService: ConfigurationService {
         return UserDefaults.standard.bool(forKey: key.rawValue)
     }
 
+    func int(for key: ConfigurationKey) -> Int {
+        return UserDefaults.standard.integer(forKey: key.rawValue)
+    }
+    
     func set(_ value: Bool, for key:ConfigurationKey) {
+        UserDefaults.standard.setValue(value, forKey: key.rawValue)
+    }
+    
+    func set(_ value: Int, for key: ConfigurationKey) {
         UserDefaults.standard.setValue(value, forKey: key.rawValue)
     }
 }
