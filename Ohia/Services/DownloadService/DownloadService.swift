@@ -14,13 +14,12 @@ struct DownloadServiceOptions {
     let maxDownloads: Int
 }
 
+typealias DownloadUpdater = @MainActor @Sendable (OhiaItem, String?, URLSession.AsyncBytes) async throws -> Void
 protocol DownloadService: Sendable {
     @MainActor
     func download(items: [OhiaItem],
                   with options: DownloadServiceOptions,
-                  updateClosure: @MainActor @Sendable @escaping (_ item: OhiaItem,
-                                                                 _ filename: String?,
-                                                                 _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)>
+                  updateClosure: @escaping DownloadUpdater) -> AsyncStream<(OhiaItem, (any Error)?)>
 
     @MainActor
     func cancelDownloads()

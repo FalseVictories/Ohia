@@ -18,9 +18,7 @@ final class LiveDownloadService: DownloadService {
     
     func download(items: [OhiaItem],
                   with options: DownloadServiceOptions,
-                  updateClosure: @MainActor @Sendable @escaping (_ item: OhiaItem,
-                                                                 _ filename: String?,
-                                                                 _ dataStream: URLSession.AsyncBytes) async throws -> Void) -> AsyncStream<(OhiaItem, (any Error)?)> {
+                  updateClosure: @escaping DownloadUpdater) -> AsyncStream<(OhiaItem, (any Error)?)> {
         // Print this out first so it is only printed once per download event
         // and so we don't need to await any variable later on
         if ProcessInfo().environment["OHIA_ALWAYS_FORCE_DOWNLOAD"] != nil {
@@ -106,9 +104,7 @@ extension LiveDownloadService {
     nonisolated
     private func downloadTask(for item: OhiaItem,
                               ofType format: FileFormat,
-                              updateClosure: (_ item: OhiaItem,
-                                              _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
+                              updateClosure: DownloadUpdater) async throws {
         Logger.DownloadService.info("Downloading \(item.artist) - \(item.title)")
         
         await item.set(state: .connecting)
@@ -128,9 +124,7 @@ extension LiveDownloadService {
     nonisolated
     private func downloadItem(_ item: OhiaItem,
                               ofType format: FileFormat,
-                              updateClosure: (_ item: OhiaItem,
-                                              _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
+                              updateClosure: DownloadUpdater) async throws {
         let loader = CollectionLoader()
         let downloadLinks = try await loader.getDownloadLinks(for: item.downloadUrl)
         
