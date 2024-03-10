@@ -98,6 +98,7 @@ class OhiaViewModel: ObservableObject {
     @Published var selectedItems = Set<Int>()
     @Published var errorShown = false
     
+    var idToItem: [Int: OhiaItem] = [:]
     var settings: SettingsModel = SettingsModel()
     
     var downloadFolderSecurityUrl: URL?
@@ -169,11 +170,14 @@ class OhiaViewModel: ObservableObject {
     }
         
     func markItem(downloaded: Bool) {
+        // Get selected items
+        
         do {
             try selectedItems.forEach {
-                let item = items[$0]
-                try dataStorageService.setItemDownloaded(item, downloaded: downloaded)
-                item.state = downloaded ? .downloaded : .none
+                if let item = idToItem[$0] {
+                    try dataStorageService.setItemDownloaded(item, downloaded: downloaded)
+                    item.state = downloaded ? .downloaded : .none
+                }
             }
         } catch {
             Logger.Model.error("Error marking item as \(downloaded): \(error)")
@@ -539,6 +543,8 @@ private extension OhiaViewModel {
                     $0.thumbnail = image
                     $0.thumbnailUrl = nil  // Don't need to download an image anymore
                 }
+                
+                idToItem[$0.id] = $0
             }
             
             // update the items
@@ -602,6 +608,7 @@ private extension OhiaViewModel {
             } else {
                 items.insert(item, at: 0)
             }
+            idToItem[item.id] = item
         }
     }
 
@@ -610,6 +617,7 @@ private extension OhiaViewModel {
 
         webModel.clear()
         items = []
+        idToItem = [:]
         
         Task {
             await webModel.clearCookies()
