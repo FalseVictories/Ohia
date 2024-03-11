@@ -216,6 +216,7 @@ class OhiaViewModel: ObservableObject {
         items.forEach {
             if selectionClosure($0, downloadPreorders) {
                 $0.state = .waiting
+                $0.lastError = nil
                 itemsToDownload.append($0)
             }
         }
