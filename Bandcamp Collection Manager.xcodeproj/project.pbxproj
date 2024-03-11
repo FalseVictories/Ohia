@@ -96,6 +96,7 @@
 		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScreen.swift; sourceTree = "<group>"; };
 		AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeIntegerStyle.swift; sourceTree = "<group>"; };
+		AE62CDDD2B9F0AC5006F7444 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AE679AB02AD82B710073EF8C /* CollectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionList.swift; sourceTree = "<group>"; };
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
@@ -339,6 +340,7 @@
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
+				AE62CDDD2B9F0AC5006F7444 /* Info.plist */,
 				AE62CDD62B7ADC9B006F7444 /* Error */,
 				AEA7D9F42B3632CC000765E8 /* Zipper */,
 				AE1E11B82AE7F3D90001369A /* App */,
@@ -783,12 +785,13 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ohia/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Ohia;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -825,12 +828,13 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ohia/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Ohia;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
