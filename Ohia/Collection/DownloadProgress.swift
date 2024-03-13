@@ -12,16 +12,16 @@ struct DownloadProgress: View {
     
     var body: some View {
         VStack (alignment: .leading, spacing: 0) {
-            ProgressView(value: Double(progress.bytesDownloaded), total: Double(progress.downloadSizeInBytes))
+            ProgressView(value: Double(progress.progress), total: Double(100))
                 .progressViewStyle(.linear)
-            Text(DownloadProgress.progressDescription(current: progress.bytesDownloaded, total: progress.downloadSizeInBytes))
+            Text(DownloadProgress.progressDescription(current: progress.bytesDownloaded, total: progress.downloadSizeString))
         }
     }
 }
 
 extension DownloadProgress {
-    static func progressDescription(current: Int64, total: Int64) -> String {
-        return "\(ByteCountFormatter.string(fromByteCount: current, countStyle: .file)) / \(ByteCountFormatter.string(fromByteCount: total, countStyle: .file))"
+    static func progressDescription(current: Int64, total: String) -> String {
+        return "\(ByteCountFormatter.string(fromByteCount: current, countStyle: .file)) / \(total)"
     }
 }
 

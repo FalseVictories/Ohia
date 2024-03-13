@@ -10,35 +10,51 @@ import OSLog
 
 @MainActor
 final class ItemDownloadProgress: ObservableObject {
-    @Published var progress = 0.0
+    @Published var progress = 0
     @Published var bytesDownloaded: Int64 = 0
+    
+    var byteCounter: Int64 = 0
     
     var destinationUrl: URL?
     var downloadOptions: DownloadOptions?
     var zipperDelegate: ItemDownloadZipperDelegate?
     
     var downloadSizeInBytes: Int64 = 0
+    var downloadSizeString: String = ""
     
     static let preview = ItemDownloadProgress()
 }
 
 extension ItemDownloadProgress {
     func increaseBytesDownloaded(size: Int64) {
-        bytesDownloaded += size
+        byteCounter += size
+        
+        // Use byteCounter to reduce the number of updates to bytesDownloaded
+        if byteCounter > 250_000 {
+            bytesDownloaded += byteCounter
+            byteCounter = 0
+        }
+        
         if downloadSizeInBytes != 0 {
-            progress = Double(bytesDownloaded) / Double(downloadSizeInBytes)
+            progress = Int((Double(bytesDownloaded) / Double(downloadSizeInBytes)) * 100)
         }
     }
     
     func setBytesDownloaded(_ bytes: Int64) {
-        bytesDownloaded = bytes
+        // Use byteCounter to reduce the number of updates to bytesDownloaded
+        byteCounter = bytes
+        if byteCounter - bytesDownloaded > 250_000 {
+            bytesDownloaded = byteCounter
+        }
+        
         if downloadSizeInBytes != 0 {
-            progress = Double(bytesDownloaded) / Double(downloadSizeInBytes)
+            progress = Int((Double(bytesDownloaded) / Double(downloadSizeInBytes)) * 100)
         }
     }
     
     func setDownloadSize(inBytes size: Int64) {
         downloadSizeInBytes = size
+        downloadSizeString = ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
     }
     
     func setDestinationUrl(_ url: URL, options: DownloadOptions) {
