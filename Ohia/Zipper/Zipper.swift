@@ -60,7 +60,7 @@ class Zipper {
     var dataBuffer: Data = Data()
     
     var decompressionPreBuffer = RingBuffer()
-    var decompressionBuffer: Data = Data()
+    var decompressionBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: Zipper.bufferSize)
     var decompressionPosition: Int = 0
     
     var bufferFillPosition: Int = 0
@@ -138,7 +138,7 @@ class Zipper {
                 // Take the front of the prebuffer and put it into the decompression buffer
                 if decompressionPreBuffer.count == 4 {
                     let decompressValue = decompressionPreBuffer.peek()
-                    decompressionBuffer.insert(decompressValue, at: decompressionPosition)
+                    decompressionBuffer[decompressionPosition] = decompressValue
                     decompressionPosition += 1
                 }
                 
@@ -146,16 +146,19 @@ class Zipper {
                 decompressionPreBuffer.push(byte)
                                 
                 // Check if there's a header value that means decompression should end
-                let totalValue = decompressionPreBuffer.totalValue()
+                let totalValue = decompressionPreBuffer.totalValue
                 let headerType = parsePKHeader(totalValue)
                 
                 // Pass a buffer to the decompressor when it's full or it's the last buffer
-                if decompressionBuffer.count >= Zipper.bufferSize || headerType != .none {
+                if decompressionPosition >= Zipper.bufferSize || headerType != .none {
+                    let dataBuffer = Data(bytesNoCopy: decompressionBuffer,
+                                          count: decompressionPosition,
+                                          deallocator: .none)
                     if currentHeader?.compression == 0 {
-                        delegate?.writeData(from: decompressionBuffer,
+                        delegate?.writeData(from: dataBuffer,
                                             bytesDownloaded: bytesDownloaded)
                     } else if currentHeader?.compression == 8 {
-                        decompress(data: decompressionBuffer, finished: decompressionBuffer.count < Zipper.bufferSize)
+                        decompress(data: dataBuffer, finished: decompressionPosition < Zipper.bufferSize)
                     } else {
                         delegate?.errorDidOccur(.unknownEncryption)
                         currentState = .finished
@@ -164,7 +167,7 @@ class Zipper {
                         
                         return
                     }
-                    decompressionBuffer.removeAll(keepingCapacity: true)
+                    
                     decompressionPosition = 0
                 }
                 
@@ -204,6 +207,7 @@ class Zipper {
             }
         }
         
+        decompressionBuffer.deallocate()
         delegate?.didFinish()
     }
 }
@@ -226,7 +230,11 @@ private extension Zipper {
         currentState = .fillingBuffer(parseLocalFileHeader(from:))
     }
     
-    func parsePKHeader(_ header: UInt32) -> HeaderType{
+    func parsePKHeader(_ header: UInt32) -> HeaderType {
+        if header & 0x4b50 != 0x4b50 {
+            return .none
+        }
+
         switch header {
         case 0x04034b50:
             return .localFile
