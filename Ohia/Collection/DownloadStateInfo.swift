@@ -9,26 +9,39 @@ import SwiftUI
 
 struct DownloadStateInfo: View {
     @ObservedObject var item: OhiaItem
+    @State var showErrorPopover = false
     
     var body: some View {
         HStack {
             Text(DownloadStateInfo.text(for: item))
 
-            /* - Button looks ugly
-            if item.state != .none {
-                HoverButton(item: item) {
-                    
-                }
+            if item.state == .error {
+                Button(action: {
+                    showErrorPopover.toggle()
+                }, label: {
+                    Image(systemSymbol: .infoCircleFill)
+                        .frame(width: 16, height: 16)
+                })
+                .buttonStyle(.borderless)
+                .popover(isPresented: $showErrorPopover, content: {
+                    if let error = item.lastError {
+                        Text(DownloadStateInfo.string(for: error))
+                            .padding()
+                    }
+                })
             }
-             */
         }
     }
 }
 
 extension DownloadStateInfo {
+    static func string(for error: Error) -> String {
+        return "\(error)"
+    }
+    
     static func text(for item: OhiaItem) -> String {
         if let error = item.lastError {
-            return NSLocalizedString("Error: \(error)", comment: "")
+            return NSLocalizedString("Error:", comment: "") + " \(error.localizedDescription)"
         } else {
             return stringForState(item.state)
         }
@@ -58,5 +71,5 @@ extension DownloadStateInfo {
 }
 
 #Preview {
-    DownloadStateInfo(item: OhiaItem.preview(for: .downloaded))
+    DownloadStateInfo(item: OhiaItem.preview(for: .error))
 }
