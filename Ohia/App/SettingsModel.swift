@@ -64,7 +64,7 @@ final class SettingsModel: ObservableObject {
         }
     }
     
-    @Published var createFolderStructure: FolderStructure = .multi {
+    @Published var createFolderStructure: FolderStructure = .bandcamp {
         didSet {
             var cs = configService
             cs.folderStructure = createFolderStructure

@@ -758,7 +758,24 @@ private extension OhiaViewModel {
 
         let fm = FileManager.default
         
-        let dirPath = options.createFolder == .single ? "\(item.artist) - \(item.title)" : "\(item.artist)/\(item.title)"
+        var dirPath: String
+        
+        switch options.createFolder {
+        case .bandcamp:
+            dirPath = "\(item.artist)/\(item.artist) - \(item.title)"
+            break
+
+        case .none:
+            return downloadUrl
+            
+        case .single:
+            dirPath = "\(item.artist) - \(item.title)"
+            break
+            
+        case .multi:
+            dirPath = "\(item.artist)/\(item.title)"
+            break
+        }
         
         let url = downloadUrl.appending(path: dirPath,
                                         directoryHint: .isDirectory)

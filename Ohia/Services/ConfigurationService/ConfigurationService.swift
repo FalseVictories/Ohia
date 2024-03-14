@@ -13,6 +13,7 @@ public enum FolderStructure: String, Sendable {
     case none = "none"
     case single = "single"
     case multi = "multi"
+    case bandcamp = "bandcamp"
 }
 
 public enum ConfigurationKey: String {
@@ -93,9 +94,9 @@ extension ConfigurationService {
         }
         get {
             if let result = string(for: .folderStructure) {
-                return .init(rawValue: result) ?? .multi
+                return .init(rawValue: result) ?? .bandcamp
             }
-            return .multi
+            return .bandcamp
         }
     }
 }

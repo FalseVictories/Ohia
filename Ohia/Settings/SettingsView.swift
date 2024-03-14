@@ -38,6 +38,7 @@ struct SettingsView: View {
                 Text("None").tag(FolderStructure.none)
                 Text("Artist - Title /").tag(FolderStructure.single)
                 Text("Artist / Title /").tag(FolderStructure.multi)
+                Text("Artist / Artist - Title /").tag(FolderStructure.bandcamp)
             }.disabled(!settingsModel.decompressDownloads)
         }
         .frame(idealWidth: 300, idealHeight: 250)
