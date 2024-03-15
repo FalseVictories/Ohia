@@ -18,9 +18,11 @@ struct OhiaApp: App {
         Window("Ohia", id: "main") {
             ZStack {
                 VisualEffect()
-                if viewModel.errorShown {
+                if viewModel.showErrorScreen {
                     ErrorScreen()
                         .environmentObject(viewModel)
+                } else if viewModel.showAboutScreen {
+                    AboutScreen(displayed: $viewModel.showAboutScreen)
                 } else if viewModel.isSignedIn {
                     CollectionContentView(state: viewModel.collectionState,
                                           username: viewModel.name,
@@ -38,6 +40,11 @@ struct OhiaApp: App {
                 }
             }
         }
+        .commands {
+                    CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                        Button("About Ohia") { viewModel.showAboutScreen.toggle() }
+                    }
+                }
 #if os(macOS)
         Settings {
             SettingsView(settingsModel: viewModel.settings)

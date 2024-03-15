@@ -26,7 +26,7 @@ struct ErrorScreen: View {
 
     var body: some View {
         VStack {
-            Image(.defaultIcon)
+            Image(.aboutIcon)
             Text("An Error Occurred")
                 .font(.title)
             if let lastError = model.lastError {
@@ -49,7 +49,7 @@ struct ErrorScreen: View {
                         _ = dataStorageService.resetDatabase()
                         
                         model.lastError = nil
-                        model.errorShown = false
+                        model.showErrorScreen = false
                     }) {
                         Text("Reset Database")
                             .padding(8)

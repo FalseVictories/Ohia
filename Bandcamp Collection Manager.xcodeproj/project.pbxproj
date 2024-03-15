@@ -34,6 +34,7 @@
 		AE80740A2B128FF5007DC1BC /* CookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8074092B128FF5007DC1BC /* CookieService.swift */; };
 		AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE80740C2B12907F007DC1BC /* LiveCookieService.swift */; };
 		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
+		AEC04D522BA4F67400778EAC /* AboutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC04D512BA4F67400778EAC /* AboutScreen.swift */; };
 		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
 		AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */; };
 		AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECF4A812AD1A4560071CFD8 /* Assets.xcassets */; };
@@ -112,6 +113,7 @@
 		AE8074092B128FF5007DC1BC /* CookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieService.swift; sourceTree = "<group>"; };
 		AE80740C2B12907F007DC1BC /* LiveCookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCookieService.swift; sourceTree = "<group>"; };
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
+		AEC04D512BA4F67400778EAC /* AboutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutScreen.swift; sourceTree = "<group>"; };
 		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
 		AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
@@ -192,7 +194,7 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		AE1E11B72AE7F23D0001369A /* Collection */ = {
+		AE1E11B72AE7F23D0001369A /* CollectionScreen */ = {
 			isa = PBXGroup;
 			children = (
 				AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */,
@@ -206,7 +208,7 @@
 				AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */,
 				AED478B32B59913400CDEA24 /* MenuButton.swift */,
 			);
-			path = Collection;
+			path = CollectionScreen;
 			sourceTree = "<group>";
 		};
 		AE1E11B82AE7F3D90001369A /* App */ = {
@@ -293,12 +295,12 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		AE62CDD62B7ADC9B006F7444 /* Error */ = {
+		AE62CDD62B7ADC9B006F7444 /* ErrorScreen */ = {
 			isa = PBXGroup;
 			children = (
 				AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */,
 			);
-			path = Error;
+			path = ErrorScreen;
 			sourceTree = "<group>";
 		};
 		AE679AB42AD8717C0073EF8C /* ConfigurationService */ = {
@@ -337,14 +339,23 @@
 			path = Zipper;
 			sourceTree = "<group>";
 		};
+		AEC04D502BA4F66300778EAC /* AboutScreen */ = {
+			isa = PBXGroup;
+			children = (
+				AEC04D512BA4F67400778EAC /* AboutScreen.swift */,
+			);
+			path = AboutScreen;
+			sourceTree = "<group>";
+		};
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
+				AEC04D502BA4F66300778EAC /* AboutScreen */,
 				AE62CDDD2B9F0AC5006F7444 /* Info.plist */,
-				AE62CDD62B7ADC9B006F7444 /* Error */,
+				AE62CDD62B7ADC9B006F7444 /* ErrorScreen */,
 				AEA7D9F42B3632CC000765E8 /* Zipper */,
 				AE1E11B82AE7F3D90001369A /* App */,
-				AE1E11B72AE7F23D0001369A /* Collection */,
+				AE1E11B72AE7F23D0001369A /* CollectionScreen */,
 				AE1E11B62AE7F22F0001369A /* Settings */,
 				AECF4ABD2AD5A2880071CFD8 /* Services */,
 				AECF4AB32AD330CA0071CFD8 /* Extensions */,
@@ -595,6 +606,7 @@
 				AE1E11B32AE549D90001369A /* DataStorageService.swift in Sources */,
 				AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */,
 				AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */,
+				AEC04D522BA4F67400778EAC /* AboutScreen.swift in Sources */,
 				AECF4ABF2AD5A62A0071CFD8 /* ImageCacheService.swift in Sources */,
 				AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */,
 				AECF4AB22AD2DA710071CFD8 /* WebView.swift in Sources */,
@@ -785,7 +797,7 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;
@@ -828,7 +840,7 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;

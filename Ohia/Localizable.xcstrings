@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "\"In the sirens and the silences now\"" : {
+
+    },
     "%@'s Collection - %d items" : {
       "localizations" : {
         "en" : {
@@ -12,6 +15,9 @@
       }
     },
     "AAC High" : {
+
+    },
+    "About Ohia" : {
 
     },
     "AIFF Lossless" : {
@@ -32,6 +38,9 @@
     "Artist / Title /" : {
 
     },
+    "By iain" : {
+
+    },
     "Cancelled" : {
 
     },
@@ -42,6 +51,9 @@
 
     },
     "Connecting…" : {
+
+    },
+    "Copyright (C) 2024 False Victories" : {
 
     },
     "Create Folders:" : {
@@ -85,6 +97,9 @@
 
     },
     "Error:" : {
+
+    },
+    "Feedback: ohiafeedback@falsevictories.com" : {
 
     },
     "Flac" : {

@@ -96,7 +96,8 @@ class OhiaViewModel: ObservableObject {
     @Published var avatarUrl: URL?
     
     @Published var selectedItems = Set<Int>()
-    @Published var errorShown = false
+    @Published var showErrorScreen = false
+    @Published var showAboutScreen = false
     
     var idToItem: [Int: OhiaItem] = [:]
     var settings: SettingsModel = SettingsModel()
@@ -358,7 +359,7 @@ class OhiaViewModel: ObservableObject {
     func resetError() {
         lastErrorIsFatal = false
         lastError = nil
-        errorShown = false
+        showErrorScreen = false
     }
 }
 
@@ -367,7 +368,7 @@ private extension OhiaViewModel {
                    isFatal: Bool) {
         lastErrorIsFatal = isFatal
         lastError = error
-        errorShown = true
+        showErrorScreen = true
     }
         
     func loadCollection(using loader: CollectionLoader) async throws {
