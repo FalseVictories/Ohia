@@ -14,7 +14,9 @@ struct DownloadServiceOptions {
     let maxDownloads: Int
 }
 
-typealias DownloadUpdater = @MainActor @Sendable (OhiaItem, String?, URLSession.AsyncBytes) async throws -> Void
+typealias DownloadUpdater = @MainActor @Sendable (OhiaItem, 
+                                                  String?,
+                                                  URLSession.AsyncBytes) async throws -> Void
 protocol DownloadService: Sendable {
     @MainActor
     func download(items: [OhiaItem],

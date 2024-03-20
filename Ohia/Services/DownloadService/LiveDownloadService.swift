@@ -150,9 +150,7 @@ extension LiveDownloadService {
     nonisolated
     private func downloadFile(for item: OhiaItem,
                               from url: URL,
-                              updateClosure: (_ item: OhiaItem,
-                                              _ filename: String?,
-                                              _ dataStream: URLSession.AsyncBytes) async throws -> Void) async throws {
+                              updateClosure: DownloadUpdater) async throws {
         let request = URLRequest(url: url)
         
         let (byteStream, response) = try await URLSession.shared.bytes(for: request, delegate: nil)
