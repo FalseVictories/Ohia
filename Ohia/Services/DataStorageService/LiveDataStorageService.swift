@@ -30,6 +30,13 @@ final class LiveDataStorageService: DataStorageService {
         static let added = "added"
         static let isPreorder = "isPreorder"
         static let isHidden = "isHidden"
+        static let tracklist = "tracklist"
+        
+        static let trackArtist = "trackArtist"
+        static let trackTitle = "trackTitle"
+        static let trackNumber = "trackNumber"
+        static let trackDuration = "trackDuration"
+        static let trackStream = "trackStream"
     }
 
     var database: Database?
@@ -94,14 +101,39 @@ final class LiveDataStorageService: DataStorageService {
 
             guard let title = docProps.string(forKey: DataBaseKeys.title),
                   let artist = docProps.string(forKey: DataBaseKeys.artist),
-                  let downloadUrl = docProps.string(forKey: DataBaseKeys.downloadUrl) else {
+                  let downloadUrl = docProps.string(forKey: DataBaseKeys.downloadUrl),
+                  let tracks = docProps.array(forKey: DataBaseKeys.tracklist) else {
                 Logger.DataStorageService.warning("Missing data")
                 continue
             }
 
+            var trackList: [OhiaTrack] = []
+            for i in 0..<tracks.count {
+                guard let trackDict = tracks.dictionary(at: i) else {
+                    Logger.DataStorageService.warning("No tracklist for \(artist) - \(title)")
+                    continue
+                }
+                
+                guard let trackTitle = trackDict.string(forKey: DataBaseKeys.trackTitle),
+                      let trackArtist = trackDict.string(forKey: DataBaseKeys.trackArtist),
+                      let streamUrl = trackDict.string(forKey: DataBaseKeys.trackStream),
+                      let url = URL(string:streamUrl) else {
+                    Logger.DataStorageService.warning("Missing tracklist data for \(artist) - \(title)")
+                    continue
+                }
+                
+                let track = OhiaTrack(title: trackTitle,
+                                      artist: trackArtist,
+                                      trackNumber: trackDict.int(forKey: DataBaseKeys.trackNumber),
+                                      duration: trackDict.double(forKey: DataBaseKeys.trackDuration),
+                                      file: url)
+                trackList.append(track)
+            }
+            
             let item = OhiaItem(id: docProps.int(forKey: DataBaseKeys.bcid),
                                 title: title,
                                 artist: artist,
+                                tracks: trackList,
                                 added: docProps.int(forKey: DataBaseKeys.added),
                                 isPreorder: docProps.boolean(forKey: DataBaseKeys.isPreorder),
                                 isHidden: docProps.boolean(forKey: DataBaseKeys.isHidden),
@@ -135,6 +167,15 @@ final class LiveDataStorageService: DataStorageService {
         document.setValue(item.added, forKey: DataBaseKeys.added)
         document.setBoolean(item.isPreorder, forKey: DataBaseKeys.isPreorder)
         document.setBoolean(item.isHidden, forKey: DataBaseKeys.isHidden)
+        
+        let trackList = MutableArrayObject()
+        item.tracks.forEach {
+            let trackDict = dictFromTrack($0)
+            trackList.addDictionary(trackDict)
+        }
+        
+        document.setArray(trackList, forKey: DataBaseKeys.tracklist)
+        
         if let thumbnail = item.thumbnailUrl {
             document.setValue(thumbnail.absoluteString, forKey: DataBaseKeys.thumbnailUrl)
         }
@@ -395,5 +436,16 @@ private extension LiveDataStorageService {
         mutableDoc.setBoolean(new, forKey: DataBaseKeys.isNew)
 
         try collection.save(document: mutableDoc)
+    }
+    
+    func dictFromTrack(_ track: OhiaTrack) -> DictionaryObject {
+        let dict = MutableDictionaryObject()
+        dict.setString(track.artist, forKey: DataBaseKeys.trackArtist)
+        dict.setString(track.title, forKey: DataBaseKeys.trackTitle)
+        dict.setDouble(track.duration, forKey: DataBaseKeys.trackDuration)
+        dict.setInt(track.trackNumber, forKey: DataBaseKeys.trackNumber)
+        dict.setString(track.file.absoluteString, forKey: DataBaseKeys.trackStream)
+        
+        return dict
     }
 }

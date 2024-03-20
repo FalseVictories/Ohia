@@ -1,11 +1,20 @@
 //
-//  File.swift
+//  BCItem.swift
 //  
 //
 //  Created by iain on 10/10/2023.
 //
 
 import Foundation
+
+public struct BCTrack: Identifiable, Sendable {
+    public let id: Int
+    public let title: String
+    public let artist: String
+    public let trackNumber: Int
+    public let duration: Double
+    public let file: URL
+}
 
 public struct BCItem: Identifiable, Sendable {
     public let id: Int
@@ -17,6 +26,8 @@ public struct BCItem: Identifiable, Sendable {
 
     public let downloadUrl: URL
     public let thumbnailUrl: URL?
+    
+    public let tracklist: [BCTrack]
 }
 
 public enum FileFormat: String, Sendable {
@@ -28,6 +39,25 @@ public enum FileFormat: String, Sendable {
     case alac = "alac"
     case wav = "wav"
     case aiff = "aiff-lossless"
+    
+    public func getExtension() -> String {
+        switch self {
+        case .mp3_v0, .mp3_320:
+            return "mp3"
+        case .flac:
+            return "flac"
+        case .aachi:
+            return "aac"
+        case .vorbis:
+            return "ogg"
+        case .alac:
+            return "alac"
+        case .wav:
+            return "wav"
+        case .aiff:
+            return "aiff"
+        }
+    }
 }
 
 public struct BCItemDownload {

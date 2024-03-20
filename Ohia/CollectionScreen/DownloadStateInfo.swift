@@ -64,6 +64,9 @@ extension DownloadStateInfo {
         case .waiting:
             return NSLocalizedString("Waiting…", comment: "")
             
+        case .failed:
+            return NSLocalizedString("Failed", comment: "")
+            
         case .none, .downloading:
             return ""
         }

@@ -225,7 +225,8 @@ extension CollectionLoader {
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "dd MMM y HH:mm:ss z"
         for item in items {
-            if let download = collection.downloadUrls["\(item.saleItemType)\(item.saleItemId)"] {
+            let itemId = "\(item.saleItemType)\(item.saleItemId)"
+            if let download = collection.downloadUrls[itemId] {
                 // 3 - 100x100
                 var thumbnailUrl: URL?
                 if let artUrl = item.art?.thumbnail {
@@ -242,8 +243,26 @@ extension CollectionLoader {
                                                                    purchased: item.datePurchased,
                                                                    using: formatter)
 
-                if (item.isPreorder ?? false) {
-                    logger.info("\(item.bandName) : \(item.itemTitle) is preorder")
+//                if (item.isPreorder ?? false) {
+//                    logger.info("\(item.bandName) : \(item.itemTitle) is preorder")
+//                }
+                
+                var tracks: [BCTrack] = []
+                if let tracklists = collection.tracklists,
+                   let albumType = item.albumType,
+                   let albumId = item.albumId,
+                   let tracklist = tracklists["\(albumType)\(albumId)"] {
+
+                    
+                    tracklist.forEach {
+                        let track = BCTrack(id: $0.id,
+                                            title: $0.title,
+                                            artist: $0.artist,
+                                            trackNumber: $0.trackNumber ?? 0,
+                                            duration: $0.duration ?? 0.0,
+                                            file: URL(string: $0.file.url)!)
+                        tracks.append(track)
+                    }
                 }
                 
                 let modelItem = BCItem(id: item.itemId,
@@ -253,7 +272,8 @@ extension CollectionLoader {
                                        isPreorder: item.isPreorder ?? false,
                                        isHidden: item.isHidden ?? false,
                                        downloadUrl: URL(string: download)!,
-                                       thumbnailUrl: thumbnailUrl)
+                                       thumbnailUrl: thumbnailUrl,
+                                       tracklist: tracks)
                 continuation.yield(modelItem)
                 itemCount += 1
             } else if item.itemType != .subscription {

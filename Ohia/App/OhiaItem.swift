@@ -5,8 +5,38 @@
 //  Created by iain on 25/10/2023.
 //
 
+import BCKit
 import Foundation
 import SwiftUI
+import OSLog
+
+struct OhiaTrack {
+    let title: String
+    let artist: String
+    let trackNumber: Int
+    let duration: Double
+    let file: URL
+
+    init(title: String,
+         artist: String,
+         trackNumber: Int,
+         duration: Double,
+         file: URL) {
+        self.title = title
+        self.artist = artist
+        self.trackNumber = trackNumber
+        self.duration = duration
+        self.file = file
+    }
+    
+    init(from track: BCTrack) {
+        title = track.title
+        artist = track.artist
+        trackNumber = track.trackNumber
+        duration = track.duration
+        file = track.file
+    }
+}
 
 @MainActor
 class OhiaItem: ObservableObject, Identifiable {
@@ -17,6 +47,7 @@ class OhiaItem: ObservableObject, Identifiable {
         case downloading
         case downloaded
         case cancelled
+        case failed
         case error
         
         var id: String { return self.rawValue }
@@ -34,6 +65,8 @@ class OhiaItem: ObservableObject, Identifiable {
     var thumbnailUrl: URL?
     var localFolder: URL?
     
+    var tracks: [OhiaTrack]
+    
     @Published var isNew: Bool
     @Published var thumbnail: Image
     @Published var state: State = .none
@@ -44,6 +77,7 @@ class OhiaItem: ObservableObject, Identifiable {
     init(id: Int,
          title: String,
          artist: String,
+         tracks: [OhiaTrack],
          added: Int,
          isPreorder: Bool,
          isHidden: Bool,
@@ -53,6 +87,7 @@ class OhiaItem: ObservableObject, Identifiable {
         self.id = id
         self.title = title
         self.artist = artist
+        self.tracks = tracks
         self.added = added
         self.downloadUrl = downloadUrl
         self.thumbnail = Image(.defaultIcon)
@@ -64,7 +99,9 @@ class OhiaItem: ObservableObject, Identifiable {
 
     static func preview(for state: State) -> OhiaItem {
         return OhiaItem(id: 1, title: "Travels in Constants", 
-                        artist: "Songs: Ohia", added: 0,
+                        artist: "Songs: Ohia",
+                        tracks: [],
+                        added: 0,
                         isPreorder: false,
                         isHidden: false,
                         isNew: false,
@@ -76,6 +113,7 @@ class OhiaItem: ObservableObject, Identifiable {
         return OhiaItem(id: 1,
                         title: "Travels in Constants",
                         artist: "Songs: Ohia",
+                        tracks: [],
                         added: 0, isPreorder: false,
                         isHidden: false,
                         isNew: true,
@@ -94,5 +132,22 @@ extension OhiaItem {
     
     func setLocalFolder(_ url: URL) {
         self.localFolder = url
+    }
+    
+    func verifyDownload(in downloadFolder: URL, format: FileFormat) -> Bool {
+        let fm = FileManager.default
+        
+        for track in tracks {
+            let filename = "\(track.artist) - \(title) - \(String(format: "%02d", track.trackNumber)) \(track.title).\(format.getExtension())"
+            var isDir = ObjCBool(false)
+            let fileUrl = downloadFolder.appending(path: filename, directoryHint: .notDirectory)
+            
+            let filePath = fileUrl.path
+            Logger.Item.debug("Checking \(filePath)")
+            if !fm.fileExists(atPath: filePath, isDirectory: &isDir) || isDir.boolValue {
+                return false
+            }
+        }
+        return true
     }
 }

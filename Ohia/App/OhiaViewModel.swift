@@ -285,6 +285,7 @@ class OhiaViewModel: ObservableObject {
                                                  createFolder: settings.createFolderStructure,
                                                  overwrite: false)
         
+        let configService = self.configService
         downloadTask = Task {
             let options = DownloadServiceOptions(format: configService.fileFormat,
                                                  maxDownloads: configService.maxDownloads)
@@ -299,10 +300,26 @@ class OhiaViewModel: ObservableObject {
                 item.set(state: success ? .downloaded : .error)
                 if success {
                     do {
+                        var verified = true
+                        
                         if let localFolder = item.localFolder {
-                            try dataStorageService.setItemDownloadLocation(item, location: localFolder.path(percentEncoded: false))
+                            
+                            if settings.decompressDownloads {
+                                Logger.Model.info("Verifying download in \(localFolder)")
+                                verified = item.verifyDownload(in: localFolder, format: options.format)
+                            }
+                            
+                            if verified {
+                                try dataStorageService.setItemDownloadLocation(item,
+                                                                               location: localFolder.path(percentEncoded: false))
+                            }
                         }
-                        try dataStorageService.setItemDownloaded(item, downloaded: true)
+                        
+                        if verified {
+                            try dataStorageService.setItemDownloaded(item, downloaded: true)
+                        } else {
+                            item.set(state: .failed)
+                        }
                     } catch let error as NSError {
                         Logger.Model.error("Error setting download results: \(error)")
                     }
@@ -596,7 +613,15 @@ private extension OhiaViewModel {
     
     func addItems(_ batchItems: [BCItem], append: Bool = true) {
         for bcItem in batchItems {
-            let item = OhiaItem(id: bcItem.id, title: bcItem.name, artist: bcItem.artist, 
+            var tracklist: [OhiaTrack] = []
+            bcItem.tracklist.forEach {
+                tracklist.append(OhiaTrack(from: $0))
+            }
+            
+            let item = OhiaItem(id: bcItem.id,
+                                title: bcItem.name,
+                                artist: bcItem.artist,
+                                tracks: tracklist,
                                 added: bcItem.added,
                                 isPreorder: bcItem.isPreorder,
                                 isHidden: bcItem.isHidden,
