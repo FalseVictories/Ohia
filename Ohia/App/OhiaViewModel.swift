@@ -684,39 +684,46 @@ private extension OhiaViewModel {
         return item.isNew
     }
     
-    @Sendable nonisolated func processDownloadStream(item: OhiaItem, 
+    @MainActor
+    func getOptionsAndFolderUrl() -> (DownloadOptions?, URL?) {
+        return (currentDownloadOptions, downloadFolderSecurityUrl)
+    }
+
+    @Sendable nonisolated func processDownloadStream(item: OhiaItem,
                                                      filename: String?,
                                                      dataStream: URLSession.AsyncBytes) async throws {
-        guard let currentDownloadOptions = await currentDownloadOptions else {
+        let (options, folderUrl) = await getOptionsAndFolderUrl()
+        
+        guard let options,
+              let folderUrl else {
             return
         }
         
-        if currentDownloadOptions.decompress {
+        if options.decompress {
             try await unpackStream(item: item,
-                                   options: currentDownloadOptions,
-                                   filename: filename, 
+                                   options: options,
+                                   downloadUrl: folderUrl,
+                                   filename: filename,
                                    dataStream: dataStream)
         } else {
             try await writeStream(item: item,
-                                  options: currentDownloadOptions,
+                                  options: options,
+                                  downloadUrl: folderUrl,
                                   filename: filename,
                                   dataStream: dataStream)
         }
     }
-    
+        
     nonisolated
     func unpackStream(item: OhiaItem, 
                       options: DownloadOptions,
-                      filename: String?, 
+                      downloadUrl: URL,
+                      filename: String?,
                       dataStream: URLSession.AsyncBytes) async throws {
-        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl else {
-            return
-        }
-        
-        var url = downloadFolderSecurityUrl
+        var url = downloadUrl
         if options.createFolder != .none {
             url = try createFolderStructure(for: item,
-                                            into: url,
+                                            into: downloadUrl,
                                             with: options)
         }
         
@@ -729,19 +736,16 @@ private extension OhiaViewModel {
     nonisolated
     func writeStream(item: OhiaItem,
                      options: DownloadOptions,
+                     downloadUrl: URL,
                      filename: String?,
                      dataStream: URLSession.AsyncBytes) async throws {
-        guard let downloadFolderSecurityUrl = await downloadFolderSecurityUrl else {
-            return
-        }
-        
         guard let handle = try await item.downloadProgress.startWritingDataFor(filename ?? "\(item.artist)-\(item.title).zip",
-                                                      in: downloadFolderSecurityUrl,
+                                                                               in: downloadUrl,
                                                                                with: options) else {
             return
         }
         
-        await item.setLocalFolder(downloadFolderSecurityUrl)
+        await item.setLocalFolder(downloadUrl)
         
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: LiveDownloadService.bufferSize)
         defer {
