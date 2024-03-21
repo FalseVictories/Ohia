@@ -19,6 +19,11 @@ struct DownloadOptions: Sendable {
     let overwrite: Bool
 }
 
+enum InternalError: Error {
+    case noDownloadOptionsSet
+    case noDownloadFileHandle
+}
+
 enum ModelError: Error {
     case noDownloadAccess
 }
@@ -39,6 +44,7 @@ extension ModelError: LocalizedError {
         }
     }
 }
+
 @MainActor
 class OhiaViewModel: ObservableObject {
     @Dependency(\.configurationService) var configService: any ConfigurationService
@@ -684,68 +690,72 @@ private extension OhiaViewModel {
         return item.isNew
     }
     
-    @MainActor
-    func getOptionsAndFolderUrl() -> (DownloadOptions?, URL?) {
-        return (currentDownloadOptions, downloadFolderSecurityUrl)
+    struct DownloadStream : Sendable{
+        let options: DownloadOptions
+        let downloadFolder: URL
+        let zipper: Zipper?
+        let fileHandle: FileHandle?
     }
-
+    
+    @MainActor
+    func getDownloadStream(for item: OhiaItem,
+                           with filename: String?) throws -> DownloadStream {
+        guard let currentDownloadOptions,
+              let downloadFolderSecurityUrl else {
+            throw InternalError.noDownloadOptionsSet
+        }
+        
+        var zipper: Zipper?
+        var fileHandle: FileHandle?
+        
+        var url = downloadFolderSecurityUrl
+        
+        if currentDownloadOptions.createFolder != .none {
+            url = try createFolderStructure(for: item,
+                                            into: url,
+                                            with: currentDownloadOptions)
+        }
+        
+        item.setLocalFolder(url)
+        
+        if currentDownloadOptions.decompress {
+            zipper = item.downloadProgress.startDecompressing(to: url,
+                                                              with: currentDownloadOptions)
+        } else {
+            let filename = filename ?? "\(item.artist)-\(item.title).zip"
+            fileHandle = try item.downloadProgress.startWritingDataFor(filename,
+                                                                       in: url,
+                                                                       with: currentDownloadOptions)
+        }
+        
+        return DownloadStream(options: currentDownloadOptions,
+                              downloadFolder: downloadFolderSecurityUrl,
+                              zipper: zipper,
+                              fileHandle: fileHandle)
+    }
+    
     @Sendable nonisolated func processDownloadStream(item: OhiaItem,
                                                      filename: String?,
                                                      dataStream: URLSession.AsyncBytes) async throws {
-        let (options, folderUrl) = await getOptionsAndFolderUrl()
+        let downloadStream = try await getDownloadStream(for: item, with: filename)
         
-        guard let options,
-              let folderUrl else {
-            return
-        }
-        
-        if options.decompress {
-            try await unpackStream(item: item,
-                                   options: options,
-                                   downloadUrl: folderUrl,
-                                   filename: filename,
-                                   dataStream: dataStream)
+        if downloadStream.options.decompress,
+            let zipper = downloadStream.zipper {
+            try await zipper.consume(dataStream)
         } else {
             try await writeStream(item: item,
-                                  options: options,
-                                  downloadUrl: folderUrl,
-                                  filename: filename,
+                                  downloadStream: downloadStream,
                                   dataStream: dataStream)
         }
-    }
-        
-    nonisolated
-    func unpackStream(item: OhiaItem, 
-                      options: DownloadOptions,
-                      downloadUrl: URL,
-                      filename: String?,
-                      dataStream: URLSession.AsyncBytes) async throws {
-        var url = downloadUrl
-        if options.createFolder != .none {
-            url = try createFolderStructure(for: item,
-                                            into: downloadUrl,
-                                            with: options)
-        }
-        
-        await item.setLocalFolder(url)
-        let zipper = await item.downloadProgress.startDecompressing(to: url,
-                                                                    with: options)
-        try await zipper.consume(dataStream)
     }
     
     nonisolated
     func writeStream(item: OhiaItem,
-                     options: DownloadOptions,
-                     downloadUrl: URL,
-                     filename: String?,
+                     downloadStream: DownloadStream,
                      dataStream: URLSession.AsyncBytes) async throws {
-        guard let handle = try await item.downloadProgress.startWritingDataFor(filename ?? "\(item.artist)-\(item.title).zip",
-                                                                               in: downloadUrl,
-                                                                               with: options) else {
-            return
+        guard let handle = downloadStream.fileHandle else {
+            throw InternalError.noDownloadFileHandle
         }
-        
-        await item.setLocalFolder(downloadUrl)
         
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: LiveDownloadService.bufferSize)
         defer {

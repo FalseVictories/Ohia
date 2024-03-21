@@ -16,16 +16,19 @@ enum ZipperError: Error {
     case compressorError
 }
 
-protocol ZipperDelegate {
-    func createFolder(with name: String)
-    func beginWritingFile(with name: String)
-    func writeData(from buffer: Data, bytesDownloaded: Int64)
-    func endWritingFile()
-    func didFinish()
-    func errorDidOccur(_ error: ZipperError)
+// FIXME:
+// Marked as @unchecked as I'm not sure how to make it Sendable. None of the data passed into the
+// closures should be accessed from multiple threads anyway
+struct ZipperDelegate: @unchecked Sendable {
+    var createFolder: (String) -> Void
+    var beginWritingFile: (String) -> Void
+    var writeData: (Data, Int64) -> Void
+    var endWritingFile: () -> Void
+    var didFinish: () -> Void
+    var errorDidOccur: (ZipperError) -> Void
 }
 
-class Zipper {
+final actor Zipper: Sendable {
     static let LocalHeaderSize = 26
     static let bufferSize = 32_768
     
@@ -70,12 +73,16 @@ class Zipper {
     var currentHeader: LocalFileHeader?
     var filename: String = ""
     
-    var delegate: (any ZipperDelegate)?
+    var delegate: ZipperDelegate
     
     var destinationBufferPointer: UnsafeMutablePointer<UInt8>?
     var streamPointer: UnsafeMutablePointer<compression_stream>?
     
     var bytesDownloaded: Int64 = 0
+    
+    init(delegate: ZipperDelegate) {
+        self.delegate = delegate
+    }
     
     func consume<S: AsyncSequence>(_ iterator: S) async throws where S.Element == UInt8 {
         currentState = .fillingBuffer(parsePKEntryHeader(from:))
@@ -88,7 +95,7 @@ class Zipper {
             
             switch currentState {
             case .none:
-                delegate?.errorDidOccur(.invalidState)
+                delegate.errorDidOccur(.invalidState)
                 return
             
             case .fillingBuffer(let completion):
@@ -107,7 +114,7 @@ class Zipper {
 
             case .readFileName:
                 guard let currentHeader else {
-                    delegate?.errorDidOccur(.invalidArchive)
+                    delegate.errorDidOccur(.invalidArchive)
                     return
                 }
                 
@@ -155,12 +162,11 @@ class Zipper {
                                           count: decompressionPosition,
                                           deallocator: .none)
                     if currentHeader?.compression == 0 {
-                        delegate?.writeData(from: dataBuffer,
-                                            bytesDownloaded: bytesDownloaded)
+                        delegate.writeData(dataBuffer, bytesDownloaded)
                     } else if currentHeader?.compression == 8 {
                         decompress(data: dataBuffer, finished: decompressionPosition < Zipper.bufferSize)
                     } else {
-                        delegate?.errorDidOccur(.unknownEncryption)
+                        delegate.errorDidOccur(.unknownEncryption)
                         currentState = .finished
                         
                         tearDownDecompressor()
@@ -172,7 +178,7 @@ class Zipper {
                 }
                 
                 if headerType != .none {
-                    delegate?.endWritingFile()
+                    delegate.endWritingFile()
                     
                     tearDownDecompressor()
                     
@@ -208,7 +214,7 @@ class Zipper {
         }
         
         decompressionBuffer.deallocate()
-        delegate?.didFinish()
+        delegate.didFinish()
     }
 }
 
@@ -312,12 +318,12 @@ private extension Zipper {
     
     func decideWhatToDoAfterSkippingExtraData() {
         guard let currentHeader else {
-            delegate?.errorDidOccur(.invalidArchive)
+            delegate.errorDidOccur(.invalidArchive)
             return
         }
         
         if currentHeader.dataLength == 0 && currentHeader.flags == 0 {
-            delegate?.createFolder(with: filename)
+            delegate.createFolder(filename)
             resetForNextEntry()
             return
         }
@@ -328,7 +334,7 @@ private extension Zipper {
                 // Tear down anything that was already set up before failure
                 tearDownDecompressor()
                 
-                delegate?.errorDidOccur(.invalidCompressor)
+                delegate.errorDidOccur(.invalidCompressor)
                 
                 currentState = .finished
                 return
@@ -336,7 +342,7 @@ private extension Zipper {
         }
 
         dataBuffer.removeAll()
-        delegate?.beginWritingFile(with: filename)
+        delegate.beginWritingFile(filename)
         decompressionPreBuffer.clear()
                 
         currentState = .decompressData
@@ -412,15 +418,14 @@ private extension Zipper {
                                       count: dataCount,
                                       deallocator: .none)
                 
-                delegate?.writeData(from: outputData,
-                                    bytesDownloaded: bytesDownloaded)
+                delegate.writeData(outputData, bytesDownloaded)
                 
                 streamPointer.pointee.dst_ptr = destinationBufferPointer
                 streamPointer.pointee.dst_size = Zipper.bufferSize
                 break
                 
             case COMPRESSION_STATUS_ERROR:
-                delegate?.errorDidOccur(.compressorError)
+                delegate.errorDidOccur(.compressorError)
                 break
                 
             default:
