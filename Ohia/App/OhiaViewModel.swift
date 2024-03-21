@@ -769,14 +769,14 @@ private extension OhiaViewModel {
             // add byte to the buffer
             buffer[count] = byte
             count += 1
-            totalCount += 1
             
             // write the data when the buffer is full
             if count >= LiveDownloadService.bufferSize {
+                totalCount += count
                 Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
                 
                 let dataBuffer = Data(bytesNoCopy: buffer,
-                                      count: LiveDownloadService.bufferSize,
+                                      count: count,
                                       deallocator: .none)
                 
                 try handle.write(contentsOf: dataBuffer)
@@ -787,6 +787,7 @@ private extension OhiaViewModel {
         }
         
         if count != 0 {
+            totalCount += count
             Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
             let dataBuffer = Data(bytesNoCopy: buffer,
                                   count: count,
