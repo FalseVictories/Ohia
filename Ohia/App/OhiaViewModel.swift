@@ -337,15 +337,6 @@ class OhiaViewModel: ObservableObject {
             downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
             self.downloadFolderSecurityUrl = nil
             currentAction = .none
-            
-//            } catch let error as NSError {
-//                Logger.Model.error("Error in download task: \(error)")
-//                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
-//                self.downloadFolderSecurityUrl = nil
-//                currentAction = .none
-//
-//                showError(error, isFatal: false)
-//            }
         }
     }
     
