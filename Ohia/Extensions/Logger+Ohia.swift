@@ -11,7 +11,7 @@ import OSLog
 extension Logger {
     static let subsystem = Bundle.main.bundleIdentifier!
     
-    static let Model = Logger(subsystem: subsystem, category: "model")
+    static let App = Logger(subsystem: subsystem, category: "app")
     static let Item = Logger(subsystem: subsystem, category: "item")
     static let Settings = Logger(subsystem: subsystem, category: "settings")
     static let Download = Logger(subsystem: subsystem, category: "downloads")

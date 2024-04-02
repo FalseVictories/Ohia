@@ -29,7 +29,7 @@ final class SettingsModel: ObservableObject {
 
             do {
                 if let selectedDownloadFolder {
-                    _ = try obtainSecurityBookmarkFor(selectedDownloadFolder)
+                    try obtainSecurityBookmarkFor(selectedDownloadFolder)
                 }
             } catch {
                 if let selectedDownloadFolder {
@@ -46,6 +46,7 @@ final class SettingsModel: ObservableObject {
         }
     }
 
+    @discardableResult
     public func obtainSecurityBookmarkFor(_ url: URL) throws -> Data? {
         let bookmarkData = try url.bookmarkData(options: .withSecurityScope,
                                                 includingResourceValuesForKeys: nil,

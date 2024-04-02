@@ -72,7 +72,7 @@ class OhiaViewModel: ObservableObject {
     
     @Published var isSignedIn: Bool = false {
         didSet {
-            Logger.Model.info("Signed in: \(self.isSignedIn, privacy: .public)")
+            Logger.App.info("Signed in: \(self.isSignedIn, privacy: .public)")
             if isSignedIn {
                 let loader = CollectionLoader()
                 Task {
@@ -122,20 +122,58 @@ class OhiaViewModel: ObservableObject {
     var lastError: NSError?
     var lastErrorIsFatal: Bool = false
     
+    var selectedDownloadFolderObserver: AnyCancellable?
+    var scanner: Scanner
+    var knownFolders: [String] = []
+    
     init() {
         if ProcessInfo().environment["OHIA_RESET_SETTINGS"] != nil {
-            Logger.Model.info("Resetting user defaults")
+            Logger.App.info("Resetting user defaults")
             
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
             }
         }
+    
+        scanner = Scanner()
         
         webModel = WebViewModel()
         webModel.setDelegate(self)
 
         registerDefaults()
         settings.loadDefaults()
+        
+        do {
+            try dataStorageService.openDatabase()
+        } catch {
+            Logger.App.error("Error opening database")
+        }
+        
+        // when the download folder changes, get a list of all the folders in it
+        // for deduplicating purposes
+        selectedDownloadFolderObserver = settings.$selectedDownloadFolder.sink(receiveValue: { [weak self] folder in
+            guard let folder,
+                  let self else {
+                return
+            }
+            
+            do {
+                if let knownFolders = try self.dataStorageService.artistFolders(for: folder) {
+                    Logger.App.info("Folders already set, not scanning")
+                    self.knownFolders = knownFolders
+                    return
+                }
+            } catch {
+                Logger.App.error("Error getting known folders: \(error)")
+            }
+            
+            Logger.App.info("Scanning for folders")
+            self.scanner.startScan(in: folder) { [weak self] results in
+                try self?.dataStorageService.setArtistFolders(results, for: folder)
+                self?.knownFolders = results
+            }
+        })
+        
         updateSignedIn()
     }
     
@@ -143,7 +181,7 @@ class OhiaViewModel: ObservableObject {
         do {
             try dataStorageService.closeDataStorage()
         } catch {
-            Logger.Model.error("Error closing database: \(error)")
+            Logger.App.error("Error closing database: \(error)")
         }
     }
     
@@ -165,7 +203,7 @@ class OhiaViewModel: ObservableObject {
         do {
             try dataStorageService.setCurrentUsername(newUsername)
         } catch {
-            Logger.Model.error("Error setting current user: \(error)")
+            Logger.App.error("Error setting current user: \(error)")
         }
     }
     
@@ -196,7 +234,7 @@ class OhiaViewModel: ObservableObject {
                 }
             }
         } catch {
-            Logger.Model.error("Error marking item as \(downloaded): \(error)")
+            Logger.App.error("Error marking item as \(downloaded): \(error)")
         }
     }
     
@@ -237,52 +275,24 @@ class OhiaViewModel: ObservableObject {
     
     func downloadItems(_ downloadItems: [OhiaItem]) throws {
         guard currentAction != .downloading else {
-            Logger.Model.warning("Download already in progress")
+            Logger.App.warning("Download already in progress")
             return
         }
         
         guard let downloadFolder = configService.downloadFolder else {
-            Logger.Model.warning("No download folder set")
+            Logger.App.warning("No download folder set")
             return
         }
 
-        Logger.Model.info("Download folder is \(downloadFolder)")
-        Logger.Model.info("Decompress: \(self.settings.decompressDownloads)")
+        Logger.App.info("Download folder is \(downloadFolder)")
+        Logger.App.info("Decompress: \(self.settings.decompressDownloads)")
 
-        guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
-            Logger.Model.error("No access to \(downloadFolder)")
-            throw ModelError.noDownloadAccess
-        }
-
-        var isStale = false
-        downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData,
-                                            options: .withSecurityScope,
-                                            bookmarkDataIsStale: &isStale)
-
-        if isStale {
-            Logger.Model.warning("Bookmark data is stale - trying again")
-            if let bookmarkData = try settings.obtainSecurityBookmarkFor(downloadFolder) {
-                downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
-
-                if isStale {
-                    Logger.Model.error("Bookmark still stale")
-                    return
-                }
-            } else {
-                Logger.Model.error("Unable to get bookmark data for \(downloadFolder)")
-            }
-        }
+        try accessDownloadFolder(downloadFolder)
 
         guard let downloadFolderSecurityUrl else {
-            Logger.Model.error("No security url for \(downloadFolder)")
-            throw ModelError.noDownloadAccess
+            return
         }
-
-        if !downloadFolderSecurityUrl.startAccessingSecurityScopedResource() {
-            Logger.Model.error("Failed to access download URL")
-            throw ModelError.noDownloadAccess
-        }
-
+        
         currentAction = .downloading
         totalDownloads = downloadItems.count
         currentDownload = 0
@@ -311,7 +321,7 @@ class OhiaViewModel: ObservableObject {
                         if let localFolder = item.localFolder {
                             
                             if settings.decompressDownloads {
-                                Logger.Model.info("Verifying download in \(localFolder)")
+                                Logger.App.info("Verifying download in \(localFolder)")
                                 verified = item.verifyDownload(in: localFolder, format: options.format)
                             }
                             
@@ -327,7 +337,7 @@ class OhiaViewModel: ObservableObject {
                             item.set(state: .failed)
                         }
                     } catch let error as NSError {
-                        Logger.Model.error("Error setting download results: \(error)")
+                        Logger.App.error("Error setting download results: \(error)")
                     }
                 } else {
                     item.lastError = error
@@ -362,11 +372,11 @@ class OhiaViewModel: ObservableObject {
     func open(item: OhiaItem) {
         do {
             if let url = try dataStorageService.getDownloadLocation(item) {
-                Logger.Model.debug("Opening \(url)")
+                Logger.App.debug("Opening \(url)")
                 NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url)
             }
         } catch {
-            Logger.Model.error("Error getting download location \(error)")
+            Logger.App.error("Error getting download location \(error)")
         }
     }
     
@@ -400,7 +410,7 @@ private extension OhiaViewModel {
             serverSummary = try await getCollectionSummary(using: loader)
             newSummary = OhiaCollectionSummary(from: serverSummary)
         } catch {
-            Logger.Model.error("Error loading summary: \(error, privacy: .public)")
+            Logger.App.error("Error loading summary: \(error, privacy: .public)")
             
             throw error
         }
@@ -416,10 +426,22 @@ private extension OhiaViewModel {
             
             try dataStorageService.clearNewItems()
         } catch {
-            Logger.Model.error("Error opening database \(error, privacy: .public)")
+            Logger.App.error("Error opening database \(error, privacy: .public)")
             
             throw error
         }
+        
+        /*
+        do {
+            try accessDownloadFolder(configService.downloadFolder!)
+            if let downloadFolderSecurityUrl {
+                try scanFolder(downloadFolderSecurityUrl)
+                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
+            }
+        } catch {
+            print("Error \(error)")
+        }
+*/
         
         do {
             // get the summary from the datastore now the DB has been opened for the user
@@ -430,20 +452,20 @@ private extension OhiaViewModel {
             var imageUrl: URL?
 
             if user == nil || user?.userId == 0{
-                Logger.Model.debug("No name set")
+                Logger.App.debug("No name set")
                 let fanData = try await loader.getFanData(for: username)
                 realname = fanData.name
                 imageUrl = fanData.imageUrl
                 if realname != nil {
-                    Logger.Model.debug("Name from service: \(realname!)")
+                    Logger.App.debug("Name from service: \(realname!)")
                 } else {
-                    Logger.Model.warning("No name from service")
+                    Logger.App.warning("No name from service")
                 }
 
                 user = OhiaUser(userId: fanData.userId ?? 0, username: username, realname: realname, imageUrl: imageUrl)
                 try dataStorageService.setUser(user!)
             } else {
-                Logger.Model.debug("Name from service: \(user?.realname ?? "<none>")")
+                Logger.App.debug("Name from service: \(user?.realname ?? "<none>")")
                 realname = user!.realname
                 imageUrl = user!.imageUrl
             }
@@ -456,14 +478,14 @@ private extension OhiaViewModel {
                 setAvatar(imageUrl)
             }
         } catch let error as NSError {
-            Logger.Model.error("Error getting user details in: \(error, privacy: .public)")
+            Logger.App.error("Error getting user details in: \(error, privacy: .public)")
             
             throw error
         }
 
         // This shouldn't ever happen
         guard let user else {
-            Logger.Model.error("No user found")
+            Logger.App.error("No user found")
 
             fatalError("No user could be created")
         }
@@ -471,12 +493,12 @@ private extension OhiaViewModel {
         do {
             // Try to load the collection from data store, fall back to the server
             if try !loadCollectionFromStorage(for: username) {
-                Logger.Model.info("Loading collection from server")
+                Logger.App.info("Loading collection from server")
                 
                 do {
                     try await loadCollectionFromServer(for: username, using: loader)
                 } catch {
-                    Logger.Model.error("Error loading collection from server \(error, privacy: .public)")
+                    Logger.App.error("Error loading collection from server \(error, privacy: .public)")
                     
                     throw error
                 }
@@ -486,7 +508,7 @@ private extension OhiaViewModel {
                 let updateCount = calculateUpdateCount(lastItemId: oldSummary.mostRecentId,
                                                        itemIds: serverSummary.itemIds)
 
-                Logger.Model.info("   - need \(updateCount) items")
+                Logger.App.info("   - need \(updateCount) items")
 
                 do {
                     if (updateCount > 0) {
@@ -500,7 +522,7 @@ private extension OhiaViewModel {
                                                            using: loader)
                     }
                 } catch {
-                    Logger.Model.error("Error getting collection update: \(error, privacy: .public)")
+                    Logger.App.error("Error getting collection update: \(error, privacy: .public)")
                     
                     throw error
                 }
@@ -514,7 +536,7 @@ private extension OhiaViewModel {
 
             await loadImages()
         } catch let error as NSError {
-            Logger.Model.error("Error loading collection: \(error, privacy: .public)")
+            Logger.App.error("Error loading collection: \(error, privacy: .public)")
             
             throw error
         }
@@ -556,7 +578,7 @@ private extension OhiaViewModel {
     
     func loadCollectionFromStorage(for username: String) throws -> Bool {
         if ProcessInfo().environment["OHIA_IGNORE_COLLECTION_CACHE"] != nil {
-            Logger.Model.info("Ignoring collection cache")
+            Logger.App.info("Ignoring collection cache")
             return false
         }
         
@@ -604,7 +626,7 @@ private extension OhiaViewModel {
         do {
             try await imageCacheService.downloadImages(for: itemsWithoutImages)
         } catch {
-            Logger.Model.error("Error getting images: \(error)")
+            Logger.App.error("Error getting images: \(error)")
         }
     }
     
@@ -630,7 +652,7 @@ private extension OhiaViewModel {
                 try dataStorageService.addItem(item)
                 try dataStorageService.setItemNew(item, new: !append)
             } catch {
-                Logger.Model.error("Error adding \(item.artist) - \(item.title) to database")
+                Logger.App.error("Error adding \(item.artist) - \(item.title) to database")
             }
             
             if let image = imageCacheService.getThumbnail(for: item) {
@@ -648,7 +670,7 @@ private extension OhiaViewModel {
     }
 
     func doLogOut() {
-        Logger.Model.info("Logging out")
+        Logger.App.info("Logging out")
 
         webModel.clear()
         items = []
@@ -754,7 +776,6 @@ private extension OhiaViewModel {
         }
         
         var count = 0
-        var totalCount = 0
         
         for try await byte in dataStream {
             // add byte to the buffer
@@ -763,9 +784,6 @@ private extension OhiaViewModel {
             
             // write the data when the buffer is full
             if count >= LiveDownloadService.bufferSize {
-                totalCount += count
-                Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
-                
                 let dataBuffer = Data(bytesNoCopy: buffer,
                                       count: count,
                                       deallocator: .none)
@@ -778,8 +796,6 @@ private extension OhiaViewModel {
         }
         
         if count != 0 {
-            totalCount += count
-            Logger.DownloadService.debug("Adding \(count) bytes to file: \(totalCount)")
             let dataBuffer = Data(bytesNoCopy: buffer,
                                   count: count,
                                   deallocator: .none)
@@ -831,6 +847,61 @@ private extension OhiaViewModel {
         UserDefaults.standard.register(defaults: [
             ConfigurationKey.maxDownloads.rawValue: 6
         ])
+    }
+    
+    func scanFolder(_ folder: URL) throws -> Set<String> {
+        let fm = FileManager.default
+        
+        let contents = try fm.contentsOfDirectory(at: folder,
+                                                  includingPropertiesForKeys: nil, /* [.isDirectoryKey, .nameKey],*/
+                                                  options: .skipsHiddenFiles)
+        
+        var results = Set<String>()
+        for url in contents {
+            if url.hasDirectoryPath {
+                print("Adding \(url.lastPathComponent)")
+                results.insert(url.lastPathComponent)
+            }
+        }
+        
+        return results
+    }
+    
+    func accessDownloadFolder(_ downloadFolder: URL) throws {
+        guard let bookmarkData = try dataStorageService.getSecureBookmarkFor(downloadFolder) else {
+            Logger.App.error("No access to \(downloadFolder)")
+            throw ModelError.noDownloadAccess
+        }
+
+        var isStale = false
+        downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData,
+                                            options: .withSecurityScope,
+                                            bookmarkDataIsStale: &isStale)
+
+        if isStale {
+            Logger.App.warning("Bookmark data is stale - trying again")
+            if let bookmarkData = try settings.obtainSecurityBookmarkFor(downloadFolder) {
+                downloadFolderSecurityUrl = try URL(resolvingBookmarkData: bookmarkData, bookmarkDataIsStale: &isStale)
+
+                if isStale {
+                    Logger.App.error("Bookmark still stale")
+                    return
+                }
+            } else {
+                Logger.App.error("Unable to get bookmark data for \(downloadFolder)")
+            }
+        }
+        
+        guard let downloadFolderSecurityUrl else {
+            Logger.App.error("No security url for \(downloadFolder)")
+            throw ModelError.noDownloadAccess
+        }
+
+        if !downloadFolderSecurityUrl.startAccessingSecurityScopedResource() {
+            Logger.App.error("Failed to access download URL")
+            throw ModelError.noDownloadAccess
+        }
+
     }
 }
 

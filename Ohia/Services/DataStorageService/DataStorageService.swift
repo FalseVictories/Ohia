@@ -10,60 +10,42 @@ import Dependencies
 import Foundation
 import OSLog
 
+@MainActor
 protocol DataStorageService: Sendable {
-    @MainActor
+    func openDatabase() throws
     func openDataStorage(for username: String) throws
     
-    @MainActor
     func closeDataStorage() throws
     
-    @MainActor
     func loadItems() throws -> [OhiaItem]
     
-    @MainActor
     func addItem(_ item: OhiaItem) throws
     
-    @MainActor
     func setItemDownloaded(_ item: OhiaItem, downloaded: Bool) throws
     
-    @MainActor
     func setItemDownloadLocation(_ item: OhiaItem, location: String) throws
-    
-    @MainActor
     func getDownloadLocation(_ item: OhiaItem) throws -> String?
-    
-    @MainActor
+
     func setItemNew(_ item: OhiaItem, new: Bool) throws
     
-    @MainActor
     func setUser(_ user: OhiaUser) throws
-    
-    @MainActor
     func getUser() throws -> OhiaUser?
 
-    @MainActor
     func getCurrentUsername() throws -> String?
-
-    @MainActor
     func setCurrentUsername(_ username: String) throws
 
-    @MainActor
     func setSummary(_ summary: OhiaCollectionSummary) throws
-
-    @MainActor
     func getSummary() throws -> OhiaCollectionSummary
 
-    @MainActor
     func setSecureBookmark(_ bookmark: Data, for url: URL) throws
-
-    @MainActor
     func getSecureBookmarkFor(_ url: URL) throws -> Data?
-    
-    @MainActor
+
     func clearNewItems() throws
     
-    @MainActor
     func resetDatabase() -> Bool
+    
+    func setArtistFolders(_ folders: [String], for url: URL) throws
+    func artistFolders(for url: URL) throws -> [String]?
 }
 
 enum DataStorageServiceError: Error {
@@ -71,6 +53,7 @@ enum DataStorageServiceError: Error {
     case noItemCollection
     case noUserCollection
     case noBookmarksCollection
+    case noScopelessCollection
 }
 
 extension DataStorageServiceError: CustomStringConvertible {
@@ -87,6 +70,9 @@ extension DataStorageServiceError: CustomStringConvertible {
             
         case .noBookmarksCollection:
             return "Missing bookmarks collection"
+            
+        case .noScopelessCollection:
+            return "Missing nonscoped collection"
         }
     }
 }
@@ -108,6 +94,10 @@ extension DataStorageServiceError: LocalizedError {
             
         case .noBookmarksCollection:
             return NSLocalizedString("The database is missing the bookmarks collection",
+                                     comment: "")
+            
+        case .noScopelessCollection:
+            return NSLocalizedString("The database is missing the nonscoped collection",
                                      comment: "")
         }
     }

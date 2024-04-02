@@ -177,6 +177,9 @@
     "The database is missing the item collection." : {
 
     },
+    "The database is missing the nonscoped collection" : {
+
+    },
     "The database is missing the user data collection" : {
 
     },

@@ -17,6 +17,7 @@ final class LiveDataStorageService: DataStorageService {
     static let collectionName = "bcItems"
     static let userDataCollectionName = "userdata"
     static let bookmarksCollectionName = "bookmarks"
+    static let nonscopedCollectionName = "noscope"
 
     private struct DataBaseKeys {
         static let artist = "artist"
@@ -43,6 +44,42 @@ final class LiveDataStorageService: DataStorageService {
     var collection: Collection?
     var userDataCollection: Collection?
     var bookmarksCollection: Collection?
+    var nonscopedCollection: Collection?
+    
+    func openDatabase() throws {
+        let fm = FileManager.default
+
+        let cachesDir = fm.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let ohiaUrl = cachesDir.appending(path: LiveDataStorageService.dbFolderPath, directoryHint: .isDirectory)
+
+        let ohiaDir = ohiaUrl.path(percentEncoded: false)
+
+        Logger.DataStorageService.debug("Using database in \(ohiaDir)")
+
+        if !fm.fileExists(atPath: ohiaDir) {
+            Logger.DataStorageService.debug("Creating database folder")
+            try fm.createDirectory(at: ohiaUrl, withIntermediateDirectories: true)
+        }
+
+        var options = DatabaseConfiguration()
+        options.directory = ohiaDir
+
+        database = try Database(name: LiveDataStorageService.dbName, config: options)
+
+        guard database != nil else {
+            throw DataStorageServiceError.noDatabase
+        }
+
+        bookmarksCollection = try database?.createCollection(name: LiveDataStorageService.bookmarksCollectionName)
+        guard bookmarksCollection != nil else {
+            throw DataStorageServiceError.noBookmarksCollection
+        }
+        
+        nonscopedCollection = try database?.createCollection(name: LiveDataStorageService.nonscopedCollectionName)
+        guard bookmarksCollection != nil else {
+            throw DataStorageServiceError.noBookmarksCollection
+        }
+    }
 
     func openDataStorage(for username: String) throws {
         Logger.DataStorageService.info("Opening database for \(username)")
@@ -394,39 +431,60 @@ final class LiveDataStorageService: DataStorageService {
         
         return true
     }
+    
+    func setArtistFolders(_ folders: [String],
+                          for url: URL) throws {
+        guard let nonscopedCollection else {
+            throw DataStorageServiceError.noScopelessCollection
+        }
+        
+        let array = MutableArrayObject()
+        folders.forEach {
+            array.addString($0)
+        }
+        
+        let mutableDoc = MutableDocument(id: "DownloadFolders")
+        mutableDoc.setValue(url.absoluteString, forKey: "path")
+        mutableDoc.setValue(array, forKey: "folders")
+
+        try nonscopedCollection.save(document: mutableDoc)
+     }
+    
+    func artistFolders(for url: URL) throws -> [String]? {
+        guard let nonscopedCollection else {
+            throw DataStorageServiceError.noScopelessCollection
+        }
+        
+        guard let doc = try nonscopedCollection.document(id: "DownloadFolders") else {
+            return nil
+        }
+        
+        guard let fileURL = doc.string(forKey: "path") else {
+            return nil
+        }
+        
+        if fileURL != url.absoluteString {
+            return nil
+        }
+        
+        let array = doc.array(forKey: "folders")
+        guard let array else {
+            return nil
+        }
+        
+        var results: [String] = []
+        for index in 0..<array.count {
+            let folder = array.string(at: index)
+            guard let folder else {
+                continue
+            }
+            results.append(folder)
+        }
+        return results
+    }
 }
 
 private extension LiveDataStorageService {
-    func openDatabase() throws {
-        let fm = FileManager.default
-
-        let cachesDir = fm.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        let ohiaUrl = cachesDir.appending(path: LiveDataStorageService.dbFolderPath, directoryHint: .isDirectory)
-
-        let ohiaDir = ohiaUrl.path(percentEncoded: false)
-
-        Logger.DataStorageService.debug("Using database in \(ohiaDir)")
-
-        if !fm.fileExists(atPath: ohiaDir) {
-            Logger.DataStorageService.debug("Creating database folder")
-            try fm.createDirectory(at: ohiaUrl, withIntermediateDirectories: true)
-        }
-
-        var options = DatabaseConfiguration()
-        options.directory = ohiaDir
-
-        database = try Database(name: LiveDataStorageService.dbName, config: options)
-
-        guard database != nil else {
-            throw DataStorageServiceError.noDatabase
-        }
-
-        bookmarksCollection = try database?.createCollection(name: LiveDataStorageService.bookmarksCollectionName)
-        guard bookmarksCollection != nil else {
-            throw DataStorageServiceError.noBookmarksCollection
-        }
-    }
-    
     func setNewFlagOnItemWith(id: String, in collection: Collection, new: Bool) throws {
         guard let document = try collection.document(id: id) else {
             return
