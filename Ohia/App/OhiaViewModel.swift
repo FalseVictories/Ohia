@@ -12,6 +12,7 @@ import Dependencies
 import Foundation
 import OSLog
 import SwiftUI
+import Zipper
 
 struct DownloadOptions: Sendable {
     let decompress: Bool

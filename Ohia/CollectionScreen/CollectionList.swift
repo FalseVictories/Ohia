@@ -25,6 +25,7 @@ struct CollectionList: View {
             .padding(EdgeInsets(top: 50, leading: 0, bottom: 0, trailing: 0))
             .scrollContentBackground(.hidden)
             .background(.clear)
+            
             CollectionListHeaderView(username: username, items: items, state: state)
                 .padding(8)
                 .background(.thinMaterial)

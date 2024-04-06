@@ -7,6 +7,7 @@
 
 import Foundation
 import OSLog
+import Zipper
 
 @MainActor
 final class ItemDownloadProgress: ObservableObject {

@@ -13,8 +13,6 @@
 		AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */; };
 		AE1E11BC2AE8176A0001369A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BB2AE8176A0001369A /* SettingsView.swift */; };
 		AE1E11BE2AE81B700001369A /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1E11BD2AE81B700001369A /* FilePickerButton.swift */; };
-		AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718A2B480E8700055E82 /* Zipper.swift */; };
-		AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A718B2B480E8700055E82 /* RingBuffer.swift */; };
 		AE62CDD52B6EFE7B006F7444 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */; };
 		AE62CDD82B7ADDD1006F7444 /* ErrorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */; };
 		AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */; };
@@ -35,6 +33,7 @@
 		AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE80740C2B12907F007DC1BC /* LiveCookieService.swift */; };
 		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
 		AEC04D522BA4F67400778EAC /* AboutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC04D512BA4F67400778EAC /* AboutScreen.swift */; };
+		AEC04D592BC1F6F700778EAC /* Zipper in Frameworks */ = {isa = PBXBuildFile; productRef = AEC04D582BC1F6F700778EAC /* Zipper */; };
 		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
 		AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */; };
 		AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECF4A812AD1A4560071CFD8 /* Assets.xcassets */; };
@@ -92,8 +91,6 @@
 		AE554D462ACADEF900579320 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AE554D492ACB485000579320 /* Logger+BCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+BCM.swift"; sourceTree = "<group>"; };
 		AE554D4E2ACC47D200579320 /* PercentEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentEncoding.swift; sourceTree = "<group>"; };
-		AE5A718A2B480E8700055E82 /* Zipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zipper.swift; sourceTree = "<group>"; };
-		AE5A718B2B480E8700055E82 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScreen.swift; sourceTree = "<group>"; };
 		AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeIntegerStyle.swift; sourceTree = "<group>"; };
@@ -114,6 +111,7 @@
 		AE80740C2B12907F007DC1BC /* LiveCookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCookieService.swift; sourceTree = "<group>"; };
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
 		AEC04D512BA4F67400778EAC /* AboutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutScreen.swift; sourceTree = "<group>"; };
+		AEC04D572BC1F67000778EAC /* Zipper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Zipper; path = ../Zipper; sourceTree = "<group>"; };
 		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
 		AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
@@ -152,6 +150,7 @@
 			files = (
 				AE1E11B02AE549550001369A /* CouchbaseLiteSwift in Frameworks */,
 				AEF2E30B2AEBC4B400AF4550 /* CachedAsyncImage in Frameworks */,
+				AEC04D592BC1F6F700778EAC /* Zipper in Frameworks */,
 				AE012C602AFC2511000528C1 /* Dependencies in Frameworks */,
 				AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */,
 				AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */,
@@ -231,6 +230,7 @@
 				AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */,
 				AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */,
 				AEDB016B2ACEF6F4004C575E /* BCKit */,
+				AEC04D572BC1F67000778EAC /* Zipper */,
 				AE554D092ACAD2DB00579320 /* Ohia-Cocoa */,
 				AECF4A7C2AD1A4550071CFD8 /* Ohia */,
 				AECF4A8E2AD1A4560071CFD8 /* OhiaTests */,
@@ -330,15 +330,6 @@
 			path = CookieService;
 			sourceTree = "<group>";
 		};
-		AEA7D9F42B3632CC000765E8 /* Zipper */ = {
-			isa = PBXGroup;
-			children = (
-				AE5A718B2B480E8700055E82 /* RingBuffer.swift */,
-				AE5A718A2B480E8700055E82 /* Zipper.swift */,
-			);
-			path = Zipper;
-			sourceTree = "<group>";
-		};
 		AEC04D502BA4F66300778EAC /* AboutScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,7 +344,6 @@
 				AEC04D502BA4F66300778EAC /* AboutScreen */,
 				AE62CDDD2B9F0AC5006F7444 /* Info.plist */,
 				AE62CDD62B7ADC9B006F7444 /* ErrorScreen */,
-				AEA7D9F42B3632CC000765E8 /* Zipper */,
 				AE1E11B82AE7F3D90001369A /* App */,
 				AE1E11B72AE7F23D0001369A /* CollectionScreen */,
 				AE1E11B62AE7F22F0001369A /* Settings */,
@@ -461,6 +451,7 @@
 				AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */,
 				AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */,
 				AE012C5F2AFC2511000528C1 /* Dependencies */,
+				AEC04D582BC1F6F700778EAC /* Zipper */,
 			);
 			productName = Ohia;
 			productReference = AECF4A7B2AD1A4550071CFD8 /* Ohia.app */;
@@ -586,7 +577,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */,
-				AE5A718C2B480E8700055E82 /* Zipper.swift in Sources */,
 				AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */,
 				AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */,
 				AECF4AAF2AD2D6C80071CFD8 /* OhiaViewModel.swift in Sources */,
@@ -614,7 +604,6 @@
 				AECF4AB52AD330DE0071CFD8 /* Logger+Ohia.swift in Sources */,
 				AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */,
 				AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */,
-				AE5A718D2B480E8700055E82 /* RingBuffer.swift in Sources */,
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
 				AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */,
 				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
@@ -1056,6 +1045,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
 			productName = SFSafeSymbols;
+		};
+		AEC04D582BC1F6F700778EAC /* Zipper */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Zipper;
 		};
 		AECF4AAA2AD1AAE80071CFD8 /* BCKit */ = {
 			isa = XCSwiftPackageProductDependency;
