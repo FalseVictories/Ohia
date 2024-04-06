@@ -45,6 +45,9 @@ extension HoverButton {
         case .downloaded:
             return SFSymbol.magnifyingglass
             
+        case .maybeDownloaded:
+            return SFSymbol.info
+            
         case .cancelled, .error, .failed:
             return SFSymbol.arrowClockwise
         }

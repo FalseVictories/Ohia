@@ -58,6 +58,9 @@ extension DownloadStateInfo {
         case .downloaded:
             return NSLocalizedString("Downloaded", comment: "")
             
+        case .maybeDownloaded:
+            return NSLocalizedString("Maybe already downloaded", comment: "")
+            
         case .error:
             return NSLocalizedString("Error", comment: "")
             

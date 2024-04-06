@@ -9,11 +9,27 @@ import BCKit
 import Dependencies
 import Foundation
 
-public enum FolderStructure: String, Sendable {
+public enum FolderStructure: String, Sendable, CaseIterable {
     case none = "none"
     case single = "single"
     case multi = "multi"
     case bandcamp = "bandcamp"
+    
+    func dirPath(for item: OhiaItem) -> String? {
+        switch self {
+        case .bandcamp:
+            return "\(item.artist)/\(item.artist) - \(item.title)"
+
+        case .none:
+            return nil
+            
+        case .single:
+            return "\(item.artist) - \(item.title)"
+            
+        case .multi:
+            return "\(item.artist)/\(item.title)"
+        }
+    }
 }
 
 public enum ConfigurationKey: String {

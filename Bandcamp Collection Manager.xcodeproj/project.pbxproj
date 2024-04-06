@@ -35,7 +35,6 @@
 		AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE80740C2B12907F007DC1BC /* LiveCookieService.swift */; };
 		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
 		AEC04D522BA4F67400778EAC /* AboutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC04D512BA4F67400778EAC /* AboutScreen.swift */; };
-		AEC04D562BB01B2A00778EAC /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC04D552BB01B2A00778EAC /* Scanner.swift */; };
 		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
 		AECF4A802AD1A4550071CFD8 /* CollectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */; };
 		AECF4A822AD1A4560071CFD8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AECF4A812AD1A4560071CFD8 /* Assets.xcassets */; };
@@ -115,7 +114,6 @@
 		AE80740C2B12907F007DC1BC /* LiveCookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCookieService.swift; sourceTree = "<group>"; };
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
 		AEC04D512BA4F67400778EAC /* AboutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutScreen.swift; sourceTree = "<group>"; };
-		AEC04D552BB01B2A00778EAC /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
 		AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
@@ -349,18 +347,9 @@
 			path = AboutScreen;
 			sourceTree = "<group>";
 		};
-		AEC04D542BB01B1000778EAC /* Scanner */ = {
-			isa = PBXGroup;
-			children = (
-				AEC04D552BB01B2A00778EAC /* Scanner.swift */,
-			);
-			path = Scanner;
-			sourceTree = "<group>";
-		};
 		AECF4A7C2AD1A4550071CFD8 /* Ohia */ = {
 			isa = PBXGroup;
 			children = (
-				AEC04D542BB01B1000778EAC /* Scanner */,
 				AEC04D502BA4F66300778EAC /* AboutScreen */,
 				AE62CDDD2B9F0AC5006F7444 /* Info.plist */,
 				AE62CDD62B7ADC9B006F7444 /* ErrorScreen */,
@@ -632,7 +621,6 @@
 				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
 				AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */,
 				AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */,
-				AEC04D562BB01B2A00778EAC /* Scanner.swift in Sources */,
 				AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

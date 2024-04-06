@@ -46,6 +46,7 @@ class OhiaItem: ObservableObject, Identifiable {
         case connecting
         case downloading
         case downloaded
+        case maybeDownloaded
         case cancelled
         case failed
         case error

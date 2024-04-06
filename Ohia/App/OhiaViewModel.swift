@@ -122,10 +122,6 @@ class OhiaViewModel: ObservableObject {
     var lastError: NSError?
     var lastErrorIsFatal: Bool = false
     
-    var selectedDownloadFolderObserver: AnyCancellable?
-    var scanner: Scanner
-    var knownFolders: [String] = []
-    
     init() {
         if ProcessInfo().environment["OHIA_RESET_SETTINGS"] != nil {
             Logger.App.info("Resetting user defaults")
@@ -134,8 +130,6 @@ class OhiaViewModel: ObservableObject {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
             }
         }
-    
-        scanner = Scanner()
         
         webModel = WebViewModel()
         webModel.setDelegate(self)
@@ -148,32 +142,7 @@ class OhiaViewModel: ObservableObject {
         } catch {
             Logger.App.error("Error opening database")
         }
-        
-        // when the download folder changes, get a list of all the folders in it
-        // for deduplicating purposes
-        selectedDownloadFolderObserver = settings.$selectedDownloadFolder.sink(receiveValue: { [weak self] folder in
-            guard let folder,
-                  let self else {
-                return
-            }
-            
-            do {
-                if let knownFolders = try self.dataStorageService.artistFolders(for: folder) {
-                    Logger.App.info("Folders already set, not scanning")
-                    self.knownFolders = knownFolders
-                    return
-                }
-            } catch {
-                Logger.App.error("Error getting known folders: \(error)")
-            }
-            
-            Logger.App.info("Scanning for folders")
-            self.scanner.startScan(in: folder) { [weak self] results in
-                try self?.dataStorageService.setArtistFolders(results, for: folder)
-                self?.knownFolders = results
-            }
-        })
-        
+                
         updateSignedIn()
     }
     
@@ -239,6 +208,11 @@ class OhiaViewModel: ObservableObject {
     }
     
     func downloadItemsOf(type: DownloadType) {
+        guard let downloadFolder = settings.selectedDownloadFolder else {
+            Logger.App.warning("No download folder selected")
+            return
+        }
+        
         var itemsToDownload: [OhiaItem] = []
         var selectionClosure: (OhiaItem, Bool) -> Bool
         
@@ -262,7 +236,24 @@ class OhiaViewModel: ObservableObject {
             if selectionClosure($0, downloadPreorders) {
                 $0.state = .waiting
                 $0.lastError = nil
-                itemsToDownload.append($0)
+
+                if !settings.decompressDownloads {
+                    itemsToDownload.append($0)
+                } else {
+                    let folderExists = doesFolderMaybeExist(for: $0,
+                                                            in: downloadFolder,
+                                                            with: settings.createFolderStructure)
+                    switch folderExists {
+                    case .no:
+                        itemsToDownload.append($0)
+                        
+                    case .yes:
+                        $0.state = .downloaded
+                        
+                    case .maybe:
+                        $0.state = .maybeDownloaded
+                    }
+                }
             }
         }
         
@@ -722,8 +713,9 @@ private extension OhiaViewModel {
         var fileHandle: FileHandle?
         
         var url = downloadFolderSecurityUrl
-        
-        if currentDownloadOptions.createFolder != .none {
+                
+        if currentDownloadOptions.decompress &&
+            currentDownloadOptions.createFolder != .none {
             url = try createFolderStructure(for: item,
                                             into: url,
                                             with: currentDownloadOptions)
@@ -810,29 +802,10 @@ private extension OhiaViewModel {
     func createFolderStructure(for item: OhiaItem,
                                into downloadUrl: URL,
                                with options: DownloadOptions) throws -> URL {
-        guard options.createFolder != .none else {
-            return downloadUrl
-        }
-
         let fm = FileManager.default
         
-        var dirPath: String
-        
-        switch options.createFolder {
-        case .bandcamp:
-            dirPath = "\(item.artist)/\(item.artist) - \(item.title)"
-            break
-
-        case .none:
+        guard let dirPath = options.createFolder.dirPath(for: item) else {
             return downloadUrl
-            
-        case .single:
-            dirPath = "\(item.artist) - \(item.title)"
-            break
-            
-        case .multi:
-            dirPath = "\(item.artist)/\(item.title)"
-            break
         }
         
         let url = downloadUrl.appending(path: dirPath,
@@ -901,7 +874,31 @@ private extension OhiaViewModel {
             Logger.App.error("Failed to access download URL")
             throw ModelError.noDownloadAccess
         }
-
+    }
+    
+    enum FolderExistence: Equatable {
+        case no
+        case yes
+        
+        case maybe(String)
+    }
+        
+    func doesFolderMaybeExist(for item: OhiaItem,
+                              in downloadUrl: URL,
+                              with requestedFolderStructure: FolderStructure) -> FolderExistence {
+        // Check for the artist folder in toplevel, which is cached
+        for folderStructure in FolderStructure.allCases {
+            if let topLevel = folderStructure.dirPath(for: item) {
+                Logger.App.debug("Searching for \(topLevel)")
+                let albumUrl = downloadUrl.appending(components: topLevel, directoryHint: .isDirectory)
+                if FileManager.default.fileExists(atPath: albumUrl.path(percentEncoded: false),
+                                                  isDirectory: nil) {
+                    return folderStructure == requestedFolderStructure ? .yes : .maybe("Matched with \(folderStructure.rawValue)")
+                }
+            }
+        }
+        
+        return .no
     }
 }
 
