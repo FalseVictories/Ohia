@@ -75,11 +75,6 @@ extension ItemDownloadProgress {
     
     func startDecompressing(to destinationUrl: URL,
                             with options: DownloadOptions) -> Zipper {
-        /*
-        let zipperDelegate = ItemDownloadZipperDelegate(itemDownload: self,
-                                                        destinationUrl: destinationUrl,
-                                                        options: options)
-         */
         let zipperDelegate = ZipperDelegate(createFolder: createFolder(with:),
                                             beginWritingFile: beginWritingFile(with:),
                                             writeData: writeData(from:bytesDownloaded:),
@@ -170,7 +165,7 @@ private extension ItemDownloadProgress {
         }
         
         DispatchQueue.main.async { [weak self] in
-            self?.setBytesDownloaded(bytesDownloaded)
+            self?.increaseBytesDownloaded(size: Int64(buffer.count))
         }
         
         do {
