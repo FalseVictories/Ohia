@@ -309,26 +309,12 @@ class OhiaViewModel: ObservableObject {
                 item.set(state: success ? .downloaded : .error)
                 if success {
                     do {
-                        var verified = true
-                        
                         if let localFolder = item.localFolder {
-                            
-                            if settings.decompressDownloads {
-                                Logger.App.info("Verifying download in \(localFolder)")
-                                verified = item.verifyDownload(in: localFolder, format: options.format)
-                            }
-                            
-                            if verified {
-                                try dataStorageService.setItemDownloadLocation(item,
-                                                                               location: localFolder.path(percentEncoded: false))
-                            }
+                            try dataStorageService.setItemDownloadLocation(item,
+                                                                           location: localFolder.path(percentEncoded: false))
                         }
                         
-                        if verified {
-                            try dataStorageService.setItemDownloaded(item, downloaded: true)
-                        } else {
-                            item.set(state: .failed)
-                        }
+                        try dataStorageService.setItemDownloaded(item, downloaded: true)
                     } catch let error as NSError {
                         Logger.App.error("Error setting download results: \(error)")
                     }
@@ -794,24 +780,6 @@ private extension OhiaViewModel {
         UserDefaults.standard.register(defaults: [
             ConfigurationKey.maxDownloads.rawValue: 6
         ])
-    }
-    
-    func scanFolder(_ folder: URL) throws -> Set<String> {
-        let fm = FileManager.default
-        
-        let contents = try fm.contentsOfDirectory(at: folder,
-                                                  includingPropertiesForKeys: nil, /* [.isDirectoryKey, .nameKey],*/
-                                                  options: .skipsHiddenFiles)
-        
-        var results = Set<String>()
-        for url in contents {
-            if url.hasDirectoryPath {
-                print("Adding \(url.lastPathComponent)")
-                results.insert(url.lastPathComponent)
-            }
-        }
-        
-        return results
     }
     
     func accessDownloadFolder(_ downloadFolder: URL) throws {
