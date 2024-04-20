@@ -11,6 +11,7 @@ import Combine
 import Dependencies
 import Foundation
 import OSLog
+import Packet
 import SwiftUI
 import Zipper
 
@@ -742,7 +743,7 @@ private extension OhiaViewModel {
     
     @Sendable nonisolated func processDownloadStream(item: OhiaItem,
                                                      filename: String?,
-                                                     dataStream: URLSession.AsyncBytes) async throws {
+                                                     dataStream: AsyncThrowingDataChunks) async throws {
         let downloadStream = try await getDownloadStream(for: item, with: filename)
         
         if downloadStream.options.decompress,
@@ -758,42 +759,14 @@ private extension OhiaViewModel {
     nonisolated
     func writeStream(item: OhiaItem,
                      downloadStream: DownloadStream,
-                     dataStream: URLSession.AsyncBytes) async throws {
+                     dataStream: AsyncThrowingDataChunks) async throws {
         guard let handle = downloadStream.fileHandle else {
             throw InternalError.noDownloadFileHandle
         }
         
-        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: LiveDownloadService.bufferSize)
-        defer {
-            buffer.deallocate()
-        }
-        
-        var count = 0
-        
-        for try await byte in dataStream {
-            // add byte to the buffer
-            buffer[count] = byte
-            count += 1
-            
-            // write the data when the buffer is full
-            if count >= LiveDownloadService.bufferSize {
-                let dataBuffer = Data(bytesNoCopy: buffer,
-                                      count: count,
-                                      deallocator: .none)
-                
-                try handle.write(contentsOf: dataBuffer)
-                
-                await item.downloadProgress.increaseBytesDownloaded(size: Int64(count))
-                count = 0
-            }
-        }
-        
-        if count != 0 {
-            let dataBuffer = Data(bytesNoCopy: buffer,
-                                  count: count,
-                                  deallocator: .none)
-            try handle.write(contentsOf: dataBuffer)
-            await item.downloadProgress.increaseBytesDownloaded(size: Int64(count))
+        for try await buffer in dataStream {
+            try handle.write(contentsOf: buffer)
+            await item.downloadProgress.increaseBytesDownloaded(size: Int64(buffer.count))
         }
         
         try handle.close()

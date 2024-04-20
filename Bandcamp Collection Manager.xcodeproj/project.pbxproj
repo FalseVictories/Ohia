@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -51,6 +51,7 @@
 		AECF4AC22AD5A7CB0071CFD8 /* LiveImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4AC12AD5A7CB0071CFD8 /* LiveImageCacheService.swift */; };
 		AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */ = {isa = PBXBuildFile; fileRef = AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */; };
 		AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED478B32B59913400CDEA24 /* MenuButton.swift */; };
+		AEF11F702BD4426E00A1D16E /* Packet in Frameworks */ = {isa = PBXBuildFile; productRef = AEF11F6F2BD4426E00A1D16E /* Packet */; };
 		AEF2E3042AE9113400AF4550 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3032AE9113400AF4550 /* SettingsModel.swift */; };
 		AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */; };
 		AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */; };
@@ -153,6 +154,7 @@
 				AEC04D592BC1F6F700778EAC /* Zipper in Frameworks */,
 				AE012C602AFC2511000528C1 /* Dependencies in Frameworks */,
 				AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */,
+				AEF11F702BD4426E00A1D16E /* Packet in Frameworks */,
 				AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,6 +454,7 @@
 				AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */,
 				AE012C5F2AFC2511000528C1 /* Dependencies */,
 				AEC04D582BC1F6F700778EAC /* Zipper */,
+				AEF11F6F2BD4426E00A1D16E /* Packet */,
 			);
 			productName = Ohia;
 			productReference = AECF4A7B2AD1A4550071CFD8 /* Ohia.app */;
@@ -530,6 +533,7 @@
 				AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */,
 				AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
+				AEF11F6E2BD4426E00A1D16E /* XCLocalSwiftPackageReference "../Packet" */,
 			);
 			productRefGroup = AE554D082ACAD2DB00579320 /* Products */;
 			projectDirPath = "";
@@ -995,6 +999,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		AEF11F6E2BD4426E00A1D16E /* XCLocalSwiftPackageReference "../Packet" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Packet;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1053,6 +1064,10 @@
 		AECF4AAA2AD1AAE80071CFD8 /* BCKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BCKit;
+		};
+		AEF11F6F2BD4426E00A1D16E /* Packet */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Packet;
 		};
 		AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;

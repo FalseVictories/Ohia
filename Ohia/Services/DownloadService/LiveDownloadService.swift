@@ -153,7 +153,7 @@ extension LiveDownloadService {
                               updateClosure: DownloadUpdater) async throws {
         let request = URLRequest(url: url)
         
-        let (byteStream, response) = try await URLSession.shared.bytes(for: request, delegate: nil)
+        let (stream, response) = try await URLSession.shared.chunks(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             await item.set(state: .error)
@@ -169,9 +169,8 @@ extension LiveDownloadService {
         await item.downloadProgress.setDownloadSize(inBytes: expectedSize)
         
         let filename = httpResponse.suggestedFilename ?? "\(item.id)"
-        
         await item.set(state: .downloading)
         
-        try await updateClosure(item, filename, byteStream)
+        try await updateClosure(item, filename, stream)
     }
 }

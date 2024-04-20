@@ -8,6 +8,7 @@
 import BCKit
 import Dependencies
 import Foundation
+import Packet
 
 struct DownloadServiceOptions {
     let format: FileFormat
@@ -16,7 +17,7 @@ struct DownloadServiceOptions {
 
 typealias DownloadUpdater = @MainActor @Sendable (OhiaItem, 
                                                   String?,
-                                                  URLSession.AsyncBytes) async throws -> Void
+                                                  AsyncThrowingDataChunks) async throws -> Void
 protocol DownloadService: Sendable {
     @MainActor
     func download(items: [OhiaItem],
