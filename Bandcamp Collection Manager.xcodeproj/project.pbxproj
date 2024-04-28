@@ -52,6 +52,7 @@
 		AECF4ACA2AD6D8270071CFD8 /* LogConfig.mobileconfig in Resources */ = {isa = PBXBuildFile; fileRef = AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */; };
 		AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED478B32B59913400CDEA24 /* MenuButton.swift */; };
 		AEF11F702BD4426E00A1D16E /* Packet in Frameworks */ = {isa = PBXBuildFile; productRef = AEF11F6F2BD4426E00A1D16E /* Packet */; };
+		AEF11F722BDD9A2000A1D16E /* DownloadCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF11F712BDD9A2000A1D16E /* DownloadCollection.swift */; };
 		AEF2E3042AE9113400AF4550 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3032AE9113400AF4550 /* SettingsModel.swift */; };
 		AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */; };
 		AEF2E3082AEA698C00AF4550 /* String+Ohia.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */; };
@@ -138,6 +139,7 @@
 		AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = LogConfig.mobileconfig; sourceTree = "<group>"; };
 		AED478B32B59913400CDEA24 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		AEDB016B2ACEF6F4004C575E /* BCKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BCKit; sourceTree = "<group>"; };
+		AEF11F712BDD9A2000A1D16E /* DownloadCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCollection.swift; sourceTree = "<group>"; };
 		AEF2E3032AE9113400AF4550 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		AEF2E3052AE91EAD00AF4550 /* OhiaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaItem.swift; sourceTree = "<group>"; };
 		AEF2E3072AEA698C00AF4550 /* String+Ohia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ohia.swift"; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 			children = (
 				AE679AC62ADC0F150073EF8C /* DownloadService.swift */,
 				AE679AC82ADC0FD60073EF8C /* LiveDownloadService.swift */,
+				AEF11F712BDD9A2000A1D16E /* DownloadCollection.swift */,
 			);
 			path = DownloadService;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
 				AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */,
 				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
+				AEF11F722BDD9A2000A1D16E /* DownloadCollection.swift in Sources */,
 				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
 				AEF2E30D2AEC43EC00AF4550 /* OhiaUser.swift in Sources */,
 				AE1E11B52AE549EA0001369A /* LiveDataStorageService.swift in Sources */,
@@ -790,7 +794,7 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;
@@ -833,7 +837,7 @@
 				CODE_SIGN_ENTITLEMENTS = Ohia/Ohia.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Ohia/Preview Content\"";
 				DEVELOPMENT_TEAM = K88AP5WRNN;

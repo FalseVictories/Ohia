@@ -15,7 +15,7 @@ struct DownloadStateInfo: View {
         HStack {
             Text(DownloadStateInfo.text(for: item))
 
-            if item.state == .error {
+            if item.state == .error || item.state == .retrying {
                 Button(action: {
                     showErrorPopover.toggle()
                 }, label: {
@@ -40,7 +40,7 @@ extension DownloadStateInfo {
     }
     
     static func text(for item: OhiaItem) -> String {
-        if let error = item.lastError {
+        if item.state == .error, let error = item.lastError {
             return NSLocalizedString("Error:", comment: "") + " \(error.localizedDescription)"
         } else {
             return stringForState(item.state)
@@ -69,6 +69,9 @@ extension DownloadStateInfo {
             
         case .failed:
             return NSLocalizedString("Failed", comment: "")
+            
+        case .retrying:
+            return NSLocalizedString("Retrying…", comment: "")
             
         case .none, .downloading:
             return ""

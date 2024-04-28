@@ -110,9 +110,10 @@ class OhiaViewModel: ObservableObject {
     var idToItem: [Int: OhiaItem] = [:]
     var settings: SettingsModel = SettingsModel()
     
-    var downloadFolderSecurityUrl: URL?
+    var downloadFolderSecurityUrl: URL? // The URL with security clearance to access the downloads folder
 
-    var downloadTask: Task<Void, Never>?
+    var downloadTask: Task<Void, Never>? // The task downloading items
+    var downloadCollection: DownloadCollection<OhiaItem>? // The collection of items to be downloaded
     
     var oldSummary: OhiaCollectionSummary = .invalid
     var newSummary: OhiaCollectionSummary = .invalid
@@ -295,12 +296,16 @@ class OhiaViewModel: ObservableObject {
                                                  overwrite: false)
         
         let configService = self.configService
+        let downloadCollection = DownloadCollection(items: downloadItems)
+        self.downloadCollection = downloadCollection
+        
+        let options = DownloadServiceOptions(format: configService.fileFormat,
+                                             maxDownloads: configService.maxDownloads)
+        let downloadStream = downloadService.download(items: downloadCollection,
+                                                      with: options,
+                                                      updateClosure: processDownloadStream(item:filename:dataStream:))
+        
         downloadTask = Task {
-            let options = DownloadServiceOptions(format: configService.fileFormat,
-                                                 maxDownloads: configService.maxDownloads)
-            let downloadStream = downloadService.download(items: downloadItems,
-                                                          with: options,
-                                                          updateClosure: processDownloadStream(item:filename:dataStream:))
             for await (item, error) in downloadStream {
                 let success = error == nil
                 
@@ -320,6 +325,10 @@ class OhiaViewModel: ObservableObject {
                     }
                 } else {
                     item.lastError = error
+                    if item.retryCount < 5 {
+                        item.set(state: .retrying)
+                        await self.downloadCollection?.reschedule(element: item)
+                    }
                 }
             }
             

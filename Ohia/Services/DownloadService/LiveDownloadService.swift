@@ -16,7 +16,7 @@ final class LiveDownloadService: DownloadService {
     
     var downloadTask: Task<Void, Error>?
     
-    func download(items: [OhiaItem],
+    func download(items: DownloadCollection<OhiaItem>,
                   with options: DownloadServiceOptions,
                   updateClosure: @escaping DownloadUpdater) -> AsyncStream<(OhiaItem, (any Error)?)> {
         // Print this out first so it is only printed once per download event
@@ -43,10 +43,12 @@ final class LiveDownloadService: DownloadService {
                             requestedMaxDownloads = environmentRequested
                         }
                     }
-                    let maxConcurrentDownloads = min(items.count, requestedMaxDownloads)
+                    let maxConcurrentDownloads = min(await items.count, requestedMaxDownloads)
                     
                     for index in 0..<maxConcurrentDownloads {
-                        let item = items[index]
+                        guard let item = await items.next() else {
+                            break
+                        }
                         
                         Logger.DownloadService.debug("Adding \(item.title) to download")
                         group.addTask {
@@ -63,26 +65,24 @@ final class LiveDownloadService: DownloadService {
                         }
                     }
                     
-                    var index = maxConcurrentDownloads
-                    
                     // Wait for a task to complete and schedule the next download
                     while await group.next() != nil {
-                        if index < items.count {
-                            let item = items[index]
-                            
-                            group.addTask {
-                                do {
-                                    try await self.downloadTask(for: item,
-                                                                ofType: options.format,
-                                                                updateClosure: updateClosure)
-                                    continuation.yield((item, nil))
-                                } catch let error as NSError {
-                                    Logger.DownloadService.error("Error downloading \(item.title) - \(error)")
-                                    continuation.yield((item, error))
-                                }
+                        
+                        guard let item = await items.next() else {
+                            break
+                        }
+                        
+                        group.addTask {
+                            do {
+                                try await self.downloadTask(for: item,
+                                                            ofType: options.format,
+                                                            updateClosure: updateClosure)
+                                continuation.yield((item, nil))
+                            } catch let error as NSError {
+                                Logger.DownloadService.error("Error downloading \(item.title) - \(error)")
+                                continuation.yield((item, error))
                             }
                         }
-                        index += 1
                     }
                 }
                 

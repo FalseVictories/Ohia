@@ -43,6 +43,7 @@ class OhiaItem: ObservableObject, Identifiable {
     enum State: String, CaseIterable, Identifiable{
         case none
         case waiting
+        case retrying
         case connecting
         case downloading
         case downloaded
@@ -67,6 +68,8 @@ class OhiaItem: ObservableObject, Identifiable {
     var localFolder: URL?
     
     var tracks: [OhiaTrack]
+    
+    var retryCount: Int = 0
     
     @Published var isNew: Bool
     @Published var thumbnail: Image
@@ -129,6 +132,14 @@ extension OhiaItem {
     
     func set(state: State) {
         self.state = state
+        if state == .retrying {
+            // Give it 5 goes, and then fail
+            if retryCount > 5 {
+                self.state = .failed
+            } else {
+                retryCount += 1
+            }
+        }
     }
     
     func setLocalFolder(_ url: URL) {

@@ -20,7 +20,7 @@ typealias DownloadUpdater = @MainActor @Sendable (OhiaItem,
                                                   AsyncThrowingDataChunks) async throws -> Void
 protocol DownloadService: Sendable {
     @MainActor
-    func download(items: [OhiaItem],
+    func download(items: DownloadCollection<OhiaItem>,
                   with options: DownloadServiceOptions,
                   updateClosure: @escaping DownloadUpdater) -> AsyncStream<(OhiaItem, (any Error)?)>
 
