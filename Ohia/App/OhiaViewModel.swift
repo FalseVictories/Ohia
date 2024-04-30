@@ -21,9 +21,20 @@ struct DownloadOptions: Sendable {
     let overwrite: Bool
 }
 
+/// The two URLs that are used for downloading and unpacking
+struct DownloadUrls {
+    /// The eventual destination
+    let url: URL
+    
+    /// The in-progress URL
+    let downloadUrl: URL?
+}
+
 enum InternalError: Error {
     case noDownloadOptionsSet
     case noDownloadFileHandle
+    case invalidFolderStructure
+    case noInProgressUrl
 }
 
 enum ModelError: Error {
@@ -314,9 +325,13 @@ class OhiaViewModel: ObservableObject {
                 item.set(state: success ? .downloaded : .error)
                 if success {
                     do {
-                        if let localFolder = item.localFolder {
+                        if let downloadUrls = item.downloadUrls {
+                            if let downloadUrl = downloadUrls.downloadUrl {
+                                // Rename the in progress folder
+                                try FileManager.default.moveItem(at: downloadUrl, to: downloadUrls.url)
+                            }
                             try dataStorageService.setItemDownloadLocation(item,
-                                                                           location: localFolder.path(percentEncoded: false))
+                                                                           location: downloadUrls.url.path(percentEncoded: false))
                         }
                         
                         try dataStorageService.setItemDownloaded(item, downloaded: true)
@@ -710,15 +725,22 @@ private extension OhiaViewModel {
         var fileHandle: FileHandle?
         
         var url = downloadFolderSecurityUrl
-                
+        var downloadUrls: DownloadUrls
+        
         if currentDownloadOptions.decompress &&
             currentDownloadOptions.createFolder != .none {
-            url = try createFolderStructure(for: item,
-                                            into: url,
-                                            with: currentDownloadOptions)
+            downloadUrls = try createFolderStructure(for: item,
+                                             into: url,
+                                             with: currentDownloadOptions)
+            guard let downloadUrl = downloadUrls.downloadUrl else {
+                throw InternalError.noInProgressUrl
+            }
+            url = downloadUrl
+        } else {
+            downloadUrls = DownloadUrls(url: url, downloadUrl: nil)
         }
         
-        item.setLocalFolder(url)
+        item.setDownloadUrls(downloadUrls)
         
         if currentDownloadOptions.decompress {
             zipper = item.downloadProgress.startDecompressing(to: url,
@@ -766,23 +788,24 @@ private extension OhiaViewModel {
         
         try handle.close()
     }
-    
+        
     nonisolated
     func createFolderStructure(for item: OhiaItem,
-                               into downloadUrl: URL,
-                               with options: DownloadOptions) throws -> URL {
+                               into downloadFolderUrl: URL,
+                               with options: DownloadOptions) throws -> DownloadUrls {
         let fm = FileManager.default
         
         guard let dirPath = options.createFolder.dirPath(for: item) else {
-            return downloadUrl
+            throw InternalError.invalidFolderStructure
         }
         
-        let url = downloadUrl.appending(path: dirPath,
+        let url = downloadFolderUrl.appending(path: dirPath,
                                         directoryHint: .isDirectory)
+        let inProgressUrl = downloadFolderUrl.appending(path: dirPath + ".ohia-download")
         
-        try fm.createDirectory(at: url, withIntermediateDirectories: true)
+        try fm.createDirectory(at: inProgressUrl, withIntermediateDirectories: true)
 
-        return url
+        return DownloadUrls(url: url, downloadUrl: inProgressUrl)
     }
     
     func registerDefaults() {

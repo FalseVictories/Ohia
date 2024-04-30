@@ -65,7 +65,7 @@ class OhiaItem: ObservableObject, Identifiable {
 
     let downloadUrl: URL
     var thumbnailUrl: URL?
-    var localFolder: URL?
+    var downloadUrls: DownloadUrls?
     
     var tracks: [OhiaTrack]
     
@@ -142,8 +142,8 @@ extension OhiaItem {
         }
     }
     
-    func setLocalFolder(_ url: URL) {
-        self.localFolder = url
+    func setDownloadUrls(_ urls: DownloadUrls) {
+        self.downloadUrls = urls
     }
     
     func verifyDownload(in downloadFolder: URL, format: FileFormat) -> Bool {
