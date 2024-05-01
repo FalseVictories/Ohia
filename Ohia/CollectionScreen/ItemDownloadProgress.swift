@@ -65,12 +65,16 @@ extension ItemDownloadProgress {
     
     func startWritingDataFor(_ filename: String,
                              in destinationUrl: URL,
-                             with options: DownloadOptions) throws -> FileHandle?
+                             with options: DownloadOptions) -> Result<FileHandle?, Error>
     {
-        let fileHandle = try createFileHandle(for: filename, 
-                                              in: destinationUrl,
-                                              with: options)
-        return fileHandle
+        do {
+            let fileHandle = try createFileHandle(for: filename,
+                                                  in: destinationUrl,
+                                                  with: options)
+            return Result.success(fileHandle)
+        } catch {
+            return Result.failure(error)
+        }
     }
     
     func startDecompressing(to destinationUrl: URL,
@@ -92,7 +96,10 @@ private extension ItemDownloadProgress {
     private func createFileHandle(for filename: String,
                                   in destinationUrl: URL,
                                   with options: DownloadOptions) throws -> FileHandle? {
-        let destinationUrl = destinationUrl.appending(path: filename, directoryHint: .notDirectory)
+        let finalDestinationUrl = destinationUrl.appending(path: filename)
+        let finalPath = finalDestinationUrl.path(percentEncoded: false)
+        let destinationUrl = destinationUrl.appending(path: filename + ".ohia-download",
+                                                      directoryHint: .notDirectory)
         let destinationPath = destinationUrl.path(percentEncoded: false)
         
         let fm = FileManager.default
@@ -103,10 +110,14 @@ private extension ItemDownloadProgress {
             overwrite = true
         }
 
-        if fm.fileExists(atPath: destinationPath) && !overwrite {
-            Logger.Download.info("\(destinationPath) already exists, not overwriting")
-            
+        if fm.fileExists(atPath: finalPath) && !overwrite {
+            Logger.Download.info("\(finalPath) already exists, not overwriting")
             return nil
+        }
+        
+        if fm.fileExists(atPath: destinationPath) {
+            Logger.Download.debug("Partial \(destinationPath) exists: removing")
+            try fm.removeItem(atPath: destinationPath)
         }
         
         Logger.Download.debug("Saving file as \(destinationPath)")
@@ -175,10 +186,21 @@ private extension ItemDownloadProgress {
         }
     }
     
-    func endWritingFile() {
+    func endWritingFile(filename: String) {
         do {
             Logger.Download.info("Closing file handle")
             try fileHandle?.close()
+            
+            guard let destinationUrl else {
+                Logger.Download.debug("No destination")
+                return
+            }
+            
+            let destPath = destinationUrl.path(percentEncoded: false) + "/" + filename
+            let inProgressPath = destPath + ".ohia-download"
+            
+            Logger.Download.debug("Renaming \(inProgressPath) to \(destPath)")
+            try FileManager.default.moveItem(atPath: inProgressPath, toPath: destPath)
         } catch {
             Logger.Download.error("Error closing file: \(error)")
         }

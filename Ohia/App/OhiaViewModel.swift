@@ -711,6 +711,7 @@ private extension OhiaViewModel {
         let downloadFolder: URL
         let zipper: Zipper?
         let fileHandle: FileHandle?
+        let filename: String?
     }
     
     @MainActor
@@ -747,15 +748,23 @@ private extension OhiaViewModel {
                                                               with: currentDownloadOptions)
         } else {
             let filename = filename ?? "\(item.artist)-\(item.title).zip"
-            fileHandle = try item.downloadProgress.startWritingDataFor(filename,
-                                                                       in: url,
-                                                                       with: currentDownloadOptions)
+            let result = item.downloadProgress.startWritingDataFor(filename,
+                                                                   in: url,
+                                                                   with: currentDownloadOptions)
+            switch result {
+            case .success(let fh):
+                fileHandle = fh
+                
+            case .failure(let error):
+                throw error
+            }
         }
         
         return DownloadStream(options: currentDownloadOptions,
                               downloadFolder: downloadFolderSecurityUrl,
                               zipper: zipper,
-                              fileHandle: fileHandle)
+                              fileHandle: fileHandle,
+                              filename: filename)
     }
     
     @Sendable nonisolated func processDownloadStream(item: OhiaItem,
@@ -778,7 +787,7 @@ private extension OhiaViewModel {
                      downloadStream: DownloadStream,
                      dataStream: AsyncThrowingDataChunks) async throws {
         guard let handle = downloadStream.fileHandle else {
-            throw InternalError.noDownloadFileHandle
+            return
         }
         
         for try await buffer in dataStream {
@@ -787,6 +796,14 @@ private extension OhiaViewModel {
         }
         
         try handle.close()
+        if let filename = downloadStream.filename {
+            let downloadUrl = downloadStream.downloadFolder.appending(path: filename)
+            let downloadPath = downloadUrl.path(percentEncoded: false)
+            let inProgress = downloadPath + ".ohia-download"
+            
+            Logger.Download.debug("Renaming \(inProgress) -> \(downloadPath)")
+            try FileManager.default.moveItem(atPath: inProgress, toPath: downloadPath)
+        }
     }
         
     nonisolated
