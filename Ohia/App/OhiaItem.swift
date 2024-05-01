@@ -142,6 +142,11 @@ extension OhiaItem {
         }
     }
     
+    func startDownloading() {
+        downloadProgress.resetProgress()
+        state = .downloading
+    }
+    
     func setDownloadUrls(_ urls: DownloadUrls) {
         self.downloadUrls = urls
     }

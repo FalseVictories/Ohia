@@ -140,7 +140,7 @@ extension LiveDownloadService {
         
         Logger.DownloadService.info("Downloading \(downloadUrl) \(item.artist) - \(item.title)")
         
-        await item.set(state: .downloading)
+        await item.startDownloading()
         
         try await downloadFile(for: item,
                                from: downloadUrl,

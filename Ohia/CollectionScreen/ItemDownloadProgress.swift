@@ -27,6 +27,14 @@ final class ItemDownloadProgress: ObservableObject {
 }
 
 extension ItemDownloadProgress {
+    func resetProgress() {
+        progress = 0
+        bytesDownloaded = 0
+        downloadSizeInBytes = 0
+        downloadSizeString = ""
+        byteCounter = 0
+    }
+    
     func increaseBytesDownloaded(size: Int64) {
         byteCounter += size
         
