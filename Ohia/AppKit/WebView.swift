@@ -7,7 +7,7 @@
 
 import Dependencies
 import SwiftUI
-import WebKit
+@preconcurrency import WebKit
 
 struct WebView: NSViewRepresentable {
     let webView: WKWebView

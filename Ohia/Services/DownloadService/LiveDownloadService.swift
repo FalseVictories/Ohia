@@ -45,7 +45,7 @@ final class LiveDownloadService: DownloadService {
                     }
                     let maxConcurrentDownloads = min(await items.count, requestedMaxDownloads)
                     
-                    for index in 0..<maxConcurrentDownloads {
+                    for _ in 0..<maxConcurrentDownloads {
                         guard let item = await items.next() else {
                             break
                         }

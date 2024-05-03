@@ -562,7 +562,7 @@ private extension OhiaViewModel {
     func loadCollectionUpdatesFor(_ userId: Int, count: Int, using loader: CollectionLoader) async throws {
         var batch: [BCItem] = []
 
-        for try await item in loader.downloadCollectionFor(userId, count: count) {
+        for try await item in await loader.downloadCollectionFor(userId, count: count) {
             batch.append(item)
             if batch.count > 20 {
                 addItems(batch, append: false)
@@ -609,7 +609,7 @@ private extension OhiaViewModel {
     func loadCollectionFromServer(for username: String, using loader: CollectionLoader) async throws {
         var batch: [BCItem] = []
         
-        for try await item in loader.downloadCollectionFor(username: username) {
+        for try await item in await loader.downloadCollectionFor(username: username) {
             batch.append(item)
             if batch.count > 20 {
                 addItems(batch)

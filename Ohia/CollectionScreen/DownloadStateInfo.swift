@@ -19,7 +19,7 @@ struct DownloadStateInfo: View {
                 Button(action: {
                     showErrorPopover.toggle()
                 }, label: {
-                    Image(systemSymbol: .infoCircleFill)
+                    Image(systemName: "info.circle.fill")
                         .frame(width: 16, height: 16)
                 })
                 .buttonStyle(.borderless)

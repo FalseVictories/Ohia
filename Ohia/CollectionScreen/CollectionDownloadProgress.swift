@@ -24,7 +24,7 @@ struct CollectionDownloadProgress: View {
             Button {
                 model.cancelAllDownloads()
             } label: {
-                Image(systemSymbol: .xCircleFill)
+                Image(systemName: "x.circle.fill")
             }
             .buttonStyle(.borderless)
             

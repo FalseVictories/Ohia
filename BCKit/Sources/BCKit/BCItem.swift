@@ -60,7 +60,7 @@ public enum FileFormat: String, Sendable {
     }
 }
 
-public struct BCItemDownload {
+public struct BCItemDownload: Sendable {
     public let format: FileFormat
     public let url: URL
 }

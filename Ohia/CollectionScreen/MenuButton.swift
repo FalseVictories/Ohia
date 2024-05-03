@@ -22,7 +22,7 @@ struct MenuButton<Content: View>: View {
             Menu {
                 content()
             } label: {
-                Image(systemSymbol: .arrowtriangleDownFill)
+                Image(systemName: "arrowtriangle.down.fill")
             }
             .menuIndicator(.hidden)
             .menuStyle(.button)

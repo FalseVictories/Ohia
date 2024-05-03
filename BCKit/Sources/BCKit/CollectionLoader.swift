@@ -37,7 +37,7 @@ extension CollectionLoaderError: CustomStringConvertible {
     }
 }
 
-public final class CollectionLoader {
+public final actor CollectionLoader {
     @Dependency(\.downloadService) var downloadService: any DownloadService
     
     private var dataBlob: DataBlob? // This is a very large datablob that remains for the life of CollectionLoader
