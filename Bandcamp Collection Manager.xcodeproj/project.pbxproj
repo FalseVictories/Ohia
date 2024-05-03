@@ -83,16 +83,6 @@
 		AE1E11B42AE549EA0001369A /* LiveDataStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveDataStorageService.swift; sourceTree = "<group>"; };
 		AE1E11BB2AE8176A0001369A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AE1E11BD2AE81B700001369A /* FilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerButton.swift; sourceTree = "<group>"; };
-		AE554D0A2ACAD2DB00579320 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AE554D0C2ACAD2DB00579320 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		AE554D0E2ACAD2DC00579320 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AE554D112ACAD2DC00579320 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		AE554D132ACAD2DC00579320 /* Ohia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ohia.entitlements; sourceTree = "<group>"; };
-		AE554D352ACAD30D00579320 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
-		AE554D3C2ACAD3FC00579320 /* LiveCollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LiveCollectionService.swift; sourceTree = "<group>"; };
-		AE554D462ACADEF900579320 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		AE554D492ACB485000579320 /* Logger+BCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+BCM.swift"; sourceTree = "<group>"; };
-		AE554D4E2ACC47D200579320 /* PercentEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentEncoding.swift; sourceTree = "<group>"; };
 		AE62CDD42B6EFE7B006F7444 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AE62CDD72B7ADDD1006F7444 /* ErrorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScreen.swift; sourceTree = "<group>"; };
 		AE62CDDB2B9E5D8B006F7444 /* RangeIntegerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeIntegerStyle.swift; sourceTree = "<group>"; };
@@ -114,10 +104,6 @@
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
 		AEC04D512BA4F67400778EAC /* AboutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutScreen.swift; sourceTree = "<group>"; };
 		AEC04D572BC1F67000778EAC /* Zipper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Zipper; path = ../Zipper; sourceTree = "<group>"; };
-		AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
-		AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewItem.swift; sourceTree = "<group>"; };
-		AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewItem.xib; sourceTree = "<group>"; };
-		AECF4A752AD095160071CFD8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AECF4A7B2AD1A4550071CFD8 /* Ohia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ohia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaApp.swift; sourceTree = "<group>"; };
 		AECF4A7F2AD1A4550071CFD8 /* CollectionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionContentView.swift; sourceTree = "<group>"; };
@@ -235,7 +221,6 @@
 				AECF4AC92AD6D8270071CFD8 /* LogConfig.mobileconfig */,
 				AEDB016B2ACEF6F4004C575E /* BCKit */,
 				AEC04D572BC1F67000778EAC /* Zipper */,
-				AE554D092ACAD2DB00579320 /* Ohia-Cocoa */,
 				AECF4A7C2AD1A4550071CFD8 /* Ohia */,
 				AECF4A8E2AD1A4560071CFD8 /* OhiaTests */,
 				AECF4A982AD1A4560071CFD8 /* OhiaUITests */,
@@ -252,51 +237,6 @@
 				AECF4A952AD1A4560071CFD8 /* OhiaUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		AE554D092ACAD2DB00579320 /* Ohia-Cocoa */ = {
-			isa = PBXGroup;
-			children = (
-				AE554D482ACB483B00579320 /* Extensions */,
-				AE554D0A2ACAD2DB00579320 /* AppDelegate.swift */,
-				AE554D0C2ACAD2DB00579320 /* ViewController.swift */,
-				AE554D0E2ACAD2DC00579320 /* Assets.xcassets */,
-				AE554D102ACAD2DC00579320 /* Main.storyboard */,
-				AE554D132ACAD2DC00579320 /* Ohia.entitlements */,
-				AE554D3A2ACAD3DF00579320 /* Services */,
-				AE554D462ACADEF900579320 /* LoginViewController.swift */,
-				AECF4A6F2AD090A20071CFD8 /* CollectionViewController.swift */,
-				AECF4A712AD093870071CFD8 /* CollectionViewItem.swift */,
-				AECF4A722AD093870071CFD8 /* CollectionViewItem.xib */,
-				AECF4A752AD095160071CFD8 /* Preview Assets.xcassets */,
-			);
-			path = "Ohia-Cocoa";
-			sourceTree = "<group>";
-		};
-		AE554D3A2ACAD3DF00579320 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				AE554D3B2ACAD3EB00579320 /* CollectionService */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		AE554D3B2ACAD3EB00579320 /* CollectionService */ = {
-			isa = PBXGroup;
-			children = (
-				AE554D352ACAD30D00579320 /* CollectionService.swift */,
-				AE554D3C2ACAD3FC00579320 /* LiveCollectionService.swift */,
-			);
-			path = CollectionService;
-			sourceTree = "<group>";
-		};
-		AE554D482ACB483B00579320 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				AE554D492ACB485000579320 /* Logger+BCM.swift */,
-				AE554D4E2ACC47D200579320 /* PercentEncoding.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		AE62CDD62B7ADC9B006F7444 /* ErrorScreen */ = {
@@ -653,17 +593,6 @@
 			targetProxy = AECF4A962AD1A4560071CFD8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		AE554D102ACAD2DC00579320 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AE554D112ACAD2DC00579320 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		AE554D2A2ACAD2DC00579320 /* Debug */ = {
