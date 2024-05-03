@@ -19,7 +19,6 @@
 		AE679AB12AD82B710073EF8C /* CollectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB02AD82B710073EF8C /* CollectionList.swift */; };
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
-		AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = AE679AB82AD991430073EF8C /* SFSafeSymbols */; };
 		AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */; };
 		AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABC2AD9D0550073EF8C /* HoverButton.swift */; };
 		AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */ = {isa = PBXBuildFile; fileRef = AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */; };
@@ -143,7 +142,6 @@
 				AE012C602AFC2511000528C1 /* Dependencies in Frameworks */,
 				AECF4AAB2AD1AAE80071CFD8 /* BCKit in Frameworks */,
 				AEF11F702BD4426E00A1D16E /* Packet in Frameworks */,
-				AE679AB92AD991430073EF8C /* SFSafeSymbols in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +390,6 @@
 			name = Ohia;
 			packageProductDependencies = (
 				AECF4AAA2AD1AAE80071CFD8 /* BCKit */,
-				AE679AB82AD991430073EF8C /* SFSafeSymbols */,
 				AE1E11AF2AE549550001369A /* CouchbaseLiteSwift */,
 				AEF2E30A2AEBC4B400AF4550 /* CachedAsyncImage */,
 				AE012C5F2AFC2511000528C1 /* Dependencies */,
@@ -472,7 +469,6 @@
 			);
 			mainGroup = AE554CFE2ACAD2DB00579320;
 			packageReferences = (
-				AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */,
 				AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				AE012C5E2AFC2511000528C1 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
@@ -956,14 +952,6 @@
 				minimumVersion = 3.1.1;
 			};
 		};
-		AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.1;
-			};
-		};
 		AEF2E3092AEBC4B400AF4550 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
@@ -984,11 +972,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE1E11AE2AE549550001369A /* XCRemoteSwiftPackageReference "couchbase-lite-ios" */;
 			productName = CouchbaseLiteSwift;
-		};
-		AE679AB82AD991430073EF8C /* SFSafeSymbols */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AE679AB72AD991420073EF8C /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
-			productName = SFSafeSymbols;
 		};
 		AEC04D582BC1F6F700778EAC /* Zipper */ = {
 			isa = XCSwiftPackageProductDependency;
