@@ -335,9 +335,12 @@ extension CollectionLoader {
 
         public let userId: Int?
         public let name: String?
-        let photo: Photo
+        let photo: Photo?
 
         public var imageUrl: URL? {
+            guard let photo else {
+                return nil
+            }
             return URL(string: "\(FanData.imageBase)\(photo.imageId)_42.jpg") // 42 is 50x50
         }
         

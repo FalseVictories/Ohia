@@ -36,14 +36,20 @@ struct CollectionListHeaderView: View {
                     model.logOut()
                 }
             } label: {
-                CachedAsyncImage(url: model.avatarUrl) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                    } else if phase.error != nil {
-                        Color.red
-                    } else {
-                        Color.clear
+                if model.avatarUrl == nil {
+                    Image(.defaultIcon)
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                } else {
+                    CachedAsyncImage(url: model.avatarUrl) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                        } else if phase.error != nil {
+                            Color.red
+                        } else {
+                            Color.clear
+                        }
                     }
                 }
             }
