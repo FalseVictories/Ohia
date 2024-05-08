@@ -78,6 +78,13 @@ final class SettingsModel: ObservableObject {
             cs.maxDownloads = maxDownloads
         }
     }
+    
+    @Published var overwrite = false {
+        didSet {
+            var cs = configService
+            cs.overwrite = overwrite
+        }
+    }
 }
 
 extension SettingsModel {
@@ -88,5 +95,6 @@ extension SettingsModel {
         decompressDownloads = configService.decompressDownloads
         createFolderStructure = configService.folderStructure
         maxDownloads = configService.maxDownloads
+        overwrite = configService.overwrite
     }
 }

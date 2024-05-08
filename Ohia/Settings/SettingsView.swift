@@ -40,6 +40,8 @@ struct SettingsView: View {
             Spacer()
                 .frame(height: 20)
             
+            Toggle("Overwrite existing downloads", isOn: $settingsModel.overwrite)
+            
             Toggle("Decompress downloads", isOn: $settingsModel.decompressDownloads)
             Picker("Create Folders:", selection: $settingsModel.createFolderStructure) {
                 Text("None").tag(FolderStructure.none)

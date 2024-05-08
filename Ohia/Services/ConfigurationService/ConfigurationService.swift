@@ -39,6 +39,7 @@ public enum ConfigurationKey: String {
     case decompressDownloads = "decompressDownloads"
     case folderStructure = "folderStructure"
     case maxDownloads = "maxDownloads"
+    case overwrite = "overwrite"
 }
 
 protocol ConfigurationService: Sendable {
@@ -113,6 +114,15 @@ extension ConfigurationService {
                 return .init(rawValue: result) ?? .bandcamp
             }
             return .bandcamp
+        }
+    }
+    
+    var overwrite: Bool {
+        set {
+            set(newValue, for: .overwrite)
+        }
+        get {
+            bool(for: .overwrite)
         }
     }
 }

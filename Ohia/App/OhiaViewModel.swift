@@ -253,7 +253,7 @@ class OhiaViewModel: ObservableObject {
 
                 if !settings.decompressDownloads {
                     itemsToDownload.append($0)
-                } else {
+                } else if !settings.overwrite {
                     let folderExists = doesFolderMaybeExist(for: $0,
                                                             in: downloadFolder,
                                                             with: settings.createFolderStructure)
@@ -304,7 +304,7 @@ class OhiaViewModel: ObservableObject {
 
         currentDownloadOptions = DownloadOptions(decompress: settings.decompressDownloads,
                                                  createFolder: settings.createFolderStructure,
-                                                 overwrite: false)
+                                                 overwrite: settings.overwrite)
         
         let configService = self.configService
         let downloadCollection = DownloadCollection(items: downloadItems)
@@ -326,12 +326,21 @@ class OhiaViewModel: ObservableObject {
                 if success {
                     do {
                         if let downloadUrls = item.downloadUrls {
+                            let downloadPath = downloadUrls.url.path(percentEncoded: false)
                             if let downloadUrl = downloadUrls.downloadUrl {
+                                let fm = FileManager.default
+                                
+                                if let currentDownloadOptions,
+                                   currentDownloadOptions.overwrite {
+                                    if fm.fileExists(atPath: downloadPath) {
+                                        try fm.removeItem(at: downloadUrls.url)
+                                    }
+                                }
                                 // Rename the in progress folder
-                                try FileManager.default.moveItem(at: downloadUrl, to: downloadUrls.url)
+                                try fm.moveItem(at: downloadUrl, to: downloadUrls.url)
                             }
                             try dataStorageService.setItemDownloadLocation(item,
-                                                                           location: downloadUrls.url.path(percentEncoded: false))
+                                                                           location: downloadPath)
                         }
                         
                         try dataStorageService.setItemDownloaded(item, downloaded: true)
