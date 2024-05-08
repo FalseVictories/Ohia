@@ -317,6 +317,23 @@ final class LiveDataStorageService: DataStorageService {
         try database.defaultCollection().save(document: mDoc)
     }
 
+    func clearCurrentUsername() throws {
+        if database == nil {
+            try openDatabase()
+        }
+        
+        guard let database else {
+            throw DataStorageServiceError.noDatabase
+        }
+        
+        if let doc = try database.defaultCollection().document(id: "currentUsername") {
+            let result = try database.defaultCollection().delete(document: doc, concurrencyControl: .lastWriteWins)
+            if !result {
+                throw DataStorageServiceError.errorDeletingUsername
+            }
+        }
+    }
+    
     func getUser() throws -> OhiaUser? {
         guard let userDataCollection else {
             throw DataStorageServiceError.noUserCollection

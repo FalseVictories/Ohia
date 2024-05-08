@@ -33,6 +33,7 @@ protocol DataStorageService: Sendable {
 
     func getCurrentUsername() throws -> String?
     func setCurrentUsername(_ username: String) throws
+    func clearCurrentUsername() throws
 
     func setSummary(_ summary: OhiaCollectionSummary) throws
     func getSummary() throws -> OhiaCollectionSummary
@@ -54,6 +55,7 @@ enum DataStorageServiceError: Error {
     case noUserCollection
     case noBookmarksCollection
     case noScopelessCollection
+    case errorDeletingUsername
 }
 
 extension DataStorageServiceError: CustomStringConvertible {
@@ -73,6 +75,9 @@ extension DataStorageServiceError: CustomStringConvertible {
             
         case .noScopelessCollection:
             return "Missing nonscoped collection"
+            
+        case .errorDeletingUsername:
+            return "Error deleting username"
         }
     }
 }
@@ -99,6 +104,9 @@ extension DataStorageServiceError: LocalizedError {
         case .noScopelessCollection:
             return NSLocalizedString("The database is missing the nonscoped collection",
                                      comment: "")
+            
+        case .errorDeletingUsername:
+            return NSLocalizedString("Error deleting username", comment: "")
         }
     }
     

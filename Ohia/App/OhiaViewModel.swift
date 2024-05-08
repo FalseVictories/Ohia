@@ -675,6 +675,12 @@ private extension OhiaViewModel {
     func doLogOut() {
         Logger.App.info("Logging out")
 
+        do {
+            try dataStorageService.clearCurrentUsername()
+        } catch {
+            Logger.App.error("Error logging out: \(error)")
+        }
+        
         webModel.clear()
         items = []
         idToItem = [:]
