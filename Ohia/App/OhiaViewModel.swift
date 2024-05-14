@@ -118,6 +118,8 @@ class OhiaViewModel: ObservableObject {
     @Published var showErrorScreen = false
     @Published var showAboutScreen = false
     
+    @Published var updatingCollection = false
+    
     var idToItem: [Int: OhiaItem] = [:]
     var settings: SettingsModel = SettingsModel()
     
@@ -381,6 +383,17 @@ class OhiaViewModel: ObservableObject {
         doLogOut()
     }
     
+    func updateCollection() {
+        guard let username else {
+            return
+        }
+        
+        Task {
+            let loader = CollectionLoader()
+            try await updateCollectionFromServer(for: username, using: loader)
+        }
+    }
+    
     func open(item: OhiaItem) {
         do {
             if let url = try dataStorageService.getDownloadLocation(item) {
@@ -443,18 +456,6 @@ private extension OhiaViewModel {
             throw error
         }
         
-        /*
-        do {
-            try accessDownloadFolder(configService.downloadFolder!)
-            if let downloadFolderSecurityUrl {
-                try scanFolder(downloadFolderSecurityUrl)
-                downloadFolderSecurityUrl.stopAccessingSecurityScopedResource()
-            }
-        } catch {
-            print("Error \(error)")
-        }
-*/
-        
         do {
             // get the summary from the datastore now the DB has been opened for the user
             oldSummary = try dataStorageService.getSummary()
@@ -508,13 +509,12 @@ private extension OhiaViewModel {
                 Logger.App.info("Loading collection from server")
                 
                 do {
-                    try await loadCollectionFromServer(for: username, using: loader)
+                    try await addCollectionFromServer(for: username, using: loader)
                 } catch {
                     Logger.App.error("Error loading collection from server \(error, privacy: .public)")
                     
                     throw error
                 }
-                
             } else {
                 // Check if we need to get an update from the server.
                 let updateCount = calculateUpdateCount(lastItemId: oldSummary.mostRecentId,
@@ -615,10 +615,18 @@ private extension OhiaViewModel {
         return items.count > 0
     }
     
-    func loadCollectionFromServer(for username: String, using loader: CollectionLoader) async throws {
+    func loadCollectionFromServer(for username: String, 
+                                  using loader: CollectionLoader) async -> ThrowingItemStream {
+        updatingCollection = true
+        return await loader.downloadCollectionFor(username: username)
+    }
+    
+    func addCollectionFromServer(for username: String,
+                                 using loader: CollectionLoader) async throws {
         var batch: [BCItem] = []
         
-        for try await item in await loader.downloadCollectionFor(username: username) {
+        for try await item in await loadCollectionFromServer(for: username,
+                                                             using: loader) {
             batch.append(item)
             if batch.count > 20 {
                 addItems(batch)
@@ -629,6 +637,20 @@ private extension OhiaViewModel {
         if batch.count > 0 {
             addItems(batch)
         }
+    }
+    
+    func updateCollectionFromServer(for username: String,
+                                    using loader: CollectionLoader) async throws {
+        for try await bcItem in await loadCollectionFromServer(for: username,
+                                                             using: loader) {
+            if let item = idToItem[bcItem.id] {
+                if item.update(from: bcItem) {
+                    try dataStorageService.updateItem(item)
+                }
+            }
+        }
+        
+        updatingCollection = false
     }
     
     func loadImages() async {

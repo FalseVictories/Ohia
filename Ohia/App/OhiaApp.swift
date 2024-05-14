@@ -41,10 +41,15 @@ struct OhiaApp: App {
             }
         }
         .commands {
-                    CommandGroup(replacing: CommandGroupPlacement.appInfo) {
-                        Button("About Ohia") { viewModel.showAboutScreen.toggle() }
-                    }
+            CommandGroup(before: .newItem) {
+                Button("Update Collection") {
+                    viewModel.updateCollection()
                 }
+            }
+            CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                Button("About Ohia") { viewModel.showAboutScreen.toggle() }
+            }
+        }
 #if os(macOS)
         Settings {
             SettingsView(settingsModel: viewModel.settings)

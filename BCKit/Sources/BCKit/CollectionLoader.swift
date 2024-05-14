@@ -12,6 +12,8 @@ import OSLog
 
 let logger = Logger(subsystem:Bundle.main.bundleIdentifier!, category: "Collection")
 
+public typealias ThrowingItemStream = AsyncThrowingStream<BCItem, Error>
+
 enum CollectionLoaderError: Error {
     case noData(String)
     case noUserId(String)
@@ -108,7 +110,7 @@ public final actor CollectionLoader {
         return db.fan
     }
     
-    public func downloadCollectionFor(username: String) -> AsyncThrowingStream<BCItem, Error> {
+    public func downloadCollectionFor(username: String) -> ThrowingItemStream {
         return AsyncThrowingStream { continuation in
             Task {
                 let db = try await getDataBlob(for: username)

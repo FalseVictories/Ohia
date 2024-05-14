@@ -271,6 +271,22 @@ final class LiveDataStorageService: DataStorageService {
         try setNewFlagOnItemWith(id: String(describing: item.id), in: collection, new: new)
     }
 
+    func updateItem(_ item: OhiaItem) throws {
+        guard let collection else {
+            throw DataStorageServiceError.noItemCollection
+        }
+        
+        guard let document = try collection.document(id: String(describing: item.id)) else {
+            return
+        }
+
+        let mutableDoc = document.toMutable()
+        mutableDoc.setBoolean(item.isHidden, forKey: DataBaseKeys.isHidden)
+        mutableDoc.setBoolean(item.isPreorder, forKey: DataBaseKeys.isPreorder)
+
+        try collection.save(document: mutableDoc)
+    }
+    
     func setUser(_ data: OhiaUser) throws {
         guard let userDataCollection else {
             throw DataStorageServiceError.noUserCollection

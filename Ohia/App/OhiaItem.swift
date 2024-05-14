@@ -60,8 +60,8 @@ class OhiaItem: ObservableObject, Identifiable {
     let artist: String
     let added: Int
 
-    let isHidden: Bool
-    let isPreorder: Bool
+    @Published var isHidden: Bool
+    @Published var isPreorder: Bool
 
     let downloadUrl: URL
     var thumbnailUrl: URL?
@@ -166,5 +166,21 @@ extension OhiaItem {
             }
         }
         return true
+    }
+    
+    func update(from item: BCItem) -> Bool {
+        var changed = false
+        
+        if isPreorder != item.isPreorder {
+            isPreorder = item.isPreorder
+            changed = true
+        }
+        
+        if isHidden != item.isHidden {
+            isHidden = item.isHidden
+            changed = true
+        }
+        
+        return changed
     }
 }

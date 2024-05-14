@@ -24,6 +24,9 @@ struct CollectionContentView: View {
                 CollectionDownloadProgress(current: model.currentDownload, total: model.totalDownloads)
                     .transition(.move(edge: .bottom))
             }
+            if model.updatingCollection {
+                UpdateProgressView()
+            }
         }
         .onReceive(model.$currentAction) { action in
             withAnimation {

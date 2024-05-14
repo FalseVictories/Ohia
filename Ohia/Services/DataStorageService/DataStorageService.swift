@@ -27,6 +27,7 @@ protocol DataStorageService: Sendable {
     func getDownloadLocation(_ item: OhiaItem) throws -> String?
 
     func setItemNew(_ item: OhiaItem, new: Bool) throws
+    func updateItem(_ item: OhiaItem) throws
     
     func setUser(_ user: OhiaUser) throws
     func getUser() throws -> OhiaUser?

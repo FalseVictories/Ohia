@@ -31,6 +31,7 @@
 		AE80740A2B128FF5007DC1BC /* CookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8074092B128FF5007DC1BC /* CookieService.swift */; };
 		AE80740D2B12907F007DC1BC /* LiveCookieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE80740C2B12907F007DC1BC /* LiveCookieService.swift */; };
 		AE99F2782AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */; };
+		AEBCC3FD2BF164F800AE9B62 /* UpdateProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBCC3FC2BF164F800AE9B62 /* UpdateProgressView.swift */; };
 		AEC04D522BA4F67400778EAC /* AboutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC04D512BA4F67400778EAC /* AboutScreen.swift */; };
 		AEC04D592BC1F6F700778EAC /* Zipper in Frameworks */ = {isa = PBXBuildFile; productRef = AEC04D582BC1F6F700778EAC /* Zipper */; };
 		AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECF4A7D2AD1A4550071CFD8 /* OhiaApp.swift */; };
@@ -101,6 +102,7 @@
 		AE8074092B128FF5007DC1BC /* CookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieService.swift; sourceTree = "<group>"; };
 		AE80740C2B12907F007DC1BC /* LiveCookieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCookieService.swift; sourceTree = "<group>"; };
 		AE99F2772AFBB6AA00CA5ADE /* OhiaCollectionSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OhiaCollectionSummary.swift; sourceTree = "<group>"; };
+		AEBCC3FC2BF164F800AE9B62 /* UpdateProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProgressView.swift; sourceTree = "<group>"; };
 		AEC04D512BA4F67400778EAC /* AboutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutScreen.swift; sourceTree = "<group>"; };
 		AEC04D572BC1F67000778EAC /* Zipper */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Zipper; path = ../Zipper; sourceTree = "<group>"; };
 		AECF4A7B2AD1A4550071CFD8 /* Ohia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ohia.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +196,7 @@
 				AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */,
 				AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */,
 				AED478B32B59913400CDEA24 /* MenuButton.swift */,
+				AEBCC3FC2BF164F800AE9B62 /* UpdateProgressView.swift */,
 			);
 			path = CollectionScreen;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				AED478B42B59913400CDEA24 /* MenuButton.swift in Sources */,
 				AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */,
 				AE62CDDC2B9E5D8B006F7444 /* RangeIntegerStyle.swift in Sources */,
+				AEBCC3FD2BF164F800AE9B62 /* UpdateProgressView.swift in Sources */,
 				AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */,
 				AEF11F722BDD9A2000A1D16E /* DownloadCollection.swift in Sources */,
 				AECF4AA72AD1A5DA0071CFD8 /* CollectionItemRow.swift in Sources */,
