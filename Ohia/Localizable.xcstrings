@@ -14,6 +14,9 @@
         }
       }
     },
+    "%lld" : {
+
+    },
     "AAC High" : {
 
     },
@@ -68,7 +71,7 @@
     "Download Folder:" : {
 
     },
-    "Download Format:" : {
+    "Download Format" : {
 
     },
     "Download New" : {
@@ -129,7 +132,7 @@
     "Mark As Not Downloaded" : {
 
     },
-    "Max concurrent downloads:" : {
+    "Maximum concurrent downloads" : {
 
     },
     "Maybe already downloaded" : {
