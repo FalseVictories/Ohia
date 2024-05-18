@@ -20,7 +20,6 @@
 		AE679AB32AD871780073EF8C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB22AD871780073EF8C /* ConfigurationService.swift */; };
 		AE679AB62AD8718E0073EF8C /* LiveConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */; };
 		AE679ABB2AD9925C0073EF8C /* DownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */; };
-		AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679ABC2AD9D0550073EF8C /* HoverButton.swift */; };
 		AE679AC22ADAF4380073EF8C /* ENVIRONMENT.md in Resources */ = {isa = PBXBuildFile; fileRef = AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */; };
 		AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */; };
 		AE679AC72ADC0F150073EF8C /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE679AC62ADC0F150073EF8C /* DownloadService.swift */; };
@@ -91,7 +90,6 @@
 		AE679AB22AD871780073EF8C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		AE679AB52AD8718E0073EF8C /* LiveConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConfigurationService.swift; sourceTree = "<group>"; };
 		AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgress.swift; sourceTree = "<group>"; };
-		AE679ABC2AD9D0550073EF8C /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
 		AE679AC12ADAF4380073EF8C /* ENVIRONMENT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ENVIRONMENT.md; sourceTree = "<group>"; };
 		AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDownloadProgress.swift; sourceTree = "<group>"; };
 		AE679AC62ADC0F150073EF8C /* DownloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
@@ -192,7 +190,6 @@
 				AE679ABA2AD9925C0073EF8C /* DownloadProgress.swift */,
 				AE679AC32ADBE1EB0073EF8C /* ItemDownloadProgress.swift */,
 				AE679AB02AD82B710073EF8C /* CollectionList.swift */,
-				AE679ABC2AD9D0550073EF8C /* HoverButton.swift */,
 				AE679ACE2AE00F960073EF8C /* CollectionListHeaderView.swift */,
 				AE679AD02AE01B570073EF8C /* CollectionDownloadProgress.swift */,
 				AED478B32B59913400CDEA24 /* MenuButton.swift */,
@@ -526,7 +523,6 @@
 				AE679AC42ADBE1EB0073EF8C /* ItemDownloadProgress.swift in Sources */,
 				AECF4A7E2AD1A4550071CFD8 /* OhiaApp.swift in Sources */,
 				AECF4AAF2AD2D6C80071CFD8 /* OhiaViewModel.swift in Sources */,
-				AE679ABD2AD9D0550073EF8C /* HoverButton.swift in Sources */,
 				AEF2E3062AE91EAD00AF4550 /* OhiaItem.swift in Sources */,
 				AE679AC92ADC0FD60073EF8C /* LiveDownloadService.swift in Sources */,
 				AE679AD12AE01B570073EF8C /* CollectionDownloadProgress.swift in Sources */,

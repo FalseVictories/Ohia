@@ -26,6 +26,7 @@ struct DownloadStateInfo: View {
                 .popover(isPresented: $showErrorPopover, content: {
                     if let error = item.lastError {
                         Text(DownloadStateInfo.string(for: error))
+                            .frame(width: 300)
                             .padding()
                     }
                 })
