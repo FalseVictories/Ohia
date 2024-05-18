@@ -57,6 +57,7 @@ struct CollectionListHeaderView: View {
             .menuIndicator(.hidden)
             .menuStyle(.button)
             .buttonStyle(.borderless)
+            .accessibilityLabel("Account Menu")
 
             Text(headerText)
                 .font(.title)

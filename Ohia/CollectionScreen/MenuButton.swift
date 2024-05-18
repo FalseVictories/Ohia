@@ -27,6 +27,7 @@ struct MenuButton<Content: View>: View {
             .menuIndicator(.hidden)
             .menuStyle(.button)
             .buttonStyle(.plain)
+            .accessibilityLabel("More download options")
         }
     }
 }
