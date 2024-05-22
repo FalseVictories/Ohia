@@ -641,16 +641,30 @@ private extension OhiaViewModel {
     
     func updateCollectionFromServer(for username: String,
                                     using loader: CollectionLoader) async throws {
+        var batch: [BCItem] = []
+        
         for try await bcItem in await loadCollectionFromServer(for: username,
                                                              using: loader) {
             if let item = idToItem[bcItem.id] {
                 if item.update(from: bcItem) {
                     try dataStorageService.updateItem(item)
                 }
+            } else {
+                batch.append(bcItem)
+                if batch.count > 20 {
+                    addItems(batch, append: false)
+                    batch.removeAll()
+                }
             }
         }
         
+        if batch.count > 0 {
+            addItems(batch, append: false)
+        }
+
         updatingCollection = false
+        
+        await loadImages()
     }
     
     func loadImages() async {
@@ -669,6 +683,13 @@ private extension OhiaViewModel {
             var tracklist: [OhiaTrack] = []
             bcItem.tracklist.forEach {
                 tracklist.append(OhiaTrack(from: $0))
+            }
+            
+            if items.contains(where: {
+                $0.id == bcItem.id
+            }) {
+                Logger.App.debug("Items already contains id \(bcItem.id)")
+                continue
             }
             
             let item = OhiaItem(id: bcItem.id,
